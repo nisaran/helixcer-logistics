@@ -1,0 +1,31 @@
+<!-- _includes/footer.html -->
+<footer class="site-footer" role="contentinfo">
+  <div class="container">
+    <div class="col">
+      <h3>Contact Us</h3>
+      <div class="contact-row">
+        <div class="contact-item">19/154 Trippanachi South, Malappuram, Kerala 673642</div>
+        <div class="contact-item"><a href="mailto:info@helixcer.com">info@helixcer.com</a></div>
+        <div class="contact-item"><a class="whatsapp" href="https://wa.me/916282010794">+91 62820 10794</a></div>
+      </div>
+    </div>
+
+    <div class="copyright">
+      © {{ "now" | date: "%Y" }} Helixcer Logistics — All rights reserved.
+    </div>
+  </div>
+
+  <style>
+    :root{
+      --footer-bg:#0f172a; --footer-color:#e6eef8; --footer-muted:#9fb0c7;
+    }
+    .site-footer{background:var(--footer-bg);color:var(--footer-color);padding:36px 18px;margin-top:40px}
+    .site-footer .container{max-width:1150px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+    .site-footer h3{margin:0 0 12px}
+    .contact-row{display:flex;flex-direction:column;gap:8px}
+    .contact-item{color:#cbd5e1}
+    .site-footer a{color:#cbd5e1;text-decoration:none}
+    .copyright{color:var(--footer-muted);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);padding-top:14px}
+    @media(min-width:760px){ .site-footer .container{flex-direction:row;justify-content:space-between;align-items:flex-start} }
+  </style>
+</footer>
