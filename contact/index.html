@@ -1,17 +1,15 @@
+---
+layout: default
+title: Contact us - Helixcer Logistics
+description: Contact us - Helixcer Logistics.
+---
+
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Contact Us — Helixcer Logistics</title>
-
-<!-- SEO -->
-<meta name="description" content="Get in touch with Helixcer Logistics for freight bookings, support, and logistics assistance across India.">
-<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/0261a6_4871fa964e70483b9afc86c8d9ac6294~mv2.png">
-<meta property="og:image" content="https://static.wixstatic.com/media/35c132_c0fb7faf6adc4abebbc07b267a1e5210~mv2.jpg" />
-<meta property="og:title" content="Contact Us — Helixcer Logistics" />
-<meta property="og:description" content="Reach Helixcer Logistics for shipping support, freight quotes, and operational help." />
-
 <style>
   :root{
     --bg:#f7f9fb;
@@ -26,13 +24,14 @@
     font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
     background:var(--bg);
     color:var(--text);
+    -webkit-font-smoothing:antialiased;
   }
 
   /* Banner */
   .banner{
     width:100%;
-    height:300px;
-    background-image:url("https://static.wixstatic.com/media/35c132_c5b9be8b78b3404b8d71c40a003a9e17~mv2.jpg");
+    height:320px;
+    background-image: url("https://static.wixstatic.com/media/35c132_c5b9be8b78b3404b8d71c40a003a9e17~mv2.jpg");
     background-size:cover;
     background-position:center;
     display:flex;
@@ -42,15 +41,16 @@
   }
   .banner::after{
     content:"";
-    position:absolute;inset:0;background:rgba(0,0,0,0.35);
+    position:absolute;inset:0;background:linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.18));
   }
   .banner h1{
-    position:relative;color:#fff;font-size:32px;margin:0;padding:14px;font-weight:800;
-    z-index:1;text-shadow:0 4px 12px rgba(0,0,0,0.4);
+    position:relative;color:#fff;font-size:32px;margin:0;padding:24px 18px;font-weight:800;z-index:1;
+    text-shadow:0 6px 16px rgba(0,0,0,0.35);
   }
 
-  /* Layout */
+  /* Content wrapper */
   .wrap{max-width:var(--container);margin:28px auto;padding:18px;}
+
   .contact-grid{
     display:grid;
     grid-template-columns:1fr 360px;
@@ -65,22 +65,15 @@
     box-shadow:0 8px 30px rgba(16,24,40,0.06);
   }
 
-  .contact-item{
-    display:flex;gap:12px;align-items:flex-start;margin:14px 0;
-    color:var(--muted);font-size:15px;
-  }
-  .icon-small{width:18px;height:18px;}
-
-  .contact-item a{
-    color:var(--text);font-weight:600;text-decoration:none;
-  }
+  .contact-item{display:flex;gap:12px;align-items:flex-start;margin:14px 0;color:var(--muted);font-size:15px;}
+  .icon-small{width:18px;height:18px;flex:0 0 18px;display:inline-block}
+  .contact-item a{color:var(--text);text-decoration:none;font-weight:600}
 
   /* Sidebar */
-  .sidebar{display:flex;flex-direction:column;gap:14px;}
-  .info-box{
-    background:#fff;padding:16px;border-radius:10px;
-    box-shadow:0 6px 20px rgba(16,24,40,0.04)
+  .sidebar{
+    display:flex;flex-direction:column;gap:12px;
   }
+  .info-box{background:#fff;padding:16px;border-radius:10px;box-shadow:0 6px 20px rgba(16,24,40,0.04)}
   .info-box h4{margin:0 0 8px 0}
   .muted{color:var(--muted);font-size:14px}
 
@@ -90,108 +83,101 @@
     .banner h1{font-size:26px}
   }
   @media(max-width:540px){
-    .banner{height:180px}
-    .banner h1{font-size:20px}
+    .banner{height:200px}
+    .banner h1{font-size:20px;padding:12px}
   }
 </style>
 </head>
-
 <body>
 
-<!-- ⭐ HEADER -->
-<div id="header-placeholder"></div>
+  <!-- Banner -->
+  <header class="banner">
+    <h1>Contact Us</h1>
+  </header>
 
-<!-- Banner -->
-<header class="banner">
-  <h1>Contact Us</h1>
-</header>
+  <main class="wrap">
+    <div class="contact-grid">
 
-<main class="wrap">
+      <!-- Contact Details -->
+      <section class="contact-card">
+        <h2 style="margin-top:0">Get in touch</h2>
 
-  <div class="contact-grid">
+        <p class="muted">We’re available to help with freight bookings, tracking, and logistics support.</p>
 
-    <!-- Left section -->
-    <section class="contact-card">
-      <h2 style="margin-top:0">Get in touch</h2>
-      <p class="muted">We’re available to help with freight bookings, tracking, and logistics support.</p>
-
-      <!-- Address -->
-      <div class="contact-item">
-        <svg class="icon-small" viewBox="0 0 24 24">
-          <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z" fill="#6b6b6b"/>
-        </svg>
-        <div>
-          <div style="font-weight:700;color:var(--text)">Address</div>
-          <div class="muted">19/154 Trippanachi South, Malappuram, Kerala 673642</div>
+        <!-- Address -->
+        <div class="contact-item">
+          <svg class="icon-small" viewBox="0 0 24 24">
+            <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z" fill="#6b6b6b"/>
+          </svg>
+          <div>
+            <div style="font-weight:700;color:var(--text)">Address</div>
+            <div class="muted">19/154 Trippanachi South, Malappuram, Kerala 673642</div>
+          </div>
         </div>
-      </div>
 
-      <!-- Email -->
-      <div class="contact-item">
-        <svg class="icon-small" viewBox="0 0 24 24">
-          <path d="M3 8.5v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7L12 13 3 8.5zM21 6H3a2 2 0 0 0-2 2v.01L12 12 23 8.01V8a2 2 0 0 0-2-2z" fill="#6b6b6b"/>
-        </svg>
-        <div>
-          <div style="font-weight:700;color:var(--text)">Email</div>
-          <div><a href="mailto:info@helixcer.com">info@helixcer.com</a></div>
+        <!-- Email -->
+        <div class="contact-item">
+          <svg class="icon-small" viewBox="0 0 24 24">
+            <path d="M3 8.5v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7L12 13 3 8.5zM21 6H3a2 2 0 0 0-2 2v.01L12 12 23 8.01V8a2 2 0 0 0-2-2z" fill="#6b6b6b"/>
+          </svg>
+          <div>
+            <div style="font-weight:700;color:var(--text)">Email</div>
+            <div><a href="mailto:info@helixcer.com">info@helixcer.com</a></div>
+          </div>
         </div>
-      </div>
 
-      <!-- WhatsApp -->
-      <div class="contact-item">
-        <img src="https://static.wixstatic.com/media/35c132_d1696c4910a64ffeb0c31667c0856c59~mv2.png"
-             alt="WhatsApp" class="icon-small" />
-        <div>
-          <div style="font-weight:700;color:var(--text)">WhatsApp</div>
-          <a href="https://wa.me/916282010794?text=Hi%2C%20I%20want%20to%20book%20a%20freight%20service%20from%20Helixcer"
-             target="_blank"
-             style="color:#1aaa55;font-weight:700;">
-             +91 62820 10794
-          </a>
+        <!-- WhatsApp -->
+        <div class="contact-item">
+          <img src="https://static.wixstatic.com/media/35c132_d1696c4910a64ffeb0c31667c0856c59~mv2.png"
+               alt="WhatsApp" class="icon-small" />
+          <div>
+            <div style="font-weight:700;color:var(--text)">WhatsApp</div>
+            <div>
+              <a href="https://wa.me/916282010794?text=Hi%2C%20I%20want%20to%20book%20a%20freight%20service%20from%20Helixcer"
+                 target="_blank"
+                 style="color:#4ade80;font-weight:600;">
+                 +91 62820 10794
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
 
-    </section>
+      </section>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+      <!-- Sidebar -->
+      <aside class="sidebar">
 
-      <div class="info-box">
-        <h4>Office Hours</h4>
-        <div class="muted">Mon – Sat: 09:30 AM — 07:00 PM</div>
-      </div>
-
-      <div class="info-box">
-        <h4>Quick Links</h4>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <a href="/" class="muted">Home</a>
-          <a href="/#services" class="muted">Services</a>
-          <a href="/#partners" class="muted">Partners</a>
-          <a href="/calculator" class="muted">Get a Quote</a>
+        <div class="info-box">
+          <h4>Office Hours</h4>
+          <div class="muted">Mon - Sat: 09:30 AM — 07:00 PM</div>
         </div>
-      </div>
 
-      <div class="info-box">
-        <h4>Need immediate help?</h4>
-        <div class="muted">Call or message us on WhatsApp for urgent bookings and live support.</div>
-        <div style="margin-top:10px">
-          <a href="tel:+916282010794"
-             style="display:inline-block;background:var(--accent);color:#fff;padding:8px 12px;
-                    border-radius:8px;text-decoration:none;font-weight:700;">
-            Call Now
-          </a>
+        <div class="info-box">
+          <h4>Quick Links</h4>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <a href="/" class="muted">Home</a>
+            <a href="/#services" class="muted">Services</a>
+            <a href="/#partners" class="muted">Partners</a>
+            <a href="https://logistics.helixcer.com/calculator" target="_blank" class="muted">Get a Quote</a>
+          </div>
         </div>
-      </div>
 
-    </aside>
+        <div class="info-box">
+          <h4>Need immediate help?</h4>
+          <div class="muted">Call or message us on WhatsApp for urgent bookings and live support.</div>
+          <div style="margin-top:10px">
+            <a href="tel:+916282010794" style="display:inline-block;background:var(--accent);color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:700;">
+              Call: +91 62820 10794
+            </a>
+          </div>
+        </div>
 
-  </div>
+      </aside>
 
-</main>
+    </div>
 
-<!-- ⭐ FOOTER -->
-<div id="footer-placeholder"></div>
+  </main>
 
-<script src="/header.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
