@@ -4,7 +4,7 @@ email: info@helixcer.com
 description: >-
   Helixcer Logistics delivers efficient, secure, and affordable freight
   solutions with nationwide coverage across more than 25,000+ PIN codes.
-baseurl: "/helixcer-logistics"   # <--- project site baseurl. When using custom domain later, set to "".
-url: "https://nisaran.github.io" # change to your custom domain when you switch.
+baseurl: ""   # <--- project site baseurl. When using custom domain later, set to "".
+url: "https://logistics.helixcer.com" # change to your custom domain when you switch.
 permalink: /:path/               # pretty URLs
 markdown: kramdown
