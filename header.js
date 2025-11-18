@@ -1,53 +1,53 @@
-/* ---------------------------------------------------------
-   AUTO-INCLUDE HEADER + FOOTER ON ALL PAGES
-   --------------------------------------------------------- */
+/* Detect base path (GitHub Pages or custom domain) */
+let BASE_PATH = "/";
 
+const pathParts = window.location.pathname.split("/").filter(Boolean);
+
+/* If hosted on GitHub Pages project site → /helixcer-logistics/ */
+if (pathParts.length > 0 && pathParts[0] === "helixcer-logistics") {
+  BASE_PATH = "/helixcer-logistics/";
+}
+
+/* Load partials */
 async function includeSection(targetId, file) {
-  try {
-    const res = await fetch("/" + file);
-    if (!res.ok) {
-      // GitHub Pages project site fallback
-      const fallback = window.location.pathname.split("/")[1];
-      const fallbackRes = await fetch("/" + fallback + "/" + file);
+  const url = BASE_PATH + file;
 
-      if (fallbackRes.ok) {
-        document.getElementById(targetId).innerHTML = await fallbackRes.text();
-      }
-      return;
+  try {
+    const res = await fetch(url);
+    if (res.ok) {
+      document.getElementById(targetId).innerHTML = await res.text();
+    } else {
+      console.warn("Failed:", url);
     }
-    document.getElementById(targetId).innerHTML = await res.text();
   } catch (e) {
-    console.warn("Include failed:", file);
+    console.warn("Error loading:", url);
   }
 }
 
-/* Load header + footer (placeholders required in each page) */
 includeSection("header-placeholder", "header.html");
 includeSection("footer-placeholder", "footer.html");
 
-
-/* ---------------------------------------------------------
-   ACTIVE LINK HIGHLIGHT (works on GitHub Pages + custom domain)
-   --------------------------------------------------------- */
+/* Highlight active menu */
 function highlightActiveLink() {
-  const path = window.location.pathname.replace(/\/+$/, ""); // remove trailing slash
-  let current = path.split("/").pop();
-
-  if (current === "") current = "home";
-
+  const current = window.location.pathname.replace(BASE_PATH, "") || "home";
   const links = document.querySelectorAll("nav a");
 
-  links.forEach(link => {
-    const href = link.getAttribute("href").replace(/\/+$/, "");
-    const page = href.split("/").pop() || "home";
+  links.forEach(a => {
+    let href = a.getAttribute("href").replace("/", "");
+    if (href === "") href = "home";
 
-    if (page === current) {
-      link.classList.add("active");
+    if (current.startsWith(href)) {
+      a.classList.add("active");
     }
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Delay needed because header is loaded dynamically
-  setTimeout(highlightActiveLink, 300);
+/* Wait for header to load first */
+setTimeout(highlightActiveLink, 400);
+
+/* Auto-close mobile menu */
+document.addEventListener("click", (e) => {
+  if (e.target.closest("nav a")) {
+    document.body.classList.remove("show-menu");
+  }
 });
