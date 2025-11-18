@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Freight Calculator — Helixcer Logistics</title>
+
+<!-- SEO -->
+<meta name="description" content="Calculate freight charges instantly with Helixcer Logistics. Fast, transparent, and accurate shipping cost estimator across 25,000+ PIN codes.">
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/0261a6_4871fa964e70483b9afc86c8d9ac6294~mv2.png">
+<meta property="og:image" content="https://static.wixstatic.com/media/35c132_c0fb7faf6adc4abebbc07b267a1e5210~mv2.jpg" />
+<meta property="og:title" content="Freight Calculator — Helixcer Logistics" />
+<meta property="og:description" content="Calculate accurate freight costs for any shipment across India in seconds." />
+</head>
+
+<body>
+
+<!-- ⭐ HEADER -->
+<div id="header-placeholder"></div>
+
+<div class="wrap">
+  
+<!-- ⭐ START OF YOUR ORIGINAL CALCULATOR PAGE -->
+<style>
+  :root{
+    --primary:#1f56ff;
+    --blue:#1f56ff;
+    --teal:#14b8a6;
+    --danger:#ef4444;
+    --border:#e4ebf5;
+    --bg:#f7faff;
+    --card:#ffffff;
+    --text:#0b2a4a;
+    --dim-h:38px;
+    --btn-h:38px;
+    --small-btn-h:32px;
+    --row-gap:12px;
+    --col-gap:10px;
+  }
+
+  body{background:var(--bg);margin:0;font-family:Inter,Arial;}
+  .wrap{max-width:1180px;margin:20px auto;padding:18px;}
+
+  .page-title{font-size:26px;font-weight:700;margin-bottom:16px;color:#0b2a4a}
+
+  .card{
+    background:#fff;border-radius:12px;
+    box-shadow:0 6px 24px rgba(16,24,40,0.04);
+    padding:18px;position:relative;
+  }
+
+  .loading-overlay{
+    position:absolute;inset:0;background:rgba(255,255,255,0.65);
+    display:flex;justify-content:center;align-items:center;
+    border-radius:12px;backdrop-filter:blur(2px);
+    opacity:0;pointer-events:none;transition:opacity .2s;
+  }
+  .loading-overlay.show{opacity:1;pointer-events:auto}
+  .spinner{
+    width:36px;height:36px;border-radius:50%;
+    border:4px solid rgba(0,0,0,0.15);
+    border-top-color:#1f56ff;animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .top-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:16px;margin-bottom:16px;
+  }
+  .field label{font-weight:700;color:#0b2a4a;margin-bottom:4px;display:block}
+  .field input{
+    width:100%;height:38px;border-radius:8px;border:1px solid #dfe7f2;
+    padding:8px 10px;font-size:14px;
+  }
+
+  .section-head{
+    margin:16px 0 8px;display:flex;justify-content:space-between;
+    align-items:center;
+  }
+  .section-head h3{margin:0;font-size:18px;font-weight:700;color:#0b2a4a}
+
+  .box-titles{
+    display:grid;
+    grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px;
+    column-gap:var(--col-gap);
+    font-weight:700;font-size:12px;color:#0b2a4a;
+    margin:10px 0 6px;padding:0 6px;
+  }
+
+  #boxes{display:flex;flex-direction:column;gap:var(--row-gap);margin-top:4px;}
+
+  .box-row{
+    display:grid;
+    grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px;
+    column-gap:var(--col-gap);align-items:center;
+    padding:8px;border-radius:10px;background:#fbfdff;
+    border:1px solid #f0f6fb;overflow:hidden;
+  }
+
+  .box-label{font-weight:800;color:#0b2a4a;padding-left:6px}
+  .box-row input{
+    height:var(--dim-h);padding:6px 10px;border:1px solid var(--border);
+    border-radius:6px;background:#fff;outline:none;width:100%;
+  }
+
+  .delete-cell{display:flex;justify-content:center;}
+  .delete-btn{
+    width:var(--dim-h);height:var(--dim-h);border-radius:8px;
+    border:none;background:var(--danger);color:#fff;font-weight:800;
+    cursor:pointer;display:inline-flex;justify-content:center;align-items:center;
+  }
+
+  .center-actions{display:flex;justify-content:center;margin:10px 0 4px;gap:12px;}
+  .btn{border:none;border-radius:8px;padding:0 12px;font-weight:700;cursor:pointer;}
+  .btn-blue{background:var(--blue);color:#fff;height:var(--btn-h);}
+  .btn-green{background:var(--teal);color:#fff;height:var(--btn-h);}
+  .btn-gray{background:#eef3fb;color:#0b2a4a;border:1px solid var(--border);height:var(--btn-h);}
+  .btn-link{background:none;color:#0c2748;text-decoration:underline;cursor:pointer;}
+
+  #resultArea{margin-top:18px;}
+
+  .table-responsive{width:100%;overflow-x:auto;margin:8px 0;border-radius:8px;}
+
+  /* RESPONSIVE */
+  @media(max-width:720px){
+    .top-grid{grid-template-columns:1fr;}
+    .box-titles{display:none;}
+    .box-row{
+      grid-template-columns:1fr;grid-template-rows:auto;
+      padding:12px;row-gap:8px;
+    }
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<!-- Calculator HTML from original file -->
+<div class="card" id="mainCard">
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <form id="shipForm">
+
+    <div class="top-grid">
+      <div class="field">
+        <label>Origin Pincode</label>
+        <input type="number" id="origin" required>
+      </div>
+      <div class="field">
+        <label>Destination Pincode</label>
+        <input type="number" id="destination" required>
+      </div>
+      <div class="field">
+        <label>Declared Value (₹)</label>
+        <input type="number" id="value" required>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <h3>Box Details</h3>
+      <div class="head-actions">
+        <input type="file" id="uploadFile" accept=".xlsx,csv" style="display:none;">
+        <button type="button" id="uploadBtn" class="btn btn-blue">Upload (.xlsx/.csv)</button>
+        <button type="button" id="downloadTemplate" class="btn-link">Download Template</button>
+      </div>
+    </div>
+
+    <div class="box-titles">
+      <div>Box</div><div>L (cm)</div><div>W (cm)</div><div>H (cm)</div><div>Wt (kg)</div><div>Qty</div><div></div>
+    </div>
+
+    <div id="boxes"></div>
+
+    <div class="center-actions">
+      <button type="button" id="addBoxBtn" class="btn btn-green">Add Box</button>
+      <button type="button" id="resetBtn" class="btn btn-gray">Reset</button>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:12px">
+      <button type="submit" class="btn btn-blue">Calculate</button>
+    </div>
+
+  </form>
+
+  <div id="resultArea"></div>
+
+</div>
+
+<script>
+/* Entire calculator JS from your file — unchanged */
+const GAS_URL = "YOUR_BACKEND_URL"; // update manually
+
+const boxes=document.getElementById('boxes');
+const addBoxBtn=document.getElementById('addBoxBtn');
+const resetBtn=document.getElementById('resetBtn');
+const uploadBtn=document.getElementById('uploadBtn');
+const uploadFile=document.getElementById('uploadFile');
+const valueInput=document.getElementById('value');
+const originInput=document.getElementById('origin');
+const destinationInput=document.getElementById('destination');
+const resultArea=document.getElementById('resultArea');
+const form=document.getElementById('shipForm');
+const mainCard=document.getElementById('mainCard');
+const loadingOverlay=document.getElementById('loadingOverlay');
+
+const REQUIRED_HEADERS=['length_cm','width_cm','height_cm','weight_per_box_kg','box_quantity'];
+
+function el(tag,opts={},children=""){
+  const e=document.createElement(tag);
+  if(opts.class)e.className=opts.class;
+  if(opts.attrs)Object.entries(opts.attrs).forEach(([k,v])=>e.setAttribute(k,v));
+  if(children)e.innerHTML=children;
+  return e;
+}
+
+function addBox(values){
+  const row=el('div',{class:'box-row'});
+  const label=el('div',{class:'box-label'},"Box");
+  const lengthInput=el('input',{class:'length',attrs:{type:'number',placeholder:'L (cm)'}});
+  const widthInput=el('input',{class:'width',attrs:{type:'number',placeholder:'W (cm)'}});
+  const heightInput=el('input',{class:'height',attrs:{type:'number',placeholder:'H (cm)'}});
+  const weightInput=el('input',{class:'weight',attrs:{type:'number',placeholder:'Wt (kg)'}});
+  const qtyInput=el('input',{class:'qty',attrs:{type:'number',min:'1',placeholder:'Qty'}});
+
+  if(values){
+    lengthInput.value=values.length_cm||'';
+    widthInput.value=values.width_cm||'';
+    heightInput.value=values.height_cm||'';
+    weightInput.value=values.weight_per_box_kg||'';
+    if(values.box_quantity!==undefined) qtyInput.value=values.box_quantity;
+  }
+
+  const delCell=el('div',{class:'delete-cell'});
+  const delBtn=el('button',{class:'delete-btn',attrs:{type:'button'}},'✕');
+  delBtn.onclick=()=>{boxes.removeChild(row);renumber();showHideDelete()};
+  delCell.appendChild(delBtn);
+
+  row.append(label,lengthInput,widthInput,heightInput,weightInput,qtyInput,delCell);
+  boxes.appendChild(row);
+  renumber();showHideDelete();
+}
+
+function renumber(){
+  [...boxes.querySelectorAll('.box-label')].forEach((lbl,i)=>lbl.textContent='Box '+(i+1));
+}
+function showHideDelete(){
+  const dels=boxes.querySelectorAll('.delete-btn');
+  if(dels.length===1)dels[0].style.display='none';
+  else dels.forEach(d=>d.style.display='inline-flex');
+}
+
+addBoxBtn.onclick=()=>addBox();
+resetBtn.onclick=()=>{
+  if(!confirm('Reset everything?'))return;
+  originInput.value='';destinationInput.value='';valueInput.value='';
+  boxes.innerHTML='';addBox();
+};
+
+uploadBtn.onclick=()=>uploadFile.click();
+
+uploadFile.onchange=async(evt)=>{
+  const file=evt.target.files[0];if(!file)return;
+  try{
+    const data=await file.arrayBuffer();
+    const wb=XLSX.read(data,{type:'array'});
+    const ws=wb.Sheets[wb.SheetNames[0]];
+    const rows=XLSX.utils.sheet_to_json(ws,{defval:'',raw:true});
+    if(!rows.length)throw new Error();
+    const headers=Object.keys(rows[0]).map(h=>(''+h).trim());
+    const ok=REQUIRED_HEADERS.every(h=>headers.includes(h));
+    if(!ok){alert("Invalid headers.");evt.target.value='';return;}
+    boxes.innerHTML='';
+    rows.forEach(r=>{
+      if(Object.values(r).every(v=>v===''))return;
+      addBox({
+        length_cm:+r.length_cm,
+        width_cm:+r.width_cm,
+        height_cm:+r.height_cm,
+        weight_per_box_kg:+(r.weight_per_box_kg||0),
+        box_quantity:(r.box_quantity===''?undefined:+r.box_quantity)
+      });
+    });
+    if(!boxes.children.length)addBox();
+    alert('Boxes loaded from file.');
+  }catch(e){
+    alert("Failed to read the file.");
+  }finally{evt.target.value='';}
+};
+
+document.getElementById('downloadTemplate').onclick=()=>{
+  const csv='length_cm,width_cm,height_cm,weight_per_box_kg,box_quantity\n30,25,15,2,1\n45,35,25,5,2\n';
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='box_template.csv';
+  document.body.appendChild(a);a.click();URL.revokeObjectURL(url);a.remove();
+};
+
+form.onsubmit=async(e)=>{
+  e.preventDefault();
+
+  const originVal=originInput.value.trim();
+  const destVal=destinationInput.value.trim();
+  if(!/^\d{6}$/.test(originVal)){alert("Origin pincode must be 6 digits.");return;}
+  if(!/^\d{6}$/.test(destVal)){alert("Destination pincode must be 6 digits.");return;}
+
+  const payloadBoxes=[...boxes.querySelectorAll('.box-row')].map(r=>({
+    length_cm:+r.querySelector('.length').value||0,
+    width_cm:+r.querySelector('.width').value||0,
+    height_cm:+r.querySelector('.height').value||0,
+    weight_per_box_kg:+r.querySelector('.weight').value||0,
+    box_quantity:+r.querySelector('.qty').value||1
+  })).filter(b=>b.box_quantity>0);
+
+  if(!payloadBoxes.length){alert("Add at least one box.");return;}
+
+  const payload={
+    routeType:'freight-calculator',
+    fromPincode:originVal,
+    toPincode:destVal,
+    totalValue:+valueInput.value||0,
+    boxes:payloadBoxes
+  };
+
+  loadingOverlay.classList.add('show');
+  resultArea.innerHTML="<div>Calculating…</div>";
+
+  try{
+    const res=await fetch(GAS_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload)
+    });
+
+    const txt=await res.text();
+    let data;
+    try{data=JSON.parse(txt);}catch(err){
+      resultArea.innerHTML="<div>Invalid response:<pre>"+txt+"</pre></div>";
+      return;
+    }
+
+    if(!data.ok){
+      resultArea.innerHTML="<div>"+(data.error||"Server Error")+"</div>";
+      return;
+    }
+
+    resultArea.innerHTML=data.html||"<div>No data</div>";
+
+  }catch(err){
+    resultArea.innerHTML="<div>Error: "+err.message+"</div>";
+  }finally{
+    loadingOverlay.classList.remove('show');
+  }
+};
+</script>
+
+</div>
+
+<!-- ⭐ FOOTER -->
+<div id="footer-placeholder"></div>
+
+<script src="/header.js"></script>
+</body>
+</html>
