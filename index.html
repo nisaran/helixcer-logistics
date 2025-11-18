@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Helixcer Logistics</title>
+
+<!-- SEO -->
+<meta name="description" content="Helixcer Logistics delivers efficient, secure, and affordable freight solutions with nationwide coverage across more than 25,000+ PIN codes.">
+
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/0261a6_4871fa964e70483b9afc86c8d9ac6294~mv2.png">
+
+<!-- OG / Social -->
+<meta property="og:title" content="Helixcer Logistics" />
+<meta property="og:description" content="Helixcer Logistics delivers efficient, secure, and affordable freight solutions with nationwide coverage across more than 25,000+ PIN codes." />
+<meta property="og:image" content="https://static.wixstatic.com/media/35c132_c0fb7faf6adc4abebbc07b267a1e5210~mv2.jpg" />
+
+<style>
+  :root{
+    --bg: #f7f9fb;
+    --card: #ffffff;
+    --accent: #ba4028;
+    --accent-strong: #8b2b1f;
+    --text: #0f172a;
+    --muted: #6b6b6b;
+    --radius: 12px;
+    --container: 1150px;
+  }
+
+  body{
+    margin:0;
+    font-family:Inter,"Segoe UI",Roboto,Arial;
+    color:var(--text);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--container);margin:18px auto;padding:18px;}
+
+  .hero{
+    margin-top:6px;
+    background:#ffffff;
+    border-radius:14px;
+    padding:28px;
+    display:grid;
+    grid-template-columns:1fr 420px;
+    gap:28px;
+    align-items:center;
+    box-shadow:0 10px 30px rgba(16,24,40,0.04);
+  }
+
+  .hero-left h2{font-size:34px;margin:0 0 14px;}
+  .hero-left p{color:var(--muted);line-height:1.6;margin:0 0 20px;}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+
+  .btn-primary{
+    background:var(--accent);color:#fff;padding:12px 18px;
+    border-radius:12px;font-weight:700;text-decoration:none;
+  }
+  .btn-ghost{
+    background:transparent;border:2px solid rgba(186,64,40,0.12);
+    padding:10px 16px;border-radius:12px;font-weight:700;
+    color:var(--accent-strong);text-decoration:none;
+  }
+
+  .hero-right-img{
+    width:100%;border-radius:12px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.08);
+  }
+
+  .section{margin-top:44px}
+  .section h3{margin:0 0 12px;font-size:22px}
+  .services-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+  }
+  .service{
+    background:var(--card);padding:18px;border-radius:12px;
+    box-shadow:0 8px 22px rgba(16,24,40,0.04);
+    display:flex;gap:12px;align-items:flex-start;
+  }
+  .svc-icon{
+    width:56px;height:56px;border-radius:10px;background:#fff;
+    display:flex;justify-content:center;align-items:center;
+    font-weight:700;color:var(--accent);box-shadow:0 6px 14px rgba(0,0,0,0.04);
+  }
+
+  .partners{margin-top:40px;padding:18px;background:#fff;border-radius:12px;}
+  .partners h3{margin:0;font-size:20px}
+
+  .partners-wrapper{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    position: relative;
+  }
+
+  .arrow-btn{
+    cursor:pointer;font-size:20px;font-weight:800;
+    padding:6px 10px;background:#f1f5f9;border-radius:8px;
+    color:#475569;user-select:none;
+    transition:opacity .18s,transform .12s;
+    display:flex;align-items:center;justify-content:center;
+    z-index: 3;
+  }
+  .arrow-btn:hover{transform:scale(1.06)}
+  .arrow-hidden{opacity:0;pointer-events:none}
+
+  .partners-scroll{
+    margin-top:0;display:flex;gap:16px;overflow-x:auto;padding:10px;
+    -webkit-overflow-scrolling:touch;scroll-behavior:smooth;
+    flex:1;
+    z-index: 1;
+    touch-action: pan-y;
+    overscroll-behavior-x: contain;
+    overscroll-behavior-y: auto;
+  }
+
+  .partner-card{
+    flex:0 0 auto;width:140px;height:70px;
+    background:#fff;border-radius:10px;padding:8px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.04);
+    display:flex;justify-content:center;align-items:center;
+  }
+  .partner-card img{max-width:100%;max-height:100%;object-fit:contain}
+
+  .about-card{
+    margin-top:36px;padding:22px;background:#fff;border-radius:12px;
+    box-shadow:0 8px 22px rgba(16,24,40,0.04);
+  }
+  .about-card p{color:var(--muted);line-height:1.6}
+  ul{margin-top:12px;color:var(--muted);line-height:1.8}
+
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr;}
+    .partners-wrapper{gap:8px}
+    .arrow-btn { padding:6px 8px; }
+  }
+  @media(max-width:620px){
+    .services-grid{grid-template-columns:1fr}
+  }
+</style>
+
+</head>
+<body>
+
+<!-- ⭐ HEADER -->
+<div id="header-placeholder"></div>
+
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <h2>Reliable Freight & Logistics Across India</h2>
+      <p>Helixcer Logistics delivers efficient, secure, and affordable freight solutions with nationwide coverage across more than <strong>25,000+</strong> PIN codes.</p>
+
+      <div class="hero-ctas">
+        <a class="btn-primary" href="/calculator" target="_self">Get a Quote</a>
+        <a id="exploreServicesBtn" class="btn-ghost" href="#services">Explore Services</a>
+      </div>
+    </div>
+
+    <div>
+      <img class="hero-right-img"
+      src="https://static.wixstatic.com/media/35c132_c0fb7faf6adc4abebbc07b267a1e5210~mv2.jpg"
+      alt="Helixcer Hero Image">
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section" id="services">
+    <h3>Our Services</h3>
+
+    <div class="services-grid">
+      <div class="service">
+        <div class="svc-icon">LTL</div>
+        <div><h4>Less-than-Truckload</h4><p>Flexible, economical partial-load freight shipping.</p></div>
+      </div>
+
+      <div class="service">
+        <div class="svc-icon">B2B</div>
+        <div><h4>B2B Freight</h4><p>Business-focused freight with billing and integration support.</p></div>
+      </div>
+
+      <div class="service">
+        <div class="svc-icon">INS</div>
+        <div><h4>Cargo Insurance</h4><p>Optional protection for safe and insured transports.</p></div>
+      </div>
+
+      <div class="service">
+        <div class="svc-icon">PUDO</div>
+        <div><h4>Pickup & Drop</h4><p>Convenient pickup/drop services across India.</p></div>
+      </div>
+
+      <div class="service">
+        <div class="svc-icon">TRK</div>
+        <div><h4>Tracking</h4><p>Live, real-time tracking for all shipments.</p></div>
+      </div>
+
+      <div class="service">
+        <div class="svc-icon">RTN</div>
+        <div><h4>Real-time Notification</h4><p>Instant updates for shipment milestones.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section class="partners" id="partners">
+    <h3>Our Logistics Partners</h3>
+
+    <div class="partners-wrapper">
+      <div id="scrollLeft" class="arrow-btn arrow-hidden">&lt;</div>
+
+      <div class="partners-scroll" id="partnersScroll">
+
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_dcff402ea03245d2ae0316b5951624c0~mv2.png"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_fb17bddf3b85410892e301d9978ca116~mv2.png"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_aba501b5d40b4e51874ebc30dc263585~mv2.jpg"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_16a8a03f95ff42b38f052ebd9b584cfd~mv2.png"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_b19c3e60c13a4684805e4c70a307d1c0~mv2.png"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_5c4cdf61bbe249d8855e8fb2f7e9bba5~mv2.png"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_a911d179b0cf47bea07ee9218acfaec1~mv2.png"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_e39101ca2dae45779f48c8dd82ecf2cf~mv2.png"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_b64ce6a4d7db44a2b0479177a65bc941~mv2.jpg"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_5a35d5365f7f4f65ab692bf5a45275d5~mv2.png"></div>
+        <div class="partner-card"><img src="https://static.wixstatic.com/media/35c132_7f5e89352b284bd8be640b39c563d17e~mv2.jpg"></div>
+
+      </div>
+
+      <div id="scrollRight" class="arrow-btn">&gt;</div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about-card">
+    <h3>About Helixcer Logistics</h3>
+    <p>Helixcer Logistics delivers reliable, flexible, and transparent shipping solutions for businesses across India.</p>
+    <ul>
+      <li>25,000+ PIN codes</li>
+      <li>Multi-carrier network</li>
+      <li>Real-time tracking</li>
+    </ul>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<div id="footer-placeholder"></div>
+
+<!-- LOAD COMMON HEADER/FOOTER -->
+<script src="/header.js"></script>
+
+<!-- Partner scroll script -->
+<script>
+(function(){
+  const scroller = document.getElementById("partnersScroll");
+  const leftBtn = document.getElementById("scrollLeft");
+  const rightBtn = document.getElementById("scrollRight");
+
+  function updateArrows(){
+    leftBtn.classList.toggle('arrow-hidden', scroller.scrollLeft <= 5);
+    rightBtn.classList.toggle('arrow-hidden', scroller.scrollLeft + scroller.clientWidth >= scroller.scrollWidth - 5);
+  }
+
+  leftBtn.onclick = () => {
+    scroller.scrollBy({ left: -240, behavior: 'smooth' });
+    setTimeout(updateArrows, 250);
+  };
+
+  rightBtn.onclick = () => {
+    scroller.scrollBy({ left: 240, behavior: 'smooth' });
+    setTimeout(updateArrows, 250);
+  };
+
+  scroller.addEventListener('scroll', updateArrows);
+  updateArrows();
+})();
+</script>
+
+</body>
+</html>
