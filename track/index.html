@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Track Shipment — Helixcer Logistics</title>
+
+<!-- SEO -->
+<meta name="description" content="Track your Helixcer Logistics shipment instantly. Get real-time status updates across 25,000+ PIN codes.">
+<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/0261a6_4871fa964e70483b9afc86c8d9ac6294~mv2.png">
+<meta property="og:image" content="https://static.wixstatic.com/media/35c132_c0fb7faf6adc4abebbc07b267a1e5210~mv2.jpg" />
+<meta property="og:title" content="Track Shipment — Helixcer Logistics" />
+<meta property="og:description" content="Track shipments in real-time across India with Helixcer Logistics." />
+
+<style>
+  :root {
+    --bg:#f7faff;
+    --card:#ffffff;
+    --border:#e6ecf5;
+    --text:#0b2748;
+    --accent:#1f56ff;
+    --muted:#6b7280;
+  }
+  body { margin:0;background:var(--bg);font-family:Inter,Arial; }
+  .wrap { max-width:1050px;margin:20px auto;padding:18px; }
+  .grid { display:grid;grid-template-columns:1fr 1fr;gap:20px; }
+  .card {
+    background:var(--card);border-radius:12px;padding:20px;
+    box-shadow:0 6px 20px rgba(10,25,70,0.05);
+  }
+  .title { font-size:22px;font-weight:700;margin-bottom:8px; }
+  .label { font-weight:600;font-size:14px;margin-bottom:4px;color:#0f172a; }
+  .control {
+    width:100%;border:1px solid var(--border);height:38px;border-radius:8px;
+    padding:8px 10px;font-size:14px;
+  }
+  .dropdown { position:relative; }
+  .dropdown-list {
+    position:absolute;top:42px;left:0;right:0;background:#fff;
+    max-height:220px;overflow-y:auto;border:1px solid #dbe5ef;
+    border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,0.06);
+    display:none;z-index:20;
+  }
+  .dropdown-item {
+    padding:8px 10px;cursor:pointer;border-bottom:1px solid #f1f5f9;
+  }
+  .dropdown-item:hover { background:#f0f6ff; }
+  .btn {
+    background:var(--accent);color:#fff;border:none;height:38px;
+    border-radius:8px;padding:0 14px;font-weight:700;cursor:pointer;
+  }
+  .small { font-size:12px;color:var(--muted); }
+
+  /* Overlay */
+  .overlay {
+    position:fixed;inset:0;background:rgba(255,255,255,0.6);
+    display:none;justify-content:center;align-items:center;z-index:999;
+    backdrop-filter:blur(2px);
+  }
+  .overlay.show { display:flex; }
+  .spinner {
+    width:40px;height:40px;border-radius:50%;
+    border:4px solid rgba(0,0,0,0.1);
+    border-top-color:#1f56ff;
+    animation:spin .9s linear infinite;
+  }
+  @keyframes spin { to{ transform:rotate(360deg); } }
+
+  /* Responsive */
+  @media(max-width:800px){ .grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+
+<body>
+
+<!-- ⭐ HEADER -->
+<div id="header-placeholder"></div>
+
+<div class="wrap">
+
+  <div class="grid">
+
+    <!-- Search Card -->
+    <div class="card">
+      <div class="title">Track Shipment</div>
+
+      <div style="margin-top:8px">
+        <div class="label">Tracking ID</div>
+        <input id="trackingInput" class="control" type="text" placeholder="Enter Tracking ID" />
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="label">Carrier</div>
+
+        <div class="dropdown">
+          <input id="carrierSearch" class="control" type="text" placeholder="Search carriers…" autocomplete="off" />
+          <div id="dropdownList" class="dropdown-list" role="listbox"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;display:flex;align-items:center;gap:8px">
+        <button id="submitBtn" class="btn">
+          <span id="btnSpinner" style="display:none;width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.45);border-top-color:#fff;animation:spin .9s linear infinite"></span>
+          <span>Track</span>
+        </button>
+
+        <div id="formMessage" class="small"></div>
+      </div>
+    </div>
+
+    <!-- Result Card -->
+    <div class="card" id="resultCard" style="display:none">
+      <div id="trackingResult"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Loading Overlay -->
+<div id="overlay" class="overlay"><div class="spinner"></div></div>
+
+<!-- ⭐ Footer -->
+<div id="footer-placeholder"></div>
+
+<script src="/header.js"></script>
+
+<!-- ORIGINAL TRACKING JS -->
+<script>
+/* -------------------------
+   CONFIG
+   ------------------------- */
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby9450wF37JPBWzJjbZoolDVVjmgEGB86E4C9TkJPyHGaTIHkfBpLmU-xthMcmeR4Rn/exec";
+const CARRIERS_CACHE_KEY = "carriers_v1";
+const CARRIERS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+
+/* -------------------------
+   STATE
+   ------------------------- */
+let carriers = [];
+let selectedCarrier = null;
+
+/* -------------------------
+   Elements
+   ------------------------- */
+const trackingInput = document.getElementById("trackingInput");
+const carrierSearch = document.getElementById("carrierSearch");
+const dropdownList = document.getElementById("dropdownList");
+const submitBtn = document.getElementById("submitBtn");
+const btnSpinner = document.getElementById("btnSpinner");
+const formMessage = document.getElementById("formMessage");
+const resultCard = document.getElementById("resultCard");
+const trackingResult = document.getElementById("trackingResult");
+const overlay = document.getElementById("overlay");
+
+/* -------------------------
+   Carrier Loading
+   ------------------------- */
+async function loadCarriers() {
+  const cached = localStorage.getItem(CARRIERS_CACHE_KEY);
+  if (cached) {
+    const parsed = JSON.parse(cached);
+    if (Date.now() - parsed.ts < CARRIERS_CACHE_TTL_MS) {
+      carriers = parsed.data;
+      return;
+    }
+  }
+  const res = await fetch(WEBAPP_URL + "?routeType=getCarriers");
+  const data = await res.json();
+  carriers = data.carriers || [];
+  localStorage.setItem(CARRIERS_CACHE_KEY, JSON.stringify({ ts:Date.now(), data:carriers }));
+}
+
+function populateDropdown(filter = "") {
+  dropdownList.innerHTML = "";
+  const filtered = carriers.filter(c => c.name.toLowerCase().includes(filter.toLowerCase()));
+  if (!filtered.length) {
+    dropdownList.style.display = "none";
+    return;
+  }
+  dropdownList.style.display = "block";
+  filtered.forEach(c => {
+    const item = document.createElement("div");
+    item.className = "dropdown-item";
+    item.textContent = c.name;
+    item.onclick = () => {
+      selectedCarrier = c;
+      carrierSearch.value = c.name;
+      dropdownList.style.display = "none";
+    };
+    dropdownList.appendChild(item);
+  });
+}
+
+/* -------------------------
+   Tracking Submission
+   ------------------------- */
+async function trackShipment() {
+  const tid = trackingInput.value.trim();
+  const carrier = selectedCarrier?.code;
+
+  if (!tid) return showMsg("Enter a tracking ID", true);
+  if (!carrier) return showMsg("Select a carrier", true);
+
+  overlay.classList.add("show");
+  btnSpinner.style.display = "inline-block";
+
+  try {
+    const res = await fetch(WEBAPP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        routeType: "track",
+        trackingId: tid,
+        carrierCode: carrier
+      })
+    });
+
+    const data = await res.json();
+
+    resultCard.style.display = "block";
+    trackingResult.innerHTML = data.html || "<div>No data returned</div>";
+
+  } catch (err) {
+    showMsg("Network error", true);
+  } finally {
+    overlay.classList.remove("show");
+    btnSpinner.style.display = "none";
+  }
+}
+
+function showMsg(msg, err = false) {
+  formMessage.textContent = msg;
+  formMessage.style.color = err ? "#b91c1c" : "#1e40af";
+}
+
+/* -------------------------
+   Events
+   ------------------------- */
+carrierSearch.addEventListener("input", (e) => populateDropdown(e.target.value));
+submitBtn.addEventListener("click", trackShipment);
+
+document.addEventListener("click", (e) => {
+  if (!dropdownList.contains(e.target) && e.target !== carrierSearch) {
+    dropdownList.style.display = "none";
+  }
+});
+
+/* Init */
+loadCarriers();
+</script>
+
+</body>
+</html>
