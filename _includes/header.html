@@ -1,16 +1,18 @@
+<!-- _includes/header.html -->
 <header class="site-header" role="banner">
   <div class="header-wrap">
+
+    <!-- LOGO -->
     <a class="logo" href="{{ site.baseurl }}/">
       <img src="https://static.wixstatic.com/media/35c132_abad5506f5da47bfb6082108b6b204e1~mv2.png" alt="Helixcer Logistics" />
     </a>
 
-    <!-- HAMBURGER BUTTON -->
+    <!-- HAMBURGER (New, Premium Animated) -->
     <button class="hamburger" aria-label="Toggle menu" onclick="document.body.classList.toggle('show-menu')">
-    <div class="bar top"></div>
-    <div class="bar middle"></div>
-    <div class="bar bottom"></div>
+      <div class="bar top"></div>
+      <div class="bar middle"></div>
+      <div class="bar bottom"></div>
     </button>
-
 
     <!-- NAVIGATION -->
     <nav class="nav" role="navigation" aria-label="Primary">
@@ -22,94 +24,157 @@
         <li><a href="{{ site.baseurl }}/track/" {% if page.url == "/track/" %}class="active"{% endif %}>Track</a></li>
       </ul>
     </nav>
+
   </div>
 
+  <!-- STYLES -->
   <style>
     :root {
-      --header-bg:#fff;
-      --header-text:#0f172a;
-      --accent:#1f56ff;
+      --header-bg: #ffffff;
+      --header-text: #0f172a;
+      --accent: #1f56ff;
     }
 
-    .site-header{
-      width:100%;background:var(--header-bg);
-      border-bottom:1px solid #e5e7eb;
-      position:sticky;top:0;z-index:1000;
+    .site-header {
+      width: 100%;
+      background: var(--header-bg);
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
     }
 
-    .header-wrap{
-      max-width:1150px;margin:0 auto;
-      padding:14px 18px;
-      display:flex;align-items:center;justify-content:space-between;
+    .header-wrap {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
 
-    .logo img{height:42px;}
-
-    nav.nav ul{
-      display:flex;gap:24px;align-items:center;
-      list-style:none;margin:0;padding:0;
-    }
-    nav.nav a{
-      text-decoration:none;color:var(--header-text);
-      font-weight:600;position:relative;padding:6px 2px;
-    }
-    nav.nav a.active{
-      color:var(--accent);
-    }
-    nav.nav a.active::after{
-      content:"";position:absolute;left:0;bottom:-5px;
-      height:3px;width:100%;border-radius:4px;
-      background:var(--accent);
+    .logo img {
+      height: 42px;
     }
 
-    /* ---------- NEW PERFECT HAMBURGER / X ICON ---------- */
+    /* ---- NAVIGATION ---- */
+    nav.nav ul {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
 
-.hamburger {
-  display: none;
-  width: 46px;
-  height: 46px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  background: #ffffff;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  cursor: pointer;
-}
+    nav.nav a {
+      text-decoration: none;
+      color: var(--header-text);
+      font-weight: 600;
+      padding: 6px 2px;
+      position: relative;
+    }
 
-/* bars */
-.hamburger .bar {
-  width: 26px;
-  height: 3px;
-  background: #0f172a;
-  border-radius: 3px;
-  position: absolute;
-  transition: 0.35s ease;
-}
+    nav.nav a.active {
+      color: var(--accent);
+    }
 
-/* Position bars in normal state */
-.hamburger .top    { transform: translateY(-8px); }
-.hamburger .middle { transform: translateY(0); }
-.hamburger .bottom { transform: translateY(8px); }
+    nav.nav a.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      height: 3px;
+      width: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+    }
 
-/* Transform into X when open */
-body.show-menu .hamburger .top {
-  transform: translateY(0px) rotate(45deg);
-}
-body.show-menu .hamburger .middle {
-  opacity: 0;
-}
-body.show-menu .hamburger .bottom {
-  transform: translateY(0px) rotate(-45deg);
-}
+    /* ---- NEW PREMIUM HAMBURGER ---- */
+    .hamburger {
+      display: none;
+      width: 46px;
+      height: 46px;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+    }
 
+    .hamburger .bar {
+      width: 26px;
+      height: 3px;
+      background: #0f172a;
+      border-radius: 3px;
+      position: absolute;
+      transition: 0.35s ease;
+    }
+
+    .hamburger .top {
+      transform: translateY(-8px);
+    }
+
+    .hamburger .middle {
+      transform: translateY(0px);
+    }
+
+    .hamburger .bottom {
+      transform: translateY(8px);
+    }
+
+    /* ---- ANIMATE TO X ---- */
+    body.show-menu .hamburger .top {
+      transform: translateY(0px) rotate(45deg);
+    }
+
+    body.show-menu .hamburger .middle {
+      opacity: 0;
+    }
+
+    body.show-menu .hamburger .bottom {
+      transform: translateY(0px) rotate(-45deg);
+    }
+
+    /* ---- RESPONSIVE ---- */
+    @media (max-width: 820px) {
+      .hamburger {
+        display: flex;
+      }
+
+      nav.nav {
+        display: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 68px;
+        background: #ffffff;
+        padding: 20px;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      }
+
+      body.show-menu nav.nav {
+        display: block;
+      }
+
+      nav.nav ul {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+    }
   </style>
 
+  <!-- SCRIPT: Auto-close menu -->
   <script>
-    // Close menu when clicking any link
-    document.addEventListener("click", (e)=>{
-      if(e.target.closest(".nav a")){
+    document.addEventListener("click", function (e) {
+      if (e.target.closest(".nav a")) {
         document.body.classList.remove("show-menu");
       }
     });
