@@ -1,7 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<body>
-
 <style>
   :root {
     --header-bg: #ffffff;
@@ -29,24 +25,18 @@
     align-items: center;
   }
 
-  .logo {
-    height: 42px;
-    display: flex;
-    align-items: center;
-  }
-
   .logo img {
     height: 42px;
   }
 
   /* NAVIGATION */
-  .nav {
+  nav.nav {
     display: flex;
-    gap: 24px;
+    gap: 26px;
     align-items: center;
   }
 
-  .nav a {
+  nav.nav a {
     text-decoration: none;
     color: var(--header-text);
     font-weight: 600;
@@ -55,11 +45,11 @@
   }
 
   /* ACTIVE TAB */
-  .nav a.active {
+  nav.nav a.active {
     color: var(--accent);
   }
 
-  .nav a.active::after {
+  nav.nav a.active::after {
     content: "";
     position: absolute;
     height: 3px;
@@ -70,7 +60,7 @@
     border-radius: 6px;
   }
 
-  /* HAMBURGER BUTTON */
+  /* HAMBURGER */
   .hamburger {
     display: none;
     width: 32px;
@@ -91,21 +81,22 @@
 
   /* MOBILE MENU */
   @media (max-width: 780px) {
-    .nav {
+    nav.nav {
       display: none;
       position: absolute;
       top: 68px;
       right: 0;
-      background: white;
-      width: 100%;
+      left: 0;
+      background: #fff;
+      padding: 20px;
       flex-direction: column;
-      padding: 16px;
-      box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+      gap: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
       border-bottom-left-radius: 12px;
       border-bottom-right-radius: 12px;
     }
 
-    body.show-menu .nav {
+    body.show-menu nav.nav {
       display: flex;
     }
 
@@ -124,8 +115,9 @@
     </a>
 
     <!-- NAVIGATION -->
-    <nav class="nav" id="mainNav">
+    <nav class="nav">
       <a href="/">Home</a>
+      <a href="/#services">Services</a>
       <a href="/contact">Contact</a>
       <a href="/calculator">Freight Calculator</a>
       <a href="/track">Track</a>
@@ -141,5 +133,11 @@
   </div>
 </header>
 
-</body>
-</html>
+<script>
+  // Auto-close mobile menu on link click
+  document.addEventListener("click", function(e){
+    if(e.target.closest("nav a")){
+      document.body.classList.remove("show-menu");
+    }
+  });
+</script>
