@@ -1,365 +1,516 @@
-<!doctype html>
+---
+layout: default
+title: Frieght Calculator - Helixcer Logistics
+description: Frieght Calculator - Helixcer Logistics
+---
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Freight Calculator — Helixcer Logistics</title>
-
-<!-- SEO -->
-<meta name="description" content="Calculate freight charges instantly with Helixcer Logistics. Fast, transparent, and accurate shipping cost estimator across 25,000+ PIN codes.">
-<link rel="icon" type="image/png" href="https://static.wixstatic.com/media/0261a6_4871fa964e70483b9afc86c8d9ac6294~mv2.png">
-<meta property="og:image" content="https://static.wixstatic.com/media/35c132_c0fb7faf6adc4abebbc07b267a1e5210~mv2.jpg" />
-<meta property="og:title" content="Freight Calculator — Helixcer Logistics" />
-<meta property="og:description" content="Calculate accurate freight costs for any shipment across India in seconds." />
-</head>
-
-<body>
-
-<!-- ⭐ HEADER -->
-<div id="header-placeholder"></div>
-
-<div class="wrap">
-  
-<!-- ⭐ START OF YOUR ORIGINAL CALCULATOR PAGE -->
+<title>Freight Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  :root{
-    --primary:#1f56ff;
-    --blue:#1f56ff;
-    --teal:#14b8a6;
-    --danger:#ef4444;
-    --border:#e4ebf5;
-    --bg:#f7faff;
-    --card:#ffffff;
-    --text:#0b2a4a;
-    --dim-h:38px;
-    --btn-h:38px;
-    --small-btn-h:32px;
-    --row-gap:12px;
-    --col-gap:10px;
+  :root {
+    --bg: #f7faff;
+    --card: #ffffff;
+    --text: #0f172a;
+    --border: #e6ecf5;
+    --primary: #1f56ff;
+    --blue: #0ea5e9;
+    --teal: #12b981;
+    --danger: #ef4444;
+
+    --col-gap: 8px;
+    --row-gap: 10px;
+
+    --dim-h: 40px;
+    --btn-h: 40px;
+    --small-btn-h: 32px;
+    --radius: 8px;
   }
 
-  body{background:var(--bg);margin:0;font-family:Inter,Arial;}
-  .wrap{max-width:1180px;margin:20px auto;padding:18px;}
+  html, body {
+  height: auto;
+}
 
-  .page-title{font-size:26px;font-weight:700;margin-bottom:16px;color:#0b2a4a}
+  body {
+    margin:0; padding:18px;
+    font:13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--text);
+    background:linear-gradient(180deg,#f7faff,#eef3fb 55%,#eaf1fb);
+  }
 
+  .wrap{ max-width:1180px; margin:0 auto; }
+  .page-title{ margin:0 0 12px; font-size:22px; font-weight:800; color:#0c2748 }
   .card{
-    background:#fff;border-radius:12px;
-    box-shadow:0 6px 24px rgba(16,24,40,0.04);
-    padding:18px;position:relative;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 4px 14px rgba(10,25,70,.06);
+    padding:16px;
+    position:relative;
   }
 
+  /* Loading overlay */
   .loading-overlay{
-    position:absolute;inset:0;background:rgba(255,255,255,0.65);
-    display:flex;justify-content:center;align-items:center;
-    border-radius:12px;backdrop-filter:blur(2px);
-    opacity:0;pointer-events:none;transition:opacity .2s;
+    position:absolute; inset:0;
+    background: rgba(255,255,255,0.6);
+    display:flex; align-items:center; justify-content:center;
+    border-radius:12px; z-index:40; pointer-events:none; opacity:0; transition:opacity .15s ease;
   }
-  .loading-overlay.show{opacity:1;pointer-events:auto}
+  .loading-overlay.show{ pointer-events:auto; opacity:1; }
   .spinner{
-    width:36px;height:36px;border-radius:50%;
-    border:4px solid rgba(0,0,0,0.15);
-    border-top-color:#1f56ff;animation:spin .8s linear infinite;
+    width:44px; height:44px; border-radius:50%;
+    border:4px solid rgba(0,0,0,0.08);
+    border-top-color:var(--primary); animation:spin 0.9s linear infinite; background:#fff;
   }
-  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes spin { to { transform:rotate(360deg); } }
 
-  .top-grid{
-    display:grid;grid-template-columns:repeat(3,1fr);
-    gap:16px;margin-bottom:16px;
-  }
-  .field label{font-weight:700;color:#0b2a4a;margin-bottom:4px;display:block}
+  .top-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:var(--col-gap); margin-bottom:12px; }
+  .field{ display:flex; flex-direction:column }
+  .field label{ font-size:13px; color:#09345f; font-weight:700; margin-bottom:6px }
   .field input{
-    width:100%;height:38px;border-radius:8px;border:1px solid #dfe7f2;
-    padding:8px 10px;font-size:14px;
+    height:var(--dim-h); padding:6px 10px; border:1px solid var(--border);
+    border-radius:var(--radius); background:#f9fbff; outline:none; box-sizing:border-box;
   }
 
-  .section-head{
-    margin:16px 0 8px;display:flex;justify-content:space-between;
-    align-items:center;
-  }
-  .section-head h3{margin:0;font-size:18px;font-weight:700;color:#0b2a4a}
+  .section-head{ display:flex; justify-content:space-between; align-items:flex-end; margin-top:10px; padding-top:10px; border-top:1px solid #edf2fa; }
+  .section-head h3{ margin:0; font-size:16px; font-weight:800; color:#0c2748 }
+  .head-actions{ display:flex; gap:8px; align-items:flex-end; }
 
-  .box-titles{
-    display:grid;
-    grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px;
-    column-gap:var(--col-gap);
-    font-weight:700;font-size:12px;color:#0b2a4a;
-    margin:10px 0 6px;padding:0 6px;
-  }
+  .btn{ border:none; border-radius:8px; padding:0 12px; height:var(--btn-h); font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center }
+  .btn-blue{ background:var(--blue); color:#fff }
+  .btn-link{ background:transparent; color:#0c2748; text-decoration:underline; height:auto; padding:0; font-weight:600; border:none; cursor:pointer }
+  .upload-btn{ height:var(--small-btn-h); padding:0 10px; border-radius:6px; font-weight:700; }
 
-  #boxes{display:flex;flex-direction:column;gap:var(--row-gap);margin-top:4px;}
+  .box-titles{ display:grid; grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px; column-gap:var(--col-gap); font-weight:700; color:#0b2a4a; font-size:12px; margin:10px 0 6px; padding:0 6px; }
+  #boxes{ display:flex; flex-direction:column; gap:var(--row-gap); margin-top:4px; }
+  .box-row{ display:grid; grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px; column-gap:var(--col-gap); align-items:center; padding:8px; border-radius:10px; background:#fbfdff; border:1px solid #f0f6fb; overflow:hidden; }
+  .box-label{ font-weight:800; color:#0b2a4a; padding-left:6px }
+  .box-row input{ height:var(--dim-h); padding:6px 10px; border:1px solid var(--border); border-radius:6px; background:#fff; outline:none; width:100%; box-sizing:border-box; }
+  .delete-cell{ display:flex; justify-content:center; }
+  .delete-btn{ width:var(--dim-h); height:var(--dim-h); border-radius:8px; border:none; background:var(--danger); color:#fff; cursor:pointer; font-weight:800; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(239,68,68,.08); }
 
-  .box-row{
-    display:grid;
-    grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px;
-    column-gap:var(--col-gap);align-items:center;
-    padding:8px;border-radius:10px;background:#fbfdff;
-    border:1px solid #f0f6fb;overflow:hidden;
-  }
+  .center-actions{ display:flex; justify-content:center; margin:10px 0 4px; gap:12px; }
+  .btn-green{ background:var(--teal); color:#fff; padding:0 14px; }
+  .footer-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
+  .btn-primary{ background:var(--primary); color:#fff; padding:0 16px; }
+  .btn-gray{ background:#eef3fb; color:#0b2a4a; border:1px solid var(--border); padding:0 14px; }
 
-  .box-label{font-weight:800;color:#0b2a4a;padding-left:6px}
-  .box-row input{
-    height:var(--dim-h);padding:6px 10px;border:1px solid var(--border);
-    border-radius:6px;background:#fff;outline:none;width:100%;
-  }
+  #resultArea{ margin-top:16px; }
 
-  .delete-cell{display:flex;justify-content:center;}
-  .delete-btn{
-    width:var(--dim-h);height:var(--dim-h);border-radius:8px;
-    border:none;background:var(--danger);color:#fff;font-weight:800;
-    cursor:pointer;display:inline-flex;justify-content:center;align-items:center;
+  @media (max-width:720px){
+    .top-grid{ grid-template-columns:1fr; }
+    .box-titles{ display:none; }
+    .box-row{ grid-template-columns:1fr; grid-template-rows:auto; padding:12px; row-gap:8px; }
+    .delete-cell{ justify-content:flex-end; padding-top:6px; }
+    .delete-btn{ width:36px; height:36px; }
+    .upload-btn{ height:32px; }
   }
 
-  .center-actions{display:flex;justify-content:center;margin:10px 0 4px;gap:12px;}
-  .btn{border:none;border-radius:8px;padding:0 12px;font-weight:700;cursor:pointer;}
-  .btn-blue{background:var(--blue);color:#fff;height:var(--btn-h);}
-  .btn-green{background:var(--teal);color:#fff;height:var(--btn-h);}
-  .btn-gray{background:#eef3fb;color:#0b2a4a;border:1px solid var(--border);height:var(--btn-h);}
-  .btn-link{background:none;color:#0c2748;text-decoration:underline;cursor:pointer;}
+  /* Result responsive cards */
+  .table-responsive{ width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; margin:8px 0; border-radius:8px; }
+  .resp-cards{ display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+  .resp-card{ background:#fff; border:1px solid #eef3fb; border-radius:10px; padding:10px; box-shadow:0 6px 18px rgba(10,25,70,.03); font-size:13px; }
+  .resp-card .rc-row{ display:flex; justify-content:space-between; gap:8px; padding:6px 0; border-bottom:1px solid #f5f8fb; }
+  .resp-card .rc-row:last-child{ border-bottom:none; }
+  .resp-card .rc-key{ color:#0b2a4a; font-weight:700; }
+  .resp-card .rc-val{ text-align:right; color:#0b2a4a; }
 
-  #resultArea{margin-top:18px;}
-
-  .table-responsive{width:100%;overflow-x:auto;margin:8px 0;border-radius:8px;}
-
-  /* RESPONSIVE */
-  @media(max-width:720px){
-    .top-grid{grid-template-columns:1fr;}
-    .box-titles{display:none;}
-    .box-row{
-      grid-template-columns:1fr;grid-template-rows:auto;
-      padding:12px;row-gap:8px;
+  /* Mobile full-width green total row */
+  @media (max-width:720px){
+    .resp-card .rc-row.is-total{
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+      background:#e9f9ee; padding:10px; border-radius:8px; margin:8px -10px;
+    }
+    .resp-card .rc-row.is-total .rc-key,
+    .resp-card .rc-row.is-total .rc-val{
+      font-weight:800; color:#0f172a;
     }
   }
 </style>
-
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="page-title">Freight Calculator</h1>
 
-<!-- Calculator HTML from original file -->
-<div class="card" id="mainCard">
+    <div class="card" id="mainCard">
+      <div class="loading-overlay" id="loadingOverlay" aria-hidden="true" role="status" title="Calculating">
+        <div class="spinner" aria-hidden="true"></div>
+      </div>
 
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
+      <form id="shipForm">
+        <div class="top-grid">
+          <div class="field">
+            <label>Origin Pincode</label>
+            <input type="number" id="origin" required>
+          </div>
+          <div class="field">
+            <label>Destination Pincode</label>
+            <input type="number" id="destination" required>
+          </div>
+          <div class="field">
+            <label>Declared Value (₹)</label>
+            <input type="number" id="value" min="0" step="0.01" required>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h3>Box Details</h3>
+          <div class="head-actions">
+            <input type="file" id="uploadFile" accept=".xlsx,.csv" style="display:none;">
+            <button type="button" id="uploadBtn" class="btn btn-blue upload-btn">Upload (.xlsx/.csv)</button>
+            <button type="button" class="btn-link" id="downloadTemplate">Download template</button>
+          </div>
+        </div>
+
+        <div class="box-titles">
+          <div></div><div>Length (cm)</div><div>Width (cm)</div><div>Height (cm)</div><div>Weight (kg)</div><div>Box Qty</div><div></div>
+        </div>
+
+        <div id="boxes"></div>
+
+        <div class="center-actions">
+          <button type="button" class="btn btn-green" id="addBoxBtn">+ Add Box</button>
+        </div>
+
+        <div class="footer-actions">
+          <button type="button" class="btn btn-gray" id="resetBtn">Reset</button>
+          <button type="submit" class="btn btn-primary" id="calcuateBtn">Calculate</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="resultArea"></div>
   </div>
 
-  <form id="shipForm">
-
-    <div class="top-grid">
-      <div class="field">
-        <label>Origin Pincode</label>
-        <input type="number" id="origin" required>
-      </div>
-      <div class="field">
-        <label>Destination Pincode</label>
-        <input type="number" id="destination" required>
-      </div>
-      <div class="field">
-        <label>Declared Value (₹)</label>
-        <input type="number" id="value" required>
-      </div>
-    </div>
-
-    <div class="section-head">
-      <h3>Box Details</h3>
-      <div class="head-actions">
-        <input type="file" id="uploadFile" accept=".xlsx,csv" style="display:none;">
-        <button type="button" id="uploadBtn" class="btn btn-blue">Upload (.xlsx/.csv)</button>
-        <button type="button" id="downloadTemplate" class="btn-link">Download Template</button>
-      </div>
-    </div>
-
-    <div class="box-titles">
-      <div>Box</div><div>L (cm)</div><div>W (cm)</div><div>H (cm)</div><div>Wt (kg)</div><div>Qty</div><div></div>
-    </div>
-
-    <div id="boxes"></div>
-
-    <div class="center-actions">
-      <button type="button" id="addBoxBtn" class="btn btn-green">Add Box</button>
-      <button type="button" id="resetBtn" class="btn btn-gray">Reset</button>
-    </div>
-
-    <div style="display:flex;justify-content:flex-end;margin-top:12px">
-      <button type="submit" class="btn btn-blue">Calculate</button>
-    </div>
-
-  </form>
-
-  <div id="resultArea"></div>
-
-</div>
-
 <script>
-/* Entire calculator JS from your file — unchanged */
-const GAS_URL = "YOUR_BACKEND_URL"; // update manually
+/* CONFIG */
+const GAS_URL = "https://script.google.com/macros/s/AKfycbw2W46r1R0bmuGoz1vwXQ3jetaDYZ8bUHXxKLf5L78wDuaxSI9N4ZUIIFJNZzitNJQF/exec";
 
-const boxes=document.getElementById('boxes');
-const addBoxBtn=document.getElementById('addBoxBtn');
-const resetBtn=document.getElementById('resetBtn');
-const uploadBtn=document.getElementById('uploadBtn');
-const uploadFile=document.getElementById('uploadFile');
-const valueInput=document.getElementById('value');
-const originInput=document.getElementById('origin');
-const destinationInput=document.getElementById('destination');
-const resultArea=document.getElementById('resultArea');
-const form=document.getElementById('shipForm');
-const mainCard=document.getElementById('mainCard');
-const loadingOverlay=document.getElementById('loadingOverlay');
+/* DOM */
+const boxes = document.getElementById('boxes');
+const addBoxBtn = document.getElementById('addBoxBtn');
+const resetBtn = document.getElementById('resetBtn');
+const uploadBtn = document.getElementById('uploadBtn');
+const uploadFile = document.getElementById('uploadFile');
+const downloadTemplate = document.getElementById('downloadTemplate');
+const form = document.getElementById('shipForm');
+const resultArea = document.getElementById('resultArea');
+const originInput = document.getElementById('origin');
+const destinationInput = document.getElementById('destination');
+const valueInput = document.getElementById('value');
+const loadingOverlay = document.getElementById('loadingOverlay');
+const mainCard = document.getElementById('mainCard');
 
-const REQUIRED_HEADERS=['length_cm','width_cm','height_cm','weight_per_box_kg','box_quantity'];
+const REQUIRED_HEADERS = ['length_cm','width_cm','height_cm','weight_per_box_kg','box_quantity'];
 
-function el(tag,opts={},children=""){
-  const e=document.createElement(tag);
-  if(opts.class)e.className=opts.class;
-  if(opts.attrs)Object.entries(opts.attrs).forEach(([k,v])=>e.setAttribute(k,v));
-  if(children)e.innerHTML=children;
+/* ENFORCE 6-DIGIT PINCODE */
+function enforcePincodeInput(el) {
+  el.addEventListener('keydown', (ev) => {
+    const control = ['Backspace','Tab','ArrowLeft','ArrowRight','Delete','Home','End'];
+    if (control.includes(ev.key) || ev.ctrlKey || ev.metaKey) return;
+    if (!/^\d$/.test(ev.key)) {
+      ev.preventDefault();
+      return;
+    }
+    const val = String(el.value || '');
+    const selStart = el.selectionStart ?? val.length;
+    const selEnd = el.selectionEnd ?? val.length;
+    const selectedLength = Math.max(0, selEnd - selStart);
+    if (val.replace(/\D/g,'').length - selectedLength >= 6) {
+      ev.preventDefault();
+    }
+  }, { passive: false });
+
+  el.addEventListener('input', () => {
+    const cleaned = String(el.value || '').replace(/\D/g, '').slice(0, 6);
+    if (el.value !== cleaned) el.value = cleaned;
+  });
+
+  el.addEventListener('paste', (ev) => {
+    ev.preventDefault();
+    const text = (ev.clipboardData || window.clipboardData).getData('text') || '';
+    const cleaned = text.replace(/\D/g, '').slice(0, 6);
+    const cur = String(el.value || '');
+    const start = el.selectionStart ?? cur.length;
+    const end = el.selectionEnd ?? cur.length;
+    const newVal = (cur.slice(0, start) + cleaned + cur.slice(end)).replace(/\D/g, '').slice(0, 6);
+    el.value = newVal;
+    const pos = Math.min(6, start + cleaned.length);
+    el.setSelectionRange(pos, pos);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+
+  el.setAttribute('inputmode', 'numeric');
+  el.setAttribute('maxlength', '6');
+}
+enforcePincodeInput(originInput);
+enforcePincodeInput(destinationInput);
+
+/* tiny helper to create elements */
+function el(tag, props = {}, ...children) {
+  const e = document.createElement(tag);
+  Object.entries(props).forEach(([k, v]) => {
+    if (k === 'class') e.className = v;
+    else if (k === 'attrs') Object.entries(v).forEach(([ak, av]) => e.setAttribute(ak, av));
+    else e[k] = v;
+  });
+  children.forEach(c => { if (c != null) e.append(typeof c === 'string' ? document.createTextNode(c) : c); });
   return e;
 }
 
-function addBox(values){
-  const row=el('div',{class:'box-row'});
-  const label=el('div',{class:'box-label'},"Box");
-  const lengthInput=el('input',{class:'length',attrs:{type:'number',placeholder:'L (cm)'}});
-  const widthInput=el('input',{class:'width',attrs:{type:'number',placeholder:'W (cm)'}});
-  const heightInput=el('input',{class:'height',attrs:{type:'number',placeholder:'H (cm)'}});
-  const weightInput=el('input',{class:'weight',attrs:{type:'number',placeholder:'Wt (kg)'}});
-  const qtyInput=el('input',{class:'qty',attrs:{type:'number',min:'1',placeholder:'Qty'}});
+/* BOX ROWS (qty default blank) */
+function addBox(values = null) {
+  const row = el('div', { class: 'box-row' });
+  const label = el('div', { class: 'box-label' }, 'Box');
+  const lengthInput = el('input', { class: 'length', attrs: { type: 'number', placeholder: 'L (cm)' } });
+  const widthInput  = el('input', { class: 'width',  attrs: { type: 'number', placeholder: 'W (cm)' } });
+  const heightInput = el('input', { class: 'height', attrs: { type: 'number', placeholder: 'H (cm)' } });
+  const weightInput = el('input', { class: 'weight', attrs: { type: 'number', placeholder: 'Wt (kg)' } });
+  const qtyInput    = el('input', { class: 'qty', attrs: { type: 'number', min: '1', placeholder: 'Qty' } });
 
-  if(values){
-    lengthInput.value=values.length_cm||'';
-    widthInput.value=values.width_cm||'';
-    heightInput.value=values.height_cm||'';
-    weightInput.value=values.weight_per_box_kg||'';
-    if(values.box_quantity!==undefined) qtyInput.value=values.box_quantity;
+  if (values) {
+    lengthInput.value = values.length_cm ?? '';
+    widthInput.value  = values.width_cm ?? '';
+    heightInput.value = values.height_cm ?? '';
+    weightInput.value = values.weight_per_box_kg ?? '';
+    if (values.box_quantity !== undefined && values.box_quantity !== null && values.box_quantity !== '') {
+      qtyInput.value = values.box_quantity;
+    }
   }
 
-  const delCell=el('div',{class:'delete-cell'});
-  const delBtn=el('button',{class:'delete-btn',attrs:{type:'button'}},'✕');
-  delBtn.onclick=()=>{boxes.removeChild(row);renumber();showHideDelete()};
+  const delCell = el('div', { class: 'delete-cell' });
+  const delBtn = el('button', { class: 'delete-btn', attrs: { type: 'button' } }, '✕');
+  delBtn.addEventListener('click', () => { boxes.removeChild(row); renumber(); showHideDelete(); });
   delCell.appendChild(delBtn);
 
-  row.append(label,lengthInput,widthInput,heightInput,weightInput,qtyInput,delCell);
+  row.append(label, lengthInput, widthInput, heightInput, weightInput, qtyInput, delCell);
   boxes.appendChild(row);
-  renumber();showHideDelete();
+  renumber(); showHideDelete();
+}
+function renumber() {
+  [...boxes.querySelectorAll('.box-label')].forEach((lbl, i) => lbl.textContent = 'Box ' + (i+1));
+}
+function showHideDelete() {
+  const dels = boxes.querySelectorAll('.delete-btn');
+  if (dels.length === 1) dels[0].style.display = 'none';
+  else dels.forEach(d => d.style.display = 'inline-flex');
 }
 
-function renumber(){
-  [...boxes.querySelectorAll('.box-label')].forEach((lbl,i)=>lbl.textContent='Box '+(i+1));
+/* Loading overlay + disable controls */
+function setLoading(on = true) {
+  loadingOverlay.classList.toggle('show', on);
+  mainCard.querySelectorAll('input,button,select,textarea').forEach(c => {
+    if (on) c.setAttribute('disabled', 'disabled'); else c.removeAttribute('disabled');
+  });
 }
-function showHideDelete(){
-  const dels=boxes.querySelectorAll('.delete-btn');
-  if(dels.length===1)dels[0].style.display='none';
-  else dels.forEach(d=>d.style.display='inline-flex');
-}
 
-addBoxBtn.onclick=()=>addBox();
-resetBtn.onclick=()=>{
-  if(!confirm('Reset everything?'))return;
-  originInput.value='';destinationInput.value='';valueInput.value='';
-  boxes.innerHTML='';addBox();
-};
+/* Buttons */
+addBoxBtn.addEventListener('click', () => addBox());
+resetBtn.addEventListener('click', () => {
+  if (!confirm('Reset everything?')) return;
+  originInput.value = ''; destinationInput.value = ''; valueInput.value = '';
+  boxes.innerHTML = ''; addBox();
+});
+uploadBtn.addEventListener('click', () => uploadFile.click());
 
-uploadBtn.onclick=()=>uploadFile.click();
+/* Upload handler (.xlsx/.csv) */
+uploadFile.addEventListener('change', async (evt) => {
+  const file = evt.target.files[0];
+  if (!file) return;
+  try {
+    const data = await file.arrayBuffer();
+    const wb = XLSX.read(data, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(ws, { defval: '', raw: true });
 
-uploadFile.onchange=async(evt)=>{
-  const file=evt.target.files[0];if(!file)return;
-  try{
-    const data=await file.arrayBuffer();
-    const wb=XLSX.read(data,{type:'array'});
-    const ws=wb.Sheets[wb.SheetNames[0]];
-    const rows=XLSX.utils.sheet_to_json(ws,{defval:'',raw:true});
-    if(!rows.length)throw new Error();
-    const headers=Object.keys(rows[0]).map(h=>(''+h).trim());
-    const ok=REQUIRED_HEADERS.every(h=>headers.includes(h));
-    if(!ok){alert("Invalid headers.");evt.target.value='';return;}
-    boxes.innerHTML='';
-    rows.forEach(r=>{
-      if(Object.values(r).every(v=>v===''))return;
+    if (!rows.length) throw new Error('No data found.');
+    const headers = Object.keys(rows[0]).map(h => ('' + h).trim());
+    const ok = REQUIRED_HEADERS.every(h => headers.includes(h));
+    if (!ok) {
+      alert('Invalid headers.\n\nRequired (exact):\n' + REQUIRED_HEADERS.join(', '));
+      evt.target.value = '';
+      return;
+    }
+
+    boxes.innerHTML = '';
+    rows.forEach(r => {
+      if (Object.values(r).every(v => v === '')) return;
       addBox({
-        length_cm:+r.length_cm,
-        width_cm:+r.width_cm,
-        height_cm:+r.height_cm,
-        weight_per_box_kg:+(r.weight_per_box_kg||0),
-        box_quantity:(r.box_quantity===''?undefined:+r.box_quantity)
+        length_cm: +r.length_cm,
+        width_cm:  +r.width_cm,
+        height_cm: +r.height_cm,
+        weight_per_box_kg: +(r.weight_per_box_kg ?? r['WT/BOX_KG'] ?? 0),
+        box_quantity: (r.box_quantity === undefined || r.box_quantity === '') ? undefined : +r.box_quantity
       });
     });
-    if(!boxes.children.length)addBox();
+    if (!boxes.children.length) addBox();
     alert('Boxes loaded from file.');
-  }catch(e){
-    alert("Failed to read the file.");
-  }finally{evt.target.value='';}
-};
+  } catch (err) {
+    console.error(err);
+    alert('Failed to read the file. Please use .xlsx or .csv with the exact headers.');
+  } finally {
+    evt.target.value = '';
+  }
+});
 
-document.getElementById('downloadTemplate').onclick=()=>{
-  const csv='length_cm,width_cm,height_cm,weight_per_box_kg,box_quantity\n30,25,15,2,1\n45,35,25,5,2\n';
-  const blob=new Blob([csv],{type:'text/csv'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');a.href=url;a.download='box_template.csv';
-  document.body.appendChild(a);a.click();URL.revokeObjectURL(url);a.remove();
-};
+/* Download template */
+downloadTemplate.addEventListener('click', () => {
+  const csv = 'length_cm,width_cm,height_cm,weight_per_box_kg,box_quantity\n30,25,15,2,1\n45,35,25,5,2\n';
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'box_template.csv';
+  document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
+});
 
-form.onsubmit=async(e)=>{
+/* Submit → GAS */
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const originVal=originInput.value.trim();
-  const destVal=destinationInput.value.trim();
-  if(!/^\d{6}$/.test(originVal)){alert("Origin pincode must be 6 digits.");return;}
-  if(!/^\d{6}$/.test(destVal)){alert("Destination pincode must be 6 digits.");return;}
+  const originVal = String(originInput.value).trim();
+  const destVal = String(destinationInput.value).trim();
+  if (!/^\d{6}$/.test(originVal)) { alert('Origin pincode must be 6 digits.'); return; }
+  if (!/^\d{6}$/.test(destVal)) { alert('Destination pincode must be 6 digits.'); return; }
 
-  const payloadBoxes=[...boxes.querySelectorAll('.box-row')].map(r=>({
-    length_cm:+r.querySelector('.length').value||0,
-    width_cm:+r.querySelector('.width').value||0,
-    height_cm:+r.querySelector('.height').value||0,
-    weight_per_box_kg:+r.querySelector('.weight').value||0,
-    box_quantity:+r.querySelector('.qty').value||1
-  })).filter(b=>b.box_quantity>0);
+  const rows = Array.from(boxes.querySelectorAll('.box-row'));
+  const payloadBoxes = rows.map(r => ({
+    length_cm: +(r.querySelector('.length').value || 0),
+    width_cm:  +(r.querySelector('.width').value || 0),
+    height_cm: +(r.querySelector('.height').value || 0),
+    weight_per_box_kg: +(r.querySelector('.weight').value || 0),
+    box_quantity: +(r.querySelector('.qty').value || 1)
+  })).filter(b => b.box_quantity > 0);
 
-  if(!payloadBoxes.length){alert("Add at least one box.");return;}
+  if (!payloadBoxes.length) { alert('Please add at least one box.'); return; }
 
-  const payload={
-    routeType:'freight-calculator',
-    fromPincode:originVal,
-    toPincode:destVal,
-    totalValue:+valueInput.value||0,
-    boxes:payloadBoxes
+  const payload = {
+	routeType: 'freight-calculator',
+    fromPincode: originVal,
+    toPincode: destVal,
+    totalValue: +valueInput.value || 0,
+    boxes: payloadBoxes
   };
 
-  loadingOverlay.classList.add('show');
-  resultArea.innerHTML="<div>Calculating…</div>";
+  setLoading(true);
+  resultArea.innerHTML = '<div style="padding:12px;border:1px solid #eee;border-radius:8px;background:#fff">Calculating…</div>';
 
-  try{
-    const res=await fetch(GAS_URL,{
-      method:'POST',
-      headers:{'Content-Type':'text/plain;charset=utf-8'},
-      body:JSON.stringify(payload)
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      redirect: 'follow'
     });
 
-    const txt=await res.text();
+    const txt = await res.text();
     let data;
-    try{data=JSON.parse(txt);}catch(err){
-      resultArea.innerHTML="<div>Invalid response:<pre>"+txt+"</pre></div>";
+    try { data = JSON.parse(txt); } catch (err) {
+      resultArea.innerHTML = `<div style="color:#b91c1c;background:#fff0f0;padding:10px;border-radius:8px">Non-JSON response from server.<pre style="white-space:pre-wrap">${txt.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</pre></div>`;
       return;
     }
 
-    if(!data.ok){
-      resultArea.innerHTML="<div>"+(data.error||"Server Error")+"</div>";
+    if (!data.ok) {
+      resultArea.innerHTML = `<div style="color:#b91c1c;background:#fff0f0;padding:10px;border-radius:8px">${data.error || 'Server returned an error'}</div>`;
       return;
     }
 
-    resultArea.innerHTML=data.html||"<div>No data</div>";
-
-  }catch(err){
-    resultArea.innerHTML="<div>Error: "+err.message+"</div>";
-  }finally{
-    loadingOverlay.classList.remove('show');
+    resultArea.innerHTML = data.html || '<div>No HTML returned</div>';
+    resultArea.innerHTML = data.html || '<div>No HTML returned</div>';
+    (function sortTableByTotal() {
+      const tables = resultArea.querySelectorAll('table');
+      tables.forEach(table => {
+        const thead = table.querySelector('thead');
+        const tbody = table.querySelector('tbody') || table;
+        let totalIdx = -1;
+        if (thead) {
+          const ths = Array.from(thead.querySelectorAll('th'));
+          totalIdx = ths.findIndex(th => /total/i.test(th.textContent.trim()));
+          if (totalIdx === -1) totalIdx = ths.length - 1;
+        } else {
+          const firstRow = tbody.querySelector('tr');
+          if (firstRow) totalIdx = firstRow.cells.length - 1;
+        }
+        if (totalIdx < 0) return;
+        const rowsArr = Array.from(tbody.querySelectorAll('tr'));
+        const num = s => {
+          const t = (s || '').toString().replace(/[^\d.]/g, '');
+          const n = parseFloat(t);
+          return isNaN(n) ? Infinity : n;
+        };
+        rowsArr.sort((a,b) => num(a.cells[totalIdx]?.textContent) - num(b.cells[totalIdx]?.textContent));
+        rowsArr.forEach(r => tbody.appendChild(r));
+      });
+    })();
+    makeResultTablesMobileFriendly();
+    resultArea.scrollIntoView({ behavior: 'smooth' });
+  } catch (err) {
+    console.error(err);
+    resultArea.innerHTML = `<div style="color:#b91c1c;background:#fff0f0;padding:10px;border-radius:8px">Network/Server error: ${err.message}</div>`;
+  } finally {
+    setLoading(false);
   }
-};
+});
+
+/* Convert tables -> mobile cards, highlight TOTAL row as full-width green band */
+function makeResultTablesMobileFriendly() {
+  resultArea.querySelectorAll('table').forEach(table => {
+    if (!table.parentElement.classList.contains('table-responsive')) {
+      const wrapper = document.createElement('div'); wrapper.className = 'table-responsive';
+      table.parentNode.insertBefore(wrapper, table); wrapper.appendChild(table);
+    }
+  });
+
+  function convertIfMobile() {
+    const mobile = window.innerWidth <= 720;
+    resultArea.querySelectorAll('.table-responsive').forEach(wrapper => {
+      const table = wrapper.querySelector('table'); if (!table) return;
+      const thead = table.querySelector('thead');
+      let headers = [];
+      if (thead) headers = Array.from(thead.querySelectorAll('th')).map(th => th.textContent.trim());
+      else { const firstRow = table.querySelector('tr'); if (firstRow) headers = Array.from(firstRow.cells).map(c => c.textContent.trim()); }
+
+      const bodyRows = table.querySelectorAll('tbody tr');
+      const rows = bodyRows.length ? Array.from(bodyRows) : Array.from(table.querySelectorAll('tr')).slice(1);
+
+      if (mobile && !wrapper.dataset.converted) {
+        const cards = document.createElement('div'); cards.className = 'resp-cards';
+        const totalIdx = headers.findIndex(h => /total/i.test(h));
+        rows.forEach(r => {
+          const card = document.createElement('div'); card.className = 'resp-card';
+          const cells = Array.from(r.querySelectorAll('td,th'));
+          cells.forEach((cell, i) => {
+            const key = headers[i] || ('Col ' + (i+1));
+            const valHtml = cell.innerHTML.trim();
+            const rowDiv = document.createElement('div'); rowDiv.className = 'rc-row';
+            if (i === totalIdx) rowDiv.classList.add('is-total');
+            const kDiv = document.createElement('div'); kDiv.className = 'rc-key'; kDiv.textContent = key;
+            const vDiv = document.createElement('div'); vDiv.className = 'rc-val'; vDiv.innerHTML = valHtml;
+            rowDiv.appendChild(kDiv); rowDiv.appendChild(vDiv); card.appendChild(rowDiv);
+          });
+          cards.appendChild(card);
+        });
+        table.style.display = 'none';
+        wrapper.parentNode.insertBefore(cards, wrapper.nextSibling);
+        wrapper.dataset.converted = 'true';
+      } else if (!mobile && wrapper.dataset.converted === 'true') {
+        const next = wrapper.nextSibling; if (next && next.classList && next.classList.contains('resp-cards')) next.remove();
+        table.style.display = '';
+        delete wrapper.dataset.converted;
+      }
+    });
+  }
+
+  convertIfMobile();
+  let resizeTimer;
+  window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(convertIfMobile, 150); });
+}
+
+/* initial one row */
+addBox();
 </script>
 
-</div>
-
-<!-- ⭐ FOOTER -->
-<div id="footer-placeholder"></div>
-
-<script src="/header.js"></script>
 </body>
 </html>
