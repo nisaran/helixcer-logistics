@@ -1,8 +1,103 @@
-<!-- _includes/footer.html -->
-<footer class="site-footer" role="contentinfo">
+<!DOCTYPE html>
+<html lang="en">
+<body>
+<style>
+  /* Footer variables — place inside footer file so it's self-contained */
+  :root {
+    --footer-bg: #0f172a;
+    --footer-color: #e6eef8;
+    --footer-muted: #9fb0c7;
+    --footer-link: #cbd5e1;
+    --footer-accent: #4ade80;
+    --footer-padding: 36px 18px;
+    --footer-max-width: 1150px;
+
+    --footer-font-size: 15px;     /* main text size */
+    --footer-heading-size: 20px;  /* Contact Us heading */
+    --footer-icon-size: 18px;     /* svg / image icons */
+    --footer-gap: 12px;
+  }
+
+  .site-footer {
+    background: var(--footer-bg);
+    color: var(--footer-color);
+    padding: var(--footer-padding);
+    margin-top: 40px;
+  }
+
+  .site-footer .container {
+    max-width: var(--footer-max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--footer-gap);
+  }
+
+  .site-footer h3 {
+    margin: 0;
+    color: var(--footer-color);
+    font-size: var(--footer-heading-size);
+    line-height: 1;
+    margin-bottom: 18px;
+  }
+
+  .site-footer .contact-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: var(--footer-font-size);
+    color: var(--footer-link);
+  }
+
+  .site-footer .contact-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: var(--footer-link);
+  }
+
+  .site-footer .contact-item svg,
+  .site-footer .contact-item img.icon {
+    width: var(--footer-icon-size);
+    height: var(--footer-icon-size);
+    flex: 0 0 var(--footer-icon-size);
+    display: inline-block;
+  }
+
+  .site-footer a {
+    color: var(--footer-link);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .site-footer a.whatsapp {
+    color: var(--footer-accent);
+    font-weight: 600;
+  }
+
+  .site-footer .copyright {
+    margin-top: 14px;
+    color: var(--footer-muted);
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 14px;
+  }
+
+  @media (min-width: 760px) {
+    .site-footer .container {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .site-footer .contact-row { max-width: 720px; }
+  }
+</style>
+
+<footer class="site-footer" role="contentinfo" aria-label="Site footer — contact information">
   <div class="container">
-    <div class="col">
+    <div>
       <h3>Contact Us</h3>
+
       <div class="contact-row" aria-label="Contact details">
         <div class="contact-item" aria-label="Address">
           <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" width="18" height="18">
@@ -21,25 +116,23 @@
         <div class="contact-item" aria-label="WhatsApp">
           <img src="https://static.wixstatic.com/media/35c132_d1696c4910a64ffeb0c31667c0856c59~mv2.png" alt="WhatsApp icon" class="icon" />
           <div><a class="whatsapp" href="https://wa.me/916282010794?text=Hi%2C%20I%20want%20to%20book%20a%20freight%20service%20from%20Helixcer" target="_blank" rel="noopener noreferrer">+91 62820 10794</a></div>
+        </div>
       </div>
     </div>
 
-    <div class="copyright">
-      © {{ "now" | date: "%Y" }} Helixcer Logistics — All rights reserved.
+    <div aria-hidden="true" style="min-width:160px;"></div>
+
+    <div style="flex:0 0 auto;min-width:220px;">
+      <div class="copyright" aria-hidden="false">
+        © <span id="sharedFooterYear"></span> Helixcer Logistics — All rights reserved.
+      </div>
     </div>
   </div>
 
-  <style>
-    :root{
-      --footer-bg:#0f172a; --footer-color:#e6eef8; --footer-muted:#9fb0c7;
-    }
-    .site-footer{background:var(--footer-bg);color:var(--footer-color);padding:36px 18px;margin-top:40px}
-    .site-footer .container{max-width:1150px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
-    .site-footer h3{margin:0 0 12px}
-    .contact-row{display:flex;flex-direction:column;gap:8px}
-    .contact-item{color:#cbd5e1}
-    .site-footer a{color:#cbd5e1;text-decoration:none}
-    .copyright{color:var(--footer-muted);font-size:13px;border-top:1px solid rgba(255,255,255,0.06);padding-top:14px}
-    @media(min-width:760px){ .site-footer .container{flex-direction:row;justify-content:space-between;align-items:flex-start} }
-  </style>
+  <script>
+    (function(){ const el = document.getElementById('sharedFooterYear'); if(el) el.textContent = new Date().getFullYear(); })();
+  </script>
 </footer>
+
+</body>
+</html>
