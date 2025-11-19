@@ -1,10 +1,7 @@
 /* =========================================================
    FULL SITE CSS - Helixcer Logistics
    - Active color: #C24525
-   - Header + Book Freight button adjustments:
-     * Desktop: button on same line as menu items
-     * Mobile: menu items LEFT aligned
-     * Button height reduced
+   - Unified header/footer, responsive menu, hamburger -> X
 ========================================================= */
 
 /* -----------------------
@@ -68,29 +65,6 @@ p{color:var(--muted);margin:0}
 .button:hover,.btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
 
 /* -----------------------
-   BOOK FREIGHT BUTTON (reduced height)
-------------------------*/
-.book-btn,
-.book-btn:link,
-.book-btn:visited,
-.book-btn:active {
-  color: #ffffff !important;
-  background: var(--accent) !important;
-  padding: 6px 14px !important;     /* reduced height */
-  border-radius: 12px !important;
-  font-weight: 700;
-  display: inline-block;
-  transition: background .2s ease, transform .12s ease;
-  white-space: nowrap;
-  vertical-align: middle;
-  box-shadow: 0 4px 12px rgba(194,69,37,0.12);
-}
-.book-btn:hover {
-  background: var(--accent-dark) !important;
-  color: #ffffff !important; /* keep label visible */
-}
-
-/* -----------------------
    CARDS / PANELS
 ------------------------*/
 .card{
@@ -115,14 +89,13 @@ header.site-header{
   border-bottom:1px solid var(--border);
   position:sticky;
   top:0;
-  z-index:99999;
+  z-index:9999;
 }
 
-/* header inner container */
 .header-wrap{
   max-width:var(--container);
   margin:0 auto;
-  padding:12px 18px;
+  padding:14px 18px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -131,15 +104,7 @@ header.site-header{
 
 .logo img{height:42px}
 
-/* NAV container: horizontal flex (desktop) */
-nav.nav{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  width:100%;
-}
-
-/* NAV list */
+/* NAV styles */
 nav.nav ul{
   display:flex;
   gap:24px;
@@ -149,49 +114,39 @@ nav.nav ul{
   padding:0;
 }
 
-/* each menu item */
-nav.nav ul li{
-  display:inline-block;
-  white-space:nowrap;
-}
-
-/* nav links */
-nav.nav a,
-nav.nav a:link,
-nav.nav a:visited,
-nav.nav a:active {
-  color:var(--text) !important;
+nav.nav a{
+  color:var(--text);
   font-weight:600;
-  text-decoration:none !important;
+  text-decoration:none;
+  position:relative;
   padding:6px 2px;
-  transition: color .2s ease;
+  transition: color .25s ease;
 }
 
-/* Active */
+/* ACTIVE color only (no underline) */
 nav.nav a.active{
   color:var(--accent) !important;
 }
 
-/* Hover */
+/* Hover uses brand color too */
 nav.nav a:hover{
   color:var(--accent) !important;
 }
 
-/* remove pseudo underline if present */
+/* Remove the underline pseudo-element entirely (if present earlier) */
 nav.nav a::after{content:none}
 
-/* Ensure nav items don't push button down: wrap menu + button in flex row */
-nav.nav > ul { flex: 0 1 auto; }      /* menu takes needed width */
-nav.nav .book-btn { margin-left: auto; } /* push button to right */
+/* Ensure nav links have adequate tap area */
+nav.nav a{line-height:1.2}
 
 /* -----------------------
-   HAMBURGER
+   HAMBURGER + MOBILE MENU
 ------------------------*/
 .hamburger{
   display:none;
-  width:44px;
-  height:44px;
-  padding:8px;
+  width:46px;
+  height:46px;
+  padding:10px;
   border-radius:10px;
   border:1px solid var(--border);
   background:#fff;
@@ -201,74 +156,50 @@ nav.nav .book-btn { margin-left: auto; } /* push button to right */
   cursor:pointer;
 }
 
+/* bars (use brand color) */
 .hamburger .bar{
   width:26px;
   height:3px;
   background:var(--accent);
   border-radius:3px;
   position:absolute;
-  transition: transform .35s ease, opacity .25s ease;
+  transition: transform .35s ease, opacity .25s ease, background .25s ease;
 }
+
 .hamburger .top{transform:translateY(-8px)}
 .hamburger .middle{transform:translateY(0)}
 .hamburger .bottom{transform:translateY(8px)}
 
+/* When menu open -> morph to X */
 body.show-menu .hamburger .top{transform:translateY(0) rotate(45deg)}
 body.show-menu .hamburger .middle{opacity:0}
 body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
 
-/* -----------------------
-   MOBILE: left-align menu items + button left
-------------------------*/
+/* Mobile dropdown */
 @media (max-width:820px){
-
   .hamburger{display:flex}
-
-  /* nav hidden by default, shown when body.show-menu */
-  nav.nav {
-    display: none !important;
-    position: absolute;
-    top: 64px;
-    left: 0;
-    right: 0;
-    background: #fff;
-    padding: 16px 18px;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  nav.nav{
+    display:none;
+    position:absolute;
+    top:68px;
+    left:0;
+    right:0;
+    background:#fff;
+    padding:20px;
+    border-bottom-left-radius:12px;
+    border-bottom-right-radius:12px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.06);
   }
-  body.show-menu nav.nav { display: block !important; }
-
-  /* nav list stacked vertically, LEFT aligned */
-  nav.nav ul {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 14px !important;
-    align-items: flex-start !important;  /* left align the items */
-    margin: 0;
-    padding: 0;
-  }
-
-  /* make links left aligned and full-width touch targets */
-  nav.nav ul li { width: 100%; }
-  nav.nav ul li a { display: block; width: 100%; padding: 10px 6px; }
-
-  /* Book Freight placed below the menu, left aligned */
-  .book-btn{
-    margin-left: 0 !important;
-    margin-top: 10px !important;
-    align-self: flex-start !important;
-    text-align: left !important;
-  }
+  body.show-menu nav.nav{display:block}
+  nav.nav ul{flex-direction:column;gap:16px;align-items:flex-start}
+  /* Ensure active color in mobile dropdown too */
+  body.show-menu nav.nav a.active{color:var(--accent) !important}
 }
 
 /* -----------------------
-   HEADER SHADOW
+   HEADER SHADOW ON SCROLL
 ------------------------*/
-.header--scrolled{
-  box-shadow:0 8px 28px rgba(15,23,42,0.08);
-  transition:box-shadow 180ms ease;
-}
+.header--scrolled{box-shadow:0 8px 28px rgba(15,23,42,0.08);transition:box-shadow 180ms ease}
 
 /* -----------------------
    FOOTER
@@ -290,5 +221,21 @@ footer a:hover{color:#fff}
 .mt-16{margin-top:16px}
 .mt-24{margin-top:24px}
 .center{text-align:center}
+
+/* -----------------------
+   SAFETY / OVERRIDES
+   - make sure header stays above any page content
+------------------------*/
+header.site-header{position:sticky;top:0;z-index:99999}
+
+/* -----------------------
+   OPTIONAL: small responsive tweaks
+------------------------*/
+@media (max-width:480px){
+  .header-wrap{padding:10px 12px}
+  .logo img{height:36px}
+  .hamburger{width:44px;height:44px;padding:8px}
+  .hamburger .bar{width:22px}
+}
 
 /* EOF */
