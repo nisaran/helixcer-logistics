@@ -1,265 +1,241 @@
 /* =========================================================
-   GLOBAL VARIABLES
+   FULL SITE CSS - Helixcer Logistics
+   - Active color: #C24525
+   - Unified header/footer, responsive menu, hamburger -> X
 ========================================================= */
-:root {
-  --bg: #f6f9fe;
-  --text: #0f172a;
-  --muted: #64748b;
-  --card: #ffffff;
-  --border: #e5e7eb;
-  --accent: #1f56ff;
-  --accent-dark: #1a45cc;
-  --radius: 12px;
+
+/* -----------------------
+   VARIABLES
+------------------------*/
+:root{
+  --bg:#f6f9fe;
+  --text:#0f172a;
+  --muted:#64748b;
+  --card:#ffffff;
+  --border:#e5e7eb;
+  --accent:#C24525;      /* BRAND COLOR */
+  --accent-dark:#a03b21;
+  --radius:12px;
+  --container:1150px;
 }
 
-/* =========================================================
+/* -----------------------
    RESET + BASICS
-========================================================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+------------------------*/
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  scroll-behavior:smooth;
 }
 
-body {
-  background: var(--bg);
-  font-family: "Inter", sans-serif;
-  color: var(--text);
-  line-height: 1.55;
-  scroll-behavior: smooth;
+/* -----------------------
+   LAYOUT CONTAINERS
+------------------------*/
+.container, .wrap{
+  max-width:var(--container);
+  margin:0 auto;
+  padding:20px 18px;
 }
 
-/* =========================================================
-   LAYOUT
-========================================================= */
-.container {
-  max-width: 1150px;
-  margin: 0 auto;
-  padding: 20px 18px;
-}
-
-/* =========================================================
+/* -----------------------
    TYPOGRAPHY
-========================================================= */
-h1, h2, h3 {
-  font-weight: 700;
-  color: var(--text);
-}
+------------------------*/
+h1,h2,h3{font-weight:700;color:var(--text)}
+p{color:var(--muted);margin:0}
 
-p {
-  color: var(--muted);
-}
-
-/* =========================================================
+/* -----------------------
    BUTTONS
-========================================================= */
-.button {
-  display: inline-block;
-  background: var(--accent);
-  padding: 14px 24px;
-  border-radius: var(--radius);
-  color: #fff;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.25s ease;
+------------------------*/
+.button, .btn{
+  display:inline-block;
+  background:var(--accent);
+  color:#fff;
+  padding:12px 18px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:700;
+  transition:background .2s ease, transform .12s ease;
+}
+.button:hover,.btn:hover{background:var(--accent-dark);transform:translateY(-1px)}
+
+/* -----------------------
+   CARDS / PANELS
+------------------------*/
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:20px;
+  box-shadow:0 6px 24px rgba(16,24,40,0.06);
 }
 
-.button:hover {
-  background: var(--accent-dark);
+/* -----------------------
+   FORMS
+------------------------*/
+label{display:block;font-weight:700;margin-bottom:6px}
+input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);font-size:15px;margin-bottom:12px}
+
+/* -----------------------
+   HEADER / NAV
+------------------------*/
+header.site-header{
+  width:100%;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:9999;
 }
 
-/* =========================================================
-   CARDS
-========================================================= */
-.card {
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 24px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+.header-wrap{
+  max-width:var(--container);
+  margin:0 auto;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
 }
 
-/* =========================================================
-   FORM ELEMENTS
-========================================================= */
-label {
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
+.logo img{height:42px}
+
+/* NAV styles */
+nav.nav ul{
+  display:flex;
+  gap:24px;
+  align-items:center;
+  list-style:none;
+  margin:0;
+  padding:0;
 }
 
-input, textarea, select {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 16px;
-  margin-bottom: 16px;
+nav.nav a{
+  color:var(--text);
+  font-weight:600;
+  text-decoration:none;
+  position:relative;
+  padding:6px 2px;
+  transition: color .25s ease;
 }
 
-/* =========================================================
-   HEADER (GLOBAL)
-========================================================= */
-header.site-header {
-  width: 100%;
-  background: #ffffff !important;
-  border-bottom: 1px solid var(--border) !important;
-  position: sticky;
-  top: 0;
-  z-index: 9999 !important;
+/* ACTIVE color only (no underline) */
+nav.nav a.active{
+  color:var(--accent) !important;
 }
 
-.header-wrap {
-  max-width: 1150px;
-  margin: 0 auto;
-  padding: 14px 18px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Hover uses brand color too */
+nav.nav a:hover{
+  color:var(--accent) !important;
 }
 
-.logo img {
-  height: 42px;
+/* Remove the underline pseudo-element entirely (if present earlier) */
+nav.nav a::after{content:none}
+
+/* Ensure nav links have adequate tap area */
+nav.nav a{line-height:1.2}
+
+/* -----------------------
+   HAMBURGER + MOBILE MENU
+------------------------*/
+.hamburger{
+  display:none;
+  width:46px;
+  height:46px;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fff;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  cursor:pointer;
 }
 
-/* =========================================================
-   NAV
-========================================================= */
-nav.nav ul {
-  display: flex !important;
-  gap: 24px;
-  list-style: none;
+/* bars (use brand color) */
+.hamburger .bar{
+  width:26px;
+  height:3px;
+  background:var(--accent);
+  border-radius:3px;
+  position:absolute;
+  transition: transform .35s ease, opacity .25s ease, background .25s ease;
 }
 
-nav.nav a {
-  text-decoration: none !important;
-  color: var(--text) !important;
-  font-weight: 600 !important;
-  padding: 6px 2px !important;
-  position: relative;
-}
+.hamburger .top{transform:translateY(-8px)}
+.hamburger .middle{transform:translateY(0)}
+.hamburger .bottom{transform:translateY(8px)}
 
-nav.nav a.active {
-  color: var(--accent) !important;
-}
+/* When menu open -> morph to X */
+body.show-menu .hamburger .top{transform:translateY(0) rotate(45deg)}
+body.show-menu .hamburger .middle{opacity:0}
+body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
 
-nav.nav a.active::after {
-  content: "";
-  height: 3px;
-  width: 100%;
-  background: var(--accent);
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  border-radius: 4px;
-}
-
-/* =========================================================
-   MOBILE NAV & HAMBURGER
-========================================================= */
-.hamburger {
-  display: none;
-  width: 46px;
-  height: 46px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: #fff;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-}
-
-.hamburger .bar {
-  width: 26px;
-  height: 3px;
-  background: #0f172a;
-  border-radius: 3px;
-  position: absolute;
-  transition: 0.35s ease;
-}
-
-.hamburger .top    { transform: translateY(-8px); }
-.hamburger .middle { transform: translateY(0); }
-.hamburger .bottom { transform: translateY(8px); }
-
-body.show-menu .hamburger .top {
-  transform: translateY(0) rotate(45deg);
-}
-body.show-menu .hamburger .middle {
-  opacity: 0;
-}
-body.show-menu .hamburger .bottom {
-  transform: translateY(0) rotate(-45deg);
-}
-
-/* Mobile menu dropdown */
-@media (max-width: 820px) {
-  .hamburger {
-    display: flex !important;
+/* Mobile dropdown */
+@media (max-width:820px){
+  .hamburger{display:flex}
+  nav.nav{
+    display:none;
+    position:absolute;
+    top:68px;
+    left:0;
+    right:0;
+    background:#fff;
+    padding:20px;
+    border-bottom-left-radius:12px;
+    border-bottom-right-radius:12px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.06);
   }
-
-  nav.nav {
-    display: none !important;
-    position: absolute;
-    top: 68px;
-    left: 0;
-    right: 0;
-    background: #fff;
-    padding: 22px;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-  }
-
-  body.show-menu nav.nav {
-    display: block !important;
-  }
-
-  nav.nav ul {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
-  }
+  body.show-menu nav.nav{display:block}
+  nav.nav ul{flex-direction:column;gap:16px;align-items:flex-start}
+  /* Ensure active color in mobile dropdown too */
+  body.show-menu nav.nav a.active{color:var(--accent) !important}
 }
 
-/* =========================================================
+/* -----------------------
    HEADER SHADOW ON SCROLL
-========================================================= */
-.header--scrolled {
-  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
-  transition: box-shadow 180ms ease;
-}
+------------------------*/
+.header--scrolled{box-shadow:0 8px 28px rgba(15,23,42,0.08);transition:box-shadow 180ms ease}
 
-/* =========================================================
+/* -----------------------
    FOOTER
-========================================================= */
-footer {
-  background: #0f1320;
-  padding: 40px 18px;
-  color: #fff;
-  margin-top: 60px;
+------------------------*/
+footer{
+  background:#0f1320;
+  color:#fff;
+  padding:40px 18px;
+  margin-top:60px;
 }
+footer h3{color:#fff;margin-bottom:12px}
+footer p, footer a{color:#b8c0d0;font-size:15px;text-decoration:none}
+footer a:hover{color:#fff}
 
-footer h3 {
-  color: #fff;
-  margin-bottom: 16px;
-}
-
-footer p,
-footer a {
-  color: #b8c0d0;
-  text-decoration: none;
-  font-size: 15px;
-}
-
-footer a:hover {
-  color: #ffffff;
-}
-
-/* =========================================================
+/* -----------------------
    UTILITIES
-========================================================= */
-.mt-20 { margin-top: 20px; }
-.mt-40 { margin-top: 40px; }
-.center { text-align: center; }
+------------------------*/
+.mt-8{margin-top:8px}
+.mt-16{margin-top:16px}
+.mt-24{margin-top:24px}
+.center{text-align:center}
+
+/* -----------------------
+   SAFETY / OVERRIDES
+   - make sure header stays above any page content
+------------------------*/
+header.site-header{position:sticky;top:0;z-index:99999}
+
+/* -----------------------
+   OPTIONAL: small responsive tweaks
+------------------------*/
+@media (max-width:480px){
+  .header-wrap{padding:10px 12px}
+  .logo img{height:36px}
+  .hamburger{width:44px;height:44px;padding:8px}
+  .hamburger .bar{width:22px}
+}
+
+/* EOF */
