@@ -99,7 +99,7 @@ header.site-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:16px;
+  gap:24px; /* ADDED: Gap to separate nav from the new button */
 }
 
 .logo img{height:42px}
@@ -138,6 +138,11 @@ nav.nav a::after{content:none}
 
 /* Ensure nav links have adequate tap area */
 nav.nav a{line-height:1.2}
+
+/* ADDED: Hide the mobile CTA link on desktop */
+.nav-cta-mobile{
+  display:none;
+}
 
 /* -----------------------
    HAMBURGER + MOBILE MENU
@@ -178,6 +183,12 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
 /* Mobile dropdown */
 @media (max-width:820px){
   .hamburger{display:flex}
+  
+  /* ADDED: Hide the desktop button on mobile */
+  .nav-cta-desktop{
+    display:none;
+  }
+  
   nav.nav{
     display:none;
     position:absolute;
@@ -194,6 +205,12 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
   nav.nav ul{flex-direction:column;gap:16px;align-items:flex-start}
   /* Ensure active color in mobile dropdown too */
   body.show-menu nav.nav a.active{color:var(--accent) !important}
+  
+  /* ADDED: Show the mobile CTA link at the end of the mobile menu */
+  .nav-cta-mobile{
+    display:list-item;
+    margin-top:8px; 
+  }
 }
 
 /* -----------------------
