@@ -2,7 +2,7 @@
    FULL SITE CSS - Helixcer Logistics
    - Active color: #C24525
    - Unified header/footer, responsive menu, hamburger -> X
-   - Book Freight button included + fixed alignment
+   - Book Freight button fully integrated and responsive
 ========================================================= */
 
 /* -----------------------
@@ -105,15 +105,16 @@ header.site-header{
 
 .logo img{height:42px}
 
-/* NAV styles */
+/* NAV container */
 nav.nav{
-  display:flex;
-  align-items:center;
+  display:flex !important;
+  align-items:center !important;
   gap:18px;
 }
 
+/* NAV list */
 nav.nav ul{
-  display:flex;
+  display:flex !important;
   gap:24px;
   align-items:center;
   list-style:none;
@@ -126,18 +127,24 @@ nav.nav ul li{
   white-space:nowrap;
 }
 
-nav.nav a{
+/* NAV links */
+nav.nav a,
+nav.nav a:link,
+nav.nav a:visited,
+nav.nav a:active {
   color:var(--text) !important;
   font-weight:600;
   text-decoration:none !important;
   padding:6px 2px;
-  transition: color .25s ease;
+  transition:color .25s ease;
 }
 
+/* Active menu */
 nav.nav a.active{
   color:var(--accent) !important;
 }
 
+/* Hover */
 nav.nav a:hover{
   color:var(--accent) !important;
 }
@@ -145,14 +152,17 @@ nav.nav a:hover{
 /* -----------------------
    BOOK FREIGHT BUTTON
 ------------------------*/
-.book-btn{
+.book-btn,
+.book-btn:link,
+.book-btn:visited,
+.book-btn:active {
   background:var(--accent);
-  color:#fff !important;
+  color:#ffffff !important;     /* ALWAYS white text */
   padding:10px 16px;
   border-radius:18px;
   font-weight:700;
   text-decoration:none !important;
-  margin-left:auto;
+  margin-left:auto;             /* push to right on desktop */
   white-space:nowrap;
   box-shadow:0 4px 12px rgba(194,69,37,0.12);
   transition:background .25s ease, transform .2s ease;
@@ -164,7 +174,7 @@ nav.nav a:hover{
 }
 
 /* -----------------------
-   HAMBURGER + MOBILE
+   HAMBURGER BUTTON
 ------------------------*/
 .hamburger{
   display:none;
@@ -197,8 +207,13 @@ body.show-menu .hamburger .top{transform:translateY(0) rotate(45deg)}
 body.show-menu .hamburger .middle{opacity:0}
 body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
 
+/* -----------------------
+   MOBILE MENU
+------------------------*/
 @media (max-width:820px){
+
   .hamburger{display:flex}
+
   nav.nav{
     flex-direction:column;
     align-items:flex-start;
@@ -213,14 +228,21 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
     border-bottom-right-radius:12px;
     box-shadow:0 8px 24px rgba(0,0,0,0.06);
   }
+
   body.show-menu nav.nav{display:block}
+
   nav.nav ul{
     flex-direction:column;
-    gap:16px;
+    gap:18px;
   }
-  .book-btn{
-    margin-left:0;
-    margin-top:12px;
+
+  /* Center Book Freight button */
+  .book-btn {
+    margin-left:0 !important;
+    margin-right:0 !important;
+    margin-top:18px;
+    align-self:center !important;
+    text-align:center !important;
     width:auto;
   }
 }
@@ -255,7 +277,7 @@ footer a:hover{color:#fff}
 .center{text-align:center}
 
 /* -----------------------
-   SMALL SCREEN TWEAKS
+   MOBILE TWEAKS
 ------------------------*/
 @media (max-width:480px){
   .header-wrap{padding:10px 12px}
