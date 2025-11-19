@@ -99,7 +99,7 @@ header.site-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:24px; /* ADDED: Gap to separate nav from the new button */
+  gap:16px; /* MODIFIED: Reduced gap for desktop spacing */
 }
 
 .logo img{height:42px}
@@ -139,7 +139,12 @@ nav.nav a::after{content:none}
 /* Ensure nav links have adequate tap area */
 nav.nav a{line-height:1.2}
 
-/* ADDED: Hide the mobile CTA link on desktop */
+/* NEW: Decrease height of the button on desktop */
+.nav-cta-desktop.button{
+  padding: 10px 16px; 
+}
+
+/* Hide the mobile CTA link on desktop */
 .nav-cta-mobile{
   display:none;
 }
@@ -184,7 +189,7 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
 @media (max-width:820px){
   .hamburger{display:flex}
   
-  /* ADDED: Hide the desktop button on mobile */
+  /* Hide the desktop button on mobile */
   .nav-cta-desktop{
     display:none;
   }
@@ -206,10 +211,17 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
   /* Ensure active color in mobile dropdown too */
   body.show-menu nav.nav a.active{color:var(--accent) !important}
   
-  /* ADDED: Show the mobile CTA link at the end of the mobile menu */
+  /* Show the mobile CTA link at the end of the mobile menu */
   .nav-cta-mobile{
     display:list-item;
     margin-top:8px; 
+  }
+  
+  /* NEW: Increase professional look for mobile button */
+  .nav-cta-mobile a.button{
+    width: 100%; 
+    text-align: center;
+    padding: 14px 18px; 
   }
 }
 
