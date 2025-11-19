@@ -139,8 +139,8 @@ nav.nav a::after{content:none}
 /* Ensure nav links have adequate tap area */
 nav.nav a{line-height:1.2}
 
-/* NEW: Decrease height of the button on desktop */
-.nav-cta-desktop.button{
+/* MODIFIED: Decrease height of the button on desktop (High Specificity) */
+header.site-header .nav-cta-desktop.button{
   padding: 10px 16px; 
 }
 
@@ -217,11 +217,11 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
     margin-top:8px; 
   }
   
-  /* NEW: Increase professional look for mobile button */
-  .nav-cta-mobile a.button{
+  /* MODIFIED: Increase professional look for mobile button (High Specificity) */
+  body.show-menu nav.nav .nav-cta-mobile a.button{
     width: 100%; 
     text-align: center;
-    padding: 10px 14px; 
+    padding: 14px 18px; 
   }
 }
 
