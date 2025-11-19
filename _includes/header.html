@@ -1,10 +1,11 @@
 <!-- _includes/header.html -->
+
 <header class="site-header" role="banner">
   <div class="header-wrap">
 
     <!-- LOGO -->
     <a class="logo" href="{{ site.baseurl }}/">
-      <img src="https://static.wixstatic.com/media/35c132_abad5506f5da47bfb6082108b6b204e1~mv2.png" alt="Helixcer Logistics" />
+      <img src="https://static.wixstatic.com/media/35c132_abad5506f5da47bfb6082108b6b204e1~mv2.png" alt="Helixcer Logistics">
     </a>
 
     <!-- HAMBURGER -->
@@ -37,13 +38,69 @@
 
   </div>
 
-  <!-- CLOSE MENU WHEN CLICKING LINKS -->
+  <!-- JS: CLOSE MOBILE MENU ON LINK CLICK -->
   <script>
     document.addEventListener("click", function (e) {
       if (e.target.closest(".nav a")) {
         document.body.classList.remove("show-menu");
       }
     });
+  </script>
+
+  <!-- JS: HEADER SHADOW ON SCROLL -->
+  <script>
+    (function(){
+      const header = document.querySelector('.site-header');
+      if(!header) return;
+
+      function onScroll(){
+        if(window.scrollY > 8){
+          header.classList.add('header--scrolled');
+        } else {
+          header.classList.remove('header--scrolled');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive:true });
+      onScroll();
+    })();
+  </script>
+
+  <!-- JS: SCROLL-SPY FOR SERVICES SECTION -->
+  <script>
+    (function(){
+      const servicesLink = document.querySelector('nav.nav a[href$="#services"]');
+      const servicesEl = document.querySelector('#services');
+
+      if(!servicesLink || !servicesEl) return;
+
+      function setActive(isActive){
+        document.querySelectorAll("nav.nav a").forEach(a => a.classList.remove("active"));
+        if(isActive) servicesLink.classList.add("active");
+        else {
+          const path = window.location.pathname.replace(/\/+$/,'');
+          document.querySelectorAll('nav.nav a').forEach(a => {
+            const href = a.getAttribute('href') || '';
+            if(href.startsWith('/') && !href.includes('#')){
+              const clean = href.replace(/\/+$/,'');
+              if(clean === path) a.classList.add('active');
+            }
+          });
+        }
+      }
+
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(en => {
+          if(en.isIntersecting) setActive(true);
+          else setActive(false);
+        });
+      }, { threshold: 0.45 });
+
+      obs.observe(servicesEl);
+
+      if(window.location.hash === '#services'){
+        setActive(true);
+      }
+    })();
   </script>
 
 </header>
