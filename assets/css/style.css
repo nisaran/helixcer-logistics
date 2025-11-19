@@ -221,7 +221,7 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
   .nav-cta-mobile a.button{
     width: 100%; 
     text-align: center;
-    padding: 14px 18px; 
+    padding: 12px 16px; 
   }
 }
 
