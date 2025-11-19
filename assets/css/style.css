@@ -89,7 +89,7 @@ header.site-header{
   border-bottom:1px solid var(--border);
   position:sticky;
   top:0;
-  z-index:9999;
+  z-index:99999;
 }
 
 .header-wrap{
@@ -133,7 +133,7 @@ nav.nav a:hover{
   color:var(--accent) !important;
 }
 
-/* Remove the underline pseudo-element entirely (if present earlier) */
+/* Remove any pseudo underline (safety) */
 nav.nav a::after{content:none}
 
 /* Ensure nav links have adequate tap area */
@@ -156,7 +156,7 @@ nav.nav a{line-height:1.2}
   cursor:pointer;
 }
 
-/* bars (use brand color) */
+/* bars (brand color) */
 .hamburger .bar{
   width:26px;
   height:3px;
@@ -178,21 +178,9 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
 /* Mobile dropdown */
 @media (max-width:820px){
   .hamburger{display:flex}
-  nav.nav{
-    display:none;
-    position:absolute;
-    top:68px;
-    left:0;
-    right:0;
-    background:#fff;
-    padding:20px;
-    border-bottom-left-radius:12px;
-    border-bottom-right-radius:12px;
-    box-shadow:0 8px 24px rgba(0,0,0,0.06);
-  }
+  nav.nav{display:none;position:absolute;top:68px;left:0;right:0;background:#fff;padding:20px;border-bottom-left-radius:12px;border-bottom-right-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.06)}
   body.show-menu nav.nav{display:block}
   nav.nav ul{flex-direction:column;gap:16px;align-items:flex-start}
-  /* Ensure active color in mobile dropdown too */
   body.show-menu nav.nav a.active{color:var(--accent) !important}
 }
 
@@ -204,32 +192,27 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
 /* -----------------------
    FOOTER
 ------------------------*/
-footer{
-  background:#0f1320;
-  color:#fff;
-  padding:40px 18px;
-  margin-top:60px;
-}
+footer{background:#0f1320;color:#fff;padding:40px 18px;margin-top:60px}
 footer h3{color:#fff;margin-bottom:12px}
 footer p, footer a{color:#b8c0d0;font-size:15px;text-decoration:none}
 footer a:hover{color:#fff}
 
 /* -----------------------
+   FORCE UNIFORMITY (last-resort overrides)
+------------------------*/
+header.site-header, header.site-header .header-wrap, nav.nav {background: #fff !important; max-width:100% !important}
+.header-wrap{max-width:var(--container);margin:0 auto;padding:14px 18px}
+nav.nav{display:flex !important;align-items:center;gap:24px}
+nav.nav ul{display:flex !important;gap:24px;list-style:none;margin:0;padding:0}
+nav.nav a{display:inline-block !important;margin:0 !important;padding:6px 2px !important}
+
+/* -----------------------
    UTILITIES
 ------------------------*/
-.mt-8{margin-top:8px}
-.mt-16{margin-top:16px}
-.mt-24{margin-top:24px}
-.center{text-align:center}
+.mt-8{margin-top:8px}.mt-16{margin-top:16px}.mt-24{margin-top:24px}.center{text-align:center}
 
 /* -----------------------
-   SAFETY / OVERRIDES
-   - make sure header stays above any page content
-------------------------*/
-header.site-header{position:sticky;top:0;z-index:99999}
-
-/* -----------------------
-   OPTIONAL: small responsive tweaks
+   SMALL SCREEN TWEAKS
 ------------------------*/
 @media (max-width:480px){
   .header-wrap{padding:10px 12px}
@@ -237,5 +220,3 @@ header.site-header{position:sticky;top:0;z-index:99999}
   .hamburger{width:44px;height:44px;padding:8px}
   .hamburger .bar{width:22px}
 }
-
-/* EOF */
