@@ -17,20 +17,7 @@
 
     <!-- NAVIGATION -->
     <nav class="nav" role="navigation" aria-label="Primary">
-  <ul>
-    <li><a href="{{ site.baseurl }}/" {% if page.url == "/" %}class="active"{% endif %}>Home</a></li>
-    <li><a href="{{ site.baseurl }}/#services">Services</a></li>
-    <li><a href="{{ site.baseurl }}/calculator/" {% if page.url == "/calculator/" %}class="active"{% endif %}>Freight Calculator</a></li>
-    <li><a href="{{ site.baseurl }}/track/" {% if page.url == "/track/" %}class="active"{% endif %}>Track</a></li>
-    <li><a href="{{ site.baseurl }}/contact/" {% if page.url == "/contact/" %}class="active"{% endif %}>Contact</a></li>
-  </ul>
-
-  <!-- BOOK FREIGHT BUTTON -->
-  <a class="book-btn" href="https://wa.me/916282010794?text=Hi%2C%20I%20want%20to%20book%20a%20freight%20service%20from%20Helixcer" target="_blank">
-    Book Freight
-  </a>
-</nav>
-
+      <ul>
         <li><a href="{{ site.baseurl }}/" {% if page.url == "/" %}class="active"{% endif %}>Home</a></li>
 
         <li>
@@ -53,8 +40,16 @@
             Contact us
           </a>
         </li>
-      </ul>
+           </ul>
+
+      <!-- BOOK FREIGHT BUTTON (kept inside nav, after the menu list) -->
+      <a class="book-btn"
+         href="https://wa.me/916282010794?text=Hi%2C%20I%20want%20to%20book%20a%20freight%20service%20from%20Helixcer"
+         target="_blank" rel="noopener">
+        Book Freight
+      </a>
     </nav>
+
 
   </div>
 
