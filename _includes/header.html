@@ -1,21 +1,16 @@
-<!-- _includes/header.html -->
-
 <header class="site-header" role="banner">
   <div class="header-wrap">
 
-    <!-- LOGO -->
     <a class="logo" href="{{ site.baseurl }}/">
       <img src="https://static.wixstatic.com/media/35c132_abad5506f5da47bfb6082108b6b204e1~mv2.png" alt="Helixcer Logistics">
     </a>
 
-    <!-- HAMBURGER -->
     <button class="hamburger" aria-label="Toggle menu" onclick="document.body.classList.toggle('show-menu')">
       <div class="bar top"></div>
       <div class="bar middle"></div>
       <div class="bar bottom"></div>
     </button>
 
-    <!-- NAVIGATION -->
     <nav class="nav" role="navigation" aria-label="Primary">
       <ul>
         <li><a href="{{ site.baseurl }}/" {% if page.url == "/" %}class="active"{% endif %}>Home</a></li>
@@ -40,12 +35,22 @@
             Contact us
           </a>
         </li>
+        
+        <li class="nav-cta-mobile">
+          <a href="https://wa.me/916282010794?text=Hi%2C%20I%20want%20to%20book%20a%20freight%20service%20from%20Helixcer" class="button">
+            Book Freight
+          </a>
+        </li>
       </ul>
     </nav>
+    
+    <a class="button nav-cta-desktop" 
+      href="https://wa.me/916282010794?text=Hi%2C%20I%20want%20to%20book%20a%20freight%20service%20from%20Helixcer">
+      Book Freight
+    </a>
 
   </div>
 
-  <!-- CLOSE MENU WHEN CLICKING LINKS -->
   <script>
     document.addEventListener("click", function (e) {
       if (e.target.closest(".nav a")) {
@@ -54,7 +59,6 @@
     });
   </script>
 
-  <!-- HEADER SHADOW -->
   <script>
     (function(){
       const header = document.querySelector('.site-header');
@@ -67,7 +71,6 @@
     })();
   </script>
 
-  <!-- SCROLL-SPY FOR SERVICES -->
   <script>
     (function(){
       const servicesLink = document.querySelector('nav.nav a[href$="#services"]');
