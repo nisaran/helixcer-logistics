@@ -1,5 +1,4 @@
 <!-- _includes/header.html -->
-
 <header class="site-header" role="banner">
   <div class="header-wrap">
 
@@ -19,27 +18,10 @@
     <nav class="nav" role="navigation" aria-label="Primary">
       <ul>
         <li><a href="{{ site.baseurl }}/" {% if page.url == "/" %}class="active"{% endif %}>Home</a></li>
-
-        <li>
-          <a href="{{ site.baseurl }}/calculator/" 
-            {% if page.url == "/calculator/" %}class="active"{% endif %}>
-            Freight Calculator
-          </a>
-        </li>
-
-        <li>
-          <a href="{{ site.baseurl }}/track/" 
-            {% if page.url == "/track/" %}class="active"{% endif %}>
-            Track Shipment
-          </a>
-        </li>
-
-        <li>
-          <a href="{{ site.baseurl }}/contact/" 
-            {% if page.url == "/contact/" %}class="active"{% endif %}>
-            Contact
-          </a>
-        </li>
+        <li><a href="{{ site.baseurl }}/#services">Services</a></li>
+        <li><a href="{{ site.baseurl }}/calculator/" {% if page.url == "/calculator/" %}class="active"{% endif %}>Freight Calculator</a></li>
+        <li><a href="{{ site.baseurl }}/track/" {% if page.url == "/track/" %}class="active"{% endif %}>Track</a></li>
+        <li><a href="{{ site.baseurl }}/contact/" {% if page.url == "/contact/" %}class="active"{% endif %}>Contact</a></li>
       </ul>
     </nav>
 
@@ -54,15 +36,16 @@
     });
   </script>
 
-  <!-- HEADER SHADOW -->
+  <!-- HEADER SHADOW ON SCROLL -->
   <script>
     (function(){
       const header = document.querySelector('.site-header');
+      if(!header) return;
       function onScroll(){
-        if (window.scrollY > 8) header.classList.add('header--scrolled');
+        if(window.scrollY > 8) header.classList.add('header--scrolled');
         else header.classList.remove('header--scrolled');
       }
-      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     })();
   </script>
@@ -72,22 +55,58 @@
     (function(){
       const servicesLink = document.querySelector('nav.nav a[href$="#services"]');
       const servicesEl = document.querySelector('#services');
-
-      if (!servicesLink || !servicesEl) return;
+      if(!servicesLink || !servicesEl) return;
 
       function setActive(isActive){
         document.querySelectorAll("nav.nav a").forEach(a => a.classList.remove("active"));
-        if (isActive) servicesLink.classList.add("active");
+        if(isActive) servicesLink.classList.add("active");
+        else {
+          // fallback: mark by path
+          const path = window.location.pathname.replace(/\/+$/,'') || '/';
+          document.querySelectorAll('nav.nav a').forEach(a=>{
+            const href = a.getAttribute('href') || '';
+            if(href.startsWith('/') && !href.includes('#')){
+              const clean = href.replace(/\/+$/,'');
+              if(clean === path) a.classList.add('active');
+            }
+          });
+        }
       }
 
-      const obs = new IntersectionObserver(entries => {
-        entries.forEach(en => setActive(en.isIntersecting));
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{
+          setActive(en.isIntersecting);
+        });
       }, { threshold: 0.45 });
 
       obs.observe(servicesEl);
 
-      if (window.location.hash === "#services") setActive(true);
+      if(window.location.hash === '#services') setActive(true);
     })();
   </script>
 
+  <!-- PATH-BASED ACTIVE FIX (ensures correct active link on all pages) -->
+  <script>
+    (function(){
+      const path = window.location.pathname.replace(/\/+$/,'') || '/';
+      const mapping = {
+        '/': '/',
+        '/index.html': '/',
+        '/contact': '/contact/',
+        '/contact/': '/contact/',
+        '/calculator': '/calculator/',
+        '/calculator/': '/calculator/',
+        '/track': '/track/',
+        '/track/': '/track/'
+      };
+      const target = mapping[path];
+      if(!target) return;
+      document.querySelectorAll('nav.nav a').forEach(a => a.classList.remove('active'));
+      const found = Array.from(document.querySelectorAll('nav.nav a')).find(a=>{
+        const h = a.getAttribute('href') || '';
+        return h.replace(/\/+$/,'') === target.replace(/\/+$/,'');
+      });
+      if(found) found.classList.add('active');
+    })();
+  </script>
 </header>
