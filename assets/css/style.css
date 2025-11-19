@@ -196,37 +196,6 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
   body.show-menu nav.nav a.active{color:var(--accent) !important}
 }
 
-
-/* BOOK FREIGHT BUTTON (Desktop + Mobile) */
-.book-btn {
-  background: #C24525;
-  color: #fff !important;
-  padding: 10px 18px;
-  border-radius: 10px;
-  font-weight: 700;
-  text-decoration: none;
-  margin-left: 20px;
-  white-space: nowrap;
-  transition: background .25s ease, transform .2s ease;
-}
-
-.book-btn:hover {
-  background: #a03b21;
-  transform: translateY(-2px);
-}
-
-/* Mobile — move below menu items */
-@media (max-width: 820px) {
-  nav.nav {
-    padding-bottom: 30px;
-  }
-  .book-btn {
-    display: block;
-    margin: 16px 0 0 0;
-    width: fit-content;
-  }
-}
-
 /* -----------------------
    HEADER SHADOW ON SCROLL
 ------------------------*/
@@ -268,5 +237,65 @@ header.site-header{position:sticky;top:0;z-index:99999}
   .hamburger{width:44px;height:44px;padding:8px}
   .hamburger .bar{width:22px}
 }
+
+/* ---------- Small fixes: uniform link color, prevent menu wrapping, book button ---------- */
+
+/* Force nav link color for all link states so other page css doesn't turn it blue */
+nav.nav a,
+nav.nav a:link,
+nav.nav a:visited,
+nav.nav a:active,
+nav.nav a:hover {
+  color: var(--text) !important;
+}
+
+/* Active state should use brand color */
+nav.nav a.active,
+body.show-menu nav.nav a.active {
+  color: var(--accent) !important;
+}
+
+/* Prevent menu items from wrapping and shifting on smaller desktop widths */
+nav.nav ul li {
+  display: inline-block;      /* prevent line-break wrapping */
+  white-space: nowrap;        /* keep text on single line */
+}
+
+/* Ensure the anchor inside the li uses no extra margins that cause shift */
+nav.nav ul li a {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 6px 2px;
+}
+
+/* BOOK FREIGHT BUTTON (desktop + mobile) */
+.book-btn {
+  background: var(--accent);
+  color: #fff !important;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none !important;
+  margin-left: 16px;
+  white-space: nowrap;
+  transition: background .18s ease, transform .12s ease;
+}
+
+/* Hover */
+.book-btn:hover {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+/* Mobile: show button as block inside dropdown and keep spacing */
+@media (max-width: 820px) {
+  .book-btn {
+    display: block;
+    margin: 14px 0 0 0;
+  }
+}
+
+/* Safety: if any page sets default anchor styles globally, ensure nav anchors don't inherit underlines */
+nav.nav a { text-decoration: none !important; }
 
 /* EOF */
