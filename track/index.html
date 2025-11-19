@@ -641,9 +641,10 @@ async function doLookupAndRender(tid, cid){
     renderTimeline(normalized, json.tid || tid, json.cid || cid);
 
     const u = new URL(window.location.href);
-    u.searchParams.set("tid", tid);
-    u.searchParams.set("cid", cid);
-    history.replaceState(null, "", u.toString());
+    // Force ordering of query params: cid first, tid next
+    const trackingUrl = `${location.pathname}?cid=${encodeURIComponent(cid)}&tid=${encodeURIComponent(tid)}`;
+    history.replaceState(null, "", trackingUrl);
+
 
   }catch(err){
     console.error("Tracking error:", err);
