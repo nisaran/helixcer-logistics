@@ -280,9 +280,9 @@ function addBox(values = null) {
     heightInput.value = values.height_cm ?? '';
     weightInput.value = values.weight_per_box_kg ?? '';
     // default box_quantity to 1 if not provided
-    qtyInput.value = (values.box_quantity !== undefined && values.box_quantity !== null && values.box_quantity !== '') ? values.box_quantity : 1;
+    qtyInput.value = (values.box_quantity !== undefined && values.box_quantity !== null && values.box_quantity !== '') ? values.box_quantity : ''
   } else {
-    qtyInput.value = 1; // when adding new box, default qty to 1
+    qtyInput.value = ''; // when adding new box, default qty to 1
   }
 
   const delCell = el('div', { class: 'delete-cell' });
@@ -348,7 +348,7 @@ uploadFile.addEventListener('change', async (evt) => {
         height_cm: +r.height_cm,
         weight_per_box_kg: +(r.weight_per_box_kg ?? r['WT/BOX_KG'] ?? 0),
         // default missing box_quantity to 1 to avoid empty qtys
-        box_quantity: (r.box_quantity === undefined || r.box_quantity === '') ? 1 : +r.box_quantity
+        box_quantity: (r.box_quantity === undefined || r.box_quantity === '') ? '' : +r.box_quantity
       });
     });
     if (!boxes.children.length) addBox();
