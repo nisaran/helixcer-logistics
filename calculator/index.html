@@ -131,21 +131,6 @@ description: Freight Calculator - Helixcer Logistics
       font-weight:800; color:#0f172a;
     }
   }
-
-  /* custom UI for validation and modals */
-  .toast{ position:fixed; right:18px; top:18px; min-width:220px; padding:10px 14px; border-radius:8px; box-shadow:0 8px 30px rgba(2,6,23,.12); z-index:80; display:none; }
-  .toast.show{ display:block; }
-  .toast.error{ background:#fff0f0; color:#b91c1c; border:1px solid rgba(185,28,28,.08); }
-  .toast.success{ background:#effcf3; color:#065f46; border:1px solid rgba(6,95,70,.08); }
-  .field-error{ color:#b91c1c; font-size:12px; margin-top:6px }
-
-  /* simple modal */
-  .modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,.45); display:none; align-items:center; justify-content:center; z-index:90 }
-  .modal-backdrop.show{ display:flex }
-  .modal{ background:#fff; border-radius:10px; padding:18px; width:380px; max-width:92%; box-shadow:0 12px 40px rgba(2,6,23,.24); }
-  .modal .modal-title{ font-weight:800; margin:0 0 8px }
-  .modal .modal-body{ margin-bottom:12px }
-  .modal .modal-actions{ display:flex; justify-content:flex-end; gap:8px }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
@@ -200,79 +185,11 @@ description: Freight Calculator - Helixcer Logistics
       </form>
     </div>
 
-    <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
-
-  <div id="confirmModal" class="modal-backdrop" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <h3 class="modal-title">Confirm</h3>
-      <div class="modal-body" id="confirmBody">Are you sure?</div>
-      <div class="modal-actions">
-        <button id="confirmCancel" class="btn btn-gray">No</button>
-        <button id="confirmOk" class="btn btn-primary">Yes</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="resultArea"></div>
+    <div id="resultArea"></div>
   </div>
 
 <script>
 /* CONFIG */
-
-// UI helpers
-function showToast(msg, type = 'error', timeout = 4000) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + (type === 'success' ? 'success' : 'error');
-  if (timeout) {
-    clearTimeout(t._timer);
-    t._timer = setTimeout(() => { t.className = 'toast'; }, timeout);
-  }
-}
-
-function clearFieldErrors() {
-  document.querySelectorAll('.field-error').forEach(e=>e.remove());
-  document.querySelectorAll('.input-invalid').forEach(i=>i.classList.remove('input-invalid'));
-}
-
-function showFieldError(inputEl, msg) {
-  clearFieldErrorFor(inputEl);
-  // add invalid class to input for red border
-  if (inputEl && inputEl.classList) inputEl.classList.add('input-invalid');
-  const err = document.createElement('div'); err.className = 'field-error'; err.textContent = msg;
-  inputEl.insertAdjacentElement('afterend', err);
-}
-function clearFieldErrorFor(inputEl) {
-  // remove invalid class
-  if (inputEl && inputEl.classList) inputEl.classList.remove('input-invalid');
-  const next = inputEl.nextElementSibling;
-  if (next && next.classList && next.classList.contains('field-error')) next.remove();
-}
-
-// Confirm modal helper returns a Promise<boolean>
-function showConfirm(message) {
-  return new Promise(res => {
-    const modal = document.getElementById('confirmModal');
-    const body = document.getElementById('confirmBody');
-    body.textContent = message;
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden','false');
-    const ok = document.getElementById('confirmOk');
-    const cancel = document.getElementById('confirmCancel');
-    function cleanup(result) {
-      modal.classList.remove('show');
-      modal.setAttribute('aria-hidden','true');
-      ok.removeEventListener('click', onOk);
-      cancel.removeEventListener('click', onCancel);
-      res(result);
-    }
-    function onOk(){ cleanup(true); }
-    function onCancel(){ cleanup(false); }
-    ok.addEventListener('click', onOk);
-    cancel.addEventListener('click', onCancel);
-  });
-}
-
 const GAS_URL = "https://script.google.com/macros/s/AKfycby9450wF37JPBWzJjbZoolDVVjmgEGB86E4C9TkJPyHGaTIHkfBpLmU-xthMcmeR4Rn/exec?routeType=freight-calculator";
 
 /* DOM */
@@ -396,9 +313,8 @@ function setLoading(on = true) {
 
 /* Buttons */
 addBoxBtn.addEventListener('click', () => addBox());
-resetBtn.addEventListener('click', async () => {
-  const ok = await showConfirm('Reset everything?');
-  if (!ok) return;
+resetBtn.addEventListener('click', () => {
+  if (!confirm('Reset everything?')) return;
   originInput.value = ''; destinationInput.value = ''; valueInput.value = '';
   boxes.innerHTML = ''; addBox();
 });
@@ -418,7 +334,7 @@ uploadFile.addEventListener('change', async (evt) => {
     const headers = Object.keys(rows[0]).map(h => ('' + h).trim());
     const ok = REQUIRED_HEADERS.every(h => headers.includes(h));
     if (!ok) {
-      showToast('Invalid headers.\n\nRequired (exact):\n' + REQUIRED_HEADERS.join(', '));
+      alert('Invalid headers.\n\nRequired (exact):\n' + REQUIRED_HEADERS.join(', '));
       evt.target.value = '';
       return;
     }
@@ -436,10 +352,10 @@ uploadFile.addEventListener('change', async (evt) => {
       });
     });
     if (!boxes.children.length) addBox();
-    showToast('Boxes loaded from file.', 'success');
+    alert('Boxes loaded from file.');
   } catch (err) {
     console.error(err);
-    showToast('Failed to read the file. Please use .xlsx or .csv with the exact headers.');
+    alert('Failed to read the file. Please use .xlsx or .csv with the exact headers.');
   } finally {
     evt.target.value = '';
   }
@@ -456,44 +372,40 @@ downloadTemplate.addEventListener('click', () => {
 
 /* Validate boxes: ensure every box has length,width,height,weight (>0) and qty (>=1) */
 function validateBoxes() {
-  clearFieldErrors();
   const rows = Array.from(boxes.querySelectorAll('.box-row'));
-  const errors = [];
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
-    const lengthEl = r.querySelector('.length');
-    const widthEl  = r.querySelector('.width');
-    const heightEl = r.querySelector('.height');
-    const weightEl = r.querySelector('.weight');
-    const qtyEl    = r.querySelector('.qty');
+    const length = r.querySelector('.length').value;
+    const width  = r.querySelector('.width').value;
+    const height = r.querySelector('.height').value;
+    const weight = r.querySelector('.weight').value;
+    const qty    = r.querySelector('.qty').value;
 
-    if (lengthEl.value === '' || isNaN(+lengthEl.value) || +lengthEl.value <= 0) {
-      showFieldError(lengthEl, `Enter valid Length for Box ${i+1}`);
-      errors.push(`Box ${i+1}: Length`);
+    if (length === '' || isNaN(+length) || +length <= 0) {
+      alert(`Please enter a valid Length (cm) for Box ${i+1}`);
+      r.querySelector('.length').focus();
+      return false;
     }
-    if (widthEl.value === '' || isNaN(+widthEl.value) || +widthEl.value <= 0) {
-      showFieldError(widthEl, `Enter valid Width for Box ${i+1}`);
-      errors.push(`Box ${i+1}: Width`);
+    if (width === '' || isNaN(+width) || +width <= 0) {
+      alert(`Please enter a valid Width (cm) for Box ${i+1}`);
+      r.querySelector('.width').focus();
+      return false;
     }
-    if (heightEl.value === '' || isNaN(+heightEl.value) || +heightEl.value <= 0) {
-      showFieldError(heightEl, `Enter valid Height for Box ${i+1}`);
-      errors.push(`Box ${i+1}: Height`);
+    if (height === '' || isNaN(+height) || +height <= 0) {
+      alert(`Please enter a valid Height (cm) for Box ${i+1}`);
+      r.querySelector('.height').focus();
+      return false;
     }
-    if (weightEl.value === '' || isNaN(+weightEl.value) || +weightEl.value <= 0) {
-      showFieldError(weightEl, `Enter valid Weight for Box ${i+1}`);
-      errors.push(`Box ${i+1}: Weight`);
+    if (weight === '' || isNaN(+weight) || +weight <= 0) {
+      alert(`Please enter a valid Weight (kg) for Box ${i+1}`);
+      r.querySelector('.weight').focus();
+      return false;
     }
-    if (qtyEl.value === '' || isNaN(+qtyEl.value) || +qtyEl.value < 1) {
-      showFieldError(qtyEl, `Enter valid Quantity (>=1) for Box ${i+1}`);
-      errors.push(`Box ${i+1}: Quantity`);
+    if (qty === '' || isNaN(+qty) || +qty < 1) {
+      alert(`Please enter a valid Quantity (>=1) for Box ${i+1}`);
+      r.querySelector('.qty').focus();
+      return false;
     }
-  }
-  if (errors.length) {
-    showToast(`Please fix ${errors.length} field(s).`, 'error');
-    // focus first invalid
-    const firstErr = boxes.querySelector('.field-error');
-    if (firstErr) firstErr.previousElementSibling.focus();
-    return false;
   }
   return true;
 }
@@ -504,8 +416,8 @@ form.addEventListener('submit', async (e) => {
 
   const originVal = String(originInput.value).trim();
   const destVal = String(destinationInput.value).trim();
-  if (!/^\d{6}$/.test(originVal)) { showToast('Origin pincode must be 6 digits.'); return; }
-  if (!/^\d{6}$/.test(destVal)) { showToast('Destination pincode must be 6 digits.'); return; }
+  if (!/^\d{6}$/.test(originVal)) { alert('Origin pincode must be 6 digits.'); return; }
+  if (!/^\d{6}$/.test(destVal)) { alert('Destination pincode must be 6 digits.'); return; }
 
   // Validate boxes first
   if (!validateBoxes()) return;
@@ -519,7 +431,7 @@ form.addEventListener('submit', async (e) => {
     box_quantity: +(r.querySelector('.qty').value || 1)
   })).filter(b => b.box_quantity > 0);
 
-  if (!payloadBoxes.length) { showToast('Please add at least one box.'); return; }
+  if (!payloadBoxes.length) { alert('Please add at least one box.'); return; }
 
   const payload = {
 	routeType: 'freight-calculator',
