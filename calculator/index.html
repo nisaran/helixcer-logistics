@@ -190,7 +190,7 @@ description: Freight Calculator - Helixcer Logistics
 
 <script>
 /* CONFIG */
-const GAS_URL = "https://script.google.com/macros/s/AKfycby9450wF37JPBWzJjbZoolDVVjmgEGB86E4C9TkJPyHGaTIHkfBpLmU-xthMcmeR4Rn/exec?routeType=freight-calculator";
+const GAS_URL = "https://script.google.com/macros/s/AKfycby9450wF37JPBWzJjbZoolDVVjmgEGB86E4C9TkJPyHGaTIHkfBpLmU-xthMcmeR4Rn/exec";
 
 /* DOM */
 const boxes = document.getElementById('boxes');
@@ -389,6 +389,7 @@ form.addEventListener('submit', async (e) => {
   if (!payloadBoxes.length) { alert('Please add at least one box.'); return; }
 
   const payload = {
+	routeType: 'freight-calculator',
     fromPincode: originVal,
     toPincode: destVal,
     totalValue: +valueInput.value || 0,
@@ -400,12 +401,11 @@ form.addEventListener('submit', async (e) => {
 
   try {
     const res = await fetch(GAS_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    mode: 'cors',
-    redirect: 'follow'
-});
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      redirect: 'follow'
+    });
 
     const txt = await res.text();
     let data;
