@@ -264,7 +264,7 @@ function el(tag, props = {}, ...children) {
   return e;
 }
 
-/* BOX ROWS (qty default blank) */
+/* BOX ROWS (qty default 1) */
 function addBox(values = null) {
   const row = el('div', { class: 'box-row' });
   const label = el('div', { class: 'box-label' }, 'Box');
@@ -279,9 +279,10 @@ function addBox(values = null) {
     widthInput.value  = values.width_cm ?? '';
     heightInput.value = values.height_cm ?? '';
     weightInput.value = values.weight_per_box_kg ?? '';
-    if (values.box_quantity !== undefined && values.box_quantity !== null && values.box_quantity !== '') {
-      qtyInput.value = values.box_quantity;
-    }
+    // default box_quantity to 1 if not provided
+    qtyInput.value = (values.box_quantity !== undefined && values.box_quantity !== null && values.box_quantity !== '') ? values.box_quantity : 1;
+  } else {
+    qtyInput.value = 1; // when adding new box, default qty to 1
   }
 
   const delCell = el('div', { class: 'delete-cell' });
@@ -346,7 +347,8 @@ uploadFile.addEventListener('change', async (evt) => {
         width_cm:  +r.width_cm,
         height_cm: +r.height_cm,
         weight_per_box_kg: +(r.weight_per_box_kg ?? r['WT/BOX_KG'] ?? 0),
-        box_quantity: (r.box_quantity === undefined || r.box_quantity === '') ? undefined : +r.box_quantity
+        // default missing box_quantity to 1 to avoid empty qtys
+        box_quantity: (r.box_quantity === undefined || r.box_quantity === '') ? 1 : +r.box_quantity
       });
     });
     if (!boxes.children.length) addBox();
@@ -368,6 +370,46 @@ downloadTemplate.addEventListener('click', () => {
   document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
 });
 
+/* Validate boxes: ensure every box has length,width,height,weight (>0) and qty (>=1) */
+function validateBoxes() {
+  const rows = Array.from(boxes.querySelectorAll('.box-row'));
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const length = r.querySelector('.length').value;
+    const width  = r.querySelector('.width').value;
+    const height = r.querySelector('.height').value;
+    const weight = r.querySelector('.weight').value;
+    const qty    = r.querySelector('.qty').value;
+
+    if (length === '' || isNaN(+length) || +length <= 0) {
+      alert(`Please enter a valid Length (cm) for Box ${i+1}`);
+      r.querySelector('.length').focus();
+      return false;
+    }
+    if (width === '' || isNaN(+width) || +width <= 0) {
+      alert(`Please enter a valid Width (cm) for Box ${i+1}`);
+      r.querySelector('.width').focus();
+      return false;
+    }
+    if (height === '' || isNaN(+height) || +height <= 0) {
+      alert(`Please enter a valid Height (cm) for Box ${i+1}`);
+      r.querySelector('.height').focus();
+      return false;
+    }
+    if (weight === '' || isNaN(+weight) || +weight <= 0) {
+      alert(`Please enter a valid Weight (kg) for Box ${i+1}`);
+      r.querySelector('.weight').focus();
+      return false;
+    }
+    if (qty === '' || isNaN(+qty) || +qty < 1) {
+      alert(`Please enter a valid Quantity (>=1) for Box ${i+1}`);
+      r.querySelector('.qty').focus();
+      return false;
+    }
+  }
+  return true;
+}
+
 /* Submit → GAS */
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -376,6 +418,9 @@ form.addEventListener('submit', async (e) => {
   const destVal = String(destinationInput.value).trim();
   if (!/^\d{6}$/.test(originVal)) { alert('Origin pincode must be 6 digits.'); return; }
   if (!/^\d{6}$/.test(destVal)) { alert('Destination pincode must be 6 digits.'); return; }
+
+  // Validate boxes first
+  if (!validateBoxes()) return;
 
   const rows = Array.from(boxes.querySelectorAll('.box-row'));
   const payloadBoxes = rows.map(r => ({
@@ -410,7 +455,7 @@ form.addEventListener('submit', async (e) => {
     const txt = await res.text();
     let data;
     try { data = JSON.parse(txt); } catch (err) {
-      resultArea.innerHTML = `<div style="color:#b91c1c;background:#fff0f0;padding:10px;border-radius:8px">Non-JSON response from server.<pre style="white-space:pre-wrap">${txt.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))}</pre></div>`;
+      resultArea.innerHTML = `<div style="color:#b91c1c;background:#fff0f0;padding:10px;border-radius:8px">Non-JSON response from server.<pre style="white-space:pre-wrap">${txt.replace(/[<>&]/g,c=>({'<' :'&lt;','>' :'&gt;','&' :'&amp;'}[c]))}</pre></div>`;
       return;
     }
 
@@ -419,7 +464,6 @@ form.addEventListener('submit', async (e) => {
       return;
     }
 
-    resultArea.innerHTML = data.html || '<div>No HTML returned</div>';
     resultArea.innerHTML = data.html || '<div>No HTML returned</div>';
     (function sortTableByTotal() {
       const tables = resultArea.querySelectorAll('table');
