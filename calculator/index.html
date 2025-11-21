@@ -434,7 +434,6 @@ form.addEventListener('submit', async (e) => {
   if (!payloadBoxes.length) { alert('Please add at least one box.'); return; }
 
   const payload = {
-	routeType: 'freight-calculator',
     fromPincode: originVal,
     toPincode: destVal,
     totalValue: +valueInput.value || 0,
