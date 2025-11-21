@@ -88,10 +88,8 @@ description: Freight Calculator - Helixcer Logistics
 
   .box-titles{ display:grid; grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px; column-gap:var(--col-gap); font-weight:700; color:#0b2a4a; font-size:12px; margin:10px 0 6px; padding:0 6px; }
   #boxes{ display:flex; flex-direction:column; gap:var(--row-gap); margin-top:4px; }
-  .box-row{ display:grid; grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px; column-gap:var(--col-gap); align-items:center; padding:8px; border-radius:10px; background:#fbfdff; border:1px solid #f0f6fb; overflow:hidden; grid-auto-rows: auto; }
+  .box-row{ display:grid; grid-template-columns:65px repeat(5,minmax(95px,1fr)) 56px; column-gap:var(--col-gap); align-items:center; padding:8px; border-radius:10px; background:#fbfdff; border:1px solid #f0f6fb; overflow:hidden; }
   .box-label{ font-weight:800; color:#0b2a4a; padding-left:6px }
-  /* keep inputs full width inside their grid cell */
-  .input-wrap{ display:flex; flex-direction:column; }
   .box-row input{ height:var(--dim-h); padding:6px 10px; border:1px solid var(--border); border-radius:6px; background:#fff; outline:none; width:100%; box-sizing:border-box; }
   .delete-cell{ display:flex; justify-content:center; }
   .delete-btn{ width:var(--dim-h); height:var(--dim-h); border-radius:8px; border:none; background:var(--danger); color:#fff; cursor:pointer; font-weight:800; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(239,68,68,.08); }
@@ -139,11 +137,7 @@ description: Freight Calculator - Helixcer Logistics
   .toast.show{ display:block; }
   .toast.error{ background:#fff0f0; color:#b91c1c; border:1px solid rgba(185,28,28,.08); }
   .toast.success{ background:#effcf3; color:#065f46; border:1px solid rgba(6,95,70,.08); }
-
-  /* make field error appear below inputs and span visually */
-  .field-error{ color:#b91c1c; font-size:12px; margin-top:6px; display:block; grid-column: 1 / -1; }
-
-  .input-invalid { border-color: #ef4444 !important; box-shadow: 0 0 0 3px rgba(239,68,68,0.06); }
+  .field-error{ color:#b91c1c; font-size:12px; margin-top:6px }
 
   /* simple modal */
   .modal-backdrop{ position:fixed; inset:0; background:rgba(2,6,23,.45); display:none; align-items:center; justify-content:center; z-index:90 }
@@ -243,23 +237,15 @@ function clearFieldErrors() {
 
 function showFieldError(inputEl, msg) {
   clearFieldErrorFor(inputEl);
-
-  // mark input with invalid style
-  inputEl.classList.add('input-invalid');
-
+  // add invalid class to input for red border
+  if (inputEl && inputEl.classList) inputEl.classList.add('input-invalid');
   const err = document.createElement('div'); err.className = 'field-error'; err.textContent = msg;
-
-  // insert error after the wrapper (if present) so it sits below the input cell
-  const wrap = inputEl.closest('.input-wrap') || inputEl;
-  wrap.insertAdjacentElement('afterend', err);
+  inputEl.insertAdjacentElement('afterend', err);
 }
 function clearFieldErrorFor(inputEl) {
-  // remove red border
+  // remove invalid class
   if (inputEl && inputEl.classList) inputEl.classList.remove('input-invalid');
-
-  // remove any existing .field-error immediately after wrapper/input
-  const wrap = inputEl.closest('.input-wrap') || inputEl;
-  const next = wrap.nextElementSibling;
+  const next = inputEl.nextElementSibling;
   if (next && next.classList && next.classList.contains('field-error')) next.remove();
 }
 
@@ -361,40 +347,25 @@ function el(tag, props = {}, ...children) {
   return e;
 }
 
-/* BOX ROWS */
+/* BOX ROWS (qty default 1) */
 function addBox(values = null) {
   const row = el('div', { class: 'box-row' });
   const label = el('div', { class: 'box-label' }, 'Box');
-
-  // create input-wraps so errors can be inserted after the wrapper (below the input)
-  const lengthWrap = el('div', { class: 'input-wrap' });
   const lengthInput = el('input', { class: 'length', attrs: { type: 'number', placeholder: 'L (cm)' } });
-  lengthWrap.appendChild(lengthInput);
-
-  const widthWrap = el('div', { class: 'input-wrap' });
   const widthInput  = el('input', { class: 'width',  attrs: { type: 'number', placeholder: 'W (cm)' } });
-  widthWrap.appendChild(widthInput);
-
-  const heightWrap = el('div', { class: 'input-wrap' });
   const heightInput = el('input', { class: 'height', attrs: { type: 'number', placeholder: 'H (cm)' } });
-  heightWrap.appendChild(heightInput);
-
-  const weightWrap = el('div', { class: 'input-wrap' });
   const weightInput = el('input', { class: 'weight', attrs: { type: 'number', placeholder: 'Wt (kg)' } });
-  weightWrap.appendChild(weightInput);
-
-  const qtyWrap = el('div', { class: 'input-wrap' });
   const qtyInput    = el('input', { class: 'qty', attrs: { type: 'number', min: '1', placeholder: 'Qty' } });
-  qtyWrap.appendChild(qtyInput);
 
   if (values) {
     lengthInput.value = values.length_cm ?? '';
     widthInput.value  = values.width_cm ?? '';
     heightInput.value = values.height_cm ?? '';
     weightInput.value = values.weight_per_box_kg ?? '';
-    qtyInput.value = (values.box_quantity !== undefined && values.box_quantity !== null && values.box_quantity !== '') ? values.box_quantity : '';
+    // default box_quantity to 1 if not provided
+    qtyInput.value = (values.box_quantity !== undefined && values.box_quantity !== null && values.box_quantity !== '') ? values.box_quantity : ''
   } else {
-    qtyInput.value = '';
+    qtyInput.value = ''; // when adding new box, default qty to 1
   }
 
   const delCell = el('div', { class: 'delete-cell' });
@@ -402,7 +373,7 @@ function addBox(values = null) {
   delBtn.addEventListener('click', () => { boxes.removeChild(row); renumber(); showHideDelete(); });
   delCell.appendChild(delBtn);
 
-  row.append(label, lengthWrap, widthWrap, heightWrap, weightWrap, qtyWrap, delCell);
+  row.append(label, lengthInput, widthInput, heightInput, weightInput, qtyInput, delCell);
   boxes.appendChild(row);
   renumber(); showHideDelete();
 }
@@ -447,7 +418,7 @@ uploadFile.addEventListener('change', async (evt) => {
     const headers = Object.keys(rows[0]).map(h => ('' + h).trim());
     const ok = REQUIRED_HEADERS.every(h => headers.includes(h));
     if (!ok) {
-      showToast('Invalid headers. Required (exact): ' + REQUIRED_HEADERS.join(', '));
+      showToast('Invalid headers.\n\nRequired (exact):\n' + REQUIRED_HEADERS.join(', '));
       evt.target.value = '';
       return;
     }
@@ -456,10 +427,11 @@ uploadFile.addEventListener('change', async (evt) => {
     rows.forEach(r => {
       if (Object.values(r).every(v => v === '')) return;
       addBox({
-        length_cm: r.length_cm === undefined || r.length_cm === '' ? '' : +r.length_cm,
-        width_cm:  r.width_cm === undefined || r.width_cm === '' ? '' : +r.width_cm,
-        height_cm: r.height_cm === undefined || r.height_cm === '' ? '' : +r.height_cm,
-        weight_per_box_kg: (r.weight_per_box_kg === undefined || r.weight_per_box_kg === '') ? '' : +(r.weight_per_box_kg ?? r['WT/BOX_KG'] ?? 0),
+        length_cm: +r.length_cm,
+        width_cm:  +r.width_cm,
+        height_cm: +r.height_cm,
+        weight_per_box_kg: +(r.weight_per_box_kg ?? r['WT/BOX_KG'] ?? 0),
+        // default missing box_quantity to 1 to avoid empty qtys
         box_quantity: (r.box_quantity === undefined || r.box_quantity === '') ? '' : +r.box_quantity
       });
     });
@@ -518,13 +490,9 @@ function validateBoxes() {
   }
   if (errors.length) {
     showToast(`Please fix ${errors.length} field(s).`, 'error');
-    // focus first invalid input
+    // focus first invalid
     const firstErr = boxes.querySelector('.field-error');
-    if (firstErr) {
-      const prev = firstErr.previousElementSibling;
-      const inputToFocus = prev && prev.querySelector ? prev.querySelector('input') : null;
-      if (inputToFocus) inputToFocus.focus();
-    }
+    if (firstErr) firstErr.previousElementSibling.focus();
     return false;
   }
   return true;
