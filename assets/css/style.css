@@ -192,7 +192,7 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
   /* Hide the desktop button on mobile */
   .nav-cta-desktop{
     display:none;
-    margin-left: 16px !important; /* reduce space */
+    margin-left: auto; /* reduce space */
   }
   
   nav.nav{
