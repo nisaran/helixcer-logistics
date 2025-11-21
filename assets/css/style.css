@@ -192,7 +192,6 @@ body.show-menu .hamburger .bottom{transform:translateY(0) rotate(-45deg)}
   /* Hide the desktop button on mobile */
   .nav-cta-desktop{
     display:none;
-    margin-left: 5px;
   }
   
   nav.nav{
@@ -268,17 +267,6 @@ header.site-header{position:sticky;top:0;z-index:99999}
   .hamburger .bar{width:22px}
 }
 
-/* --- Reduce space between menu and Book Freight on desktop only --- */
-@media (min-width: 821px) {
-  /* tighten gap between menu items and the button */
-  nav.nav { gap: 12px !important; }
-
-  /* ensure menu list doesn't expand to push the button away */
-  nav.nav > ul { flex: 0 0 auto !important; }
-
-  /* move Book Freight closer to menu (smaller gap) */
-  nav.nav .book-btn { margin-left: 8px !important; }
-}
 
 
 /* EOF */
