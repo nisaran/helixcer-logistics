@@ -83,44 +83,24 @@ input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px soli
 /* -----------------------
    HEADER / NAV
 ------------------------*/
-/* -----------------------
-   HEADER / NAV
-------------------------*/
 header.site-header{
-  width:100%;
-  background:#fff;
-  border-bottom:1px solid var(--border);
-  position:sticky;
-  top:0;
-  z-index:9999;
+  width:100%;
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:9999;
 }
 
 .header-wrap{
-  max-width:var(--container);
-  margin:0 auto;
-  padding:14px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  /* Remove the general gap from here. We will set it in a desktop-specific media query. */
-  /* gap:16px;  <-- REMOVED or COMMENTED OUT */
+  max-width:var(--container);
+  margin:0 auto;
+  padding:14px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px; /* MODIFIED: Reduced gap for desktop spacing */
 }
-
-/* Add a desktop-specific rule to control the gap */
-@media (min-width: 821px) {
-    .header-wrap {
-        /* Set a smaller gap for desktop, which will push the nav closer to the button */
-        gap: 8px; /* MODIFIED: Reduced gap to 8px for a tighter desktop layout */
-    }
-
-    /* Alternatively, you can use margin-left on the button to control the space */
-    /* header.site-header .nav-cta-desktop.button {
-         margin-left: 8px;
-         padding: 10px 16px;
-    } */
-}
-
-/* ... (rest of the header/nav CSS remains the same) ... */
 
 .logo img{height:42px}
 
@@ -286,7 +266,5 @@ header.site-header{position:sticky;top:0;z-index:99999}
   .hamburger{width:44px;height:44px;padding:8px}
   .hamburger .bar{width:22px}
 }
-
-
 
 /* EOF */
