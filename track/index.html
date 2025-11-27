@@ -553,8 +553,38 @@ function renderTimeline(normalized, tid, cid){
     const timeBox = document.createElement("div");
     timeBox.className = "event-time";
 
-    // 📌 Show exact raw time — no conversion, no formatting
-timeBox.innerHTML = `<span class="event-date">${esc(ev.when || "")}</span>`;
+  // ---------- RAW DATE & TIME FORMATTER ----------
+// expected ev.when = "yyyy-mm-dd HH:MM:ss" or similar
+let dateText = "", timeText = "";
+
+if(ev.when){
+  let raw = ev.when.toString().trim();
+
+  // split date & time
+  let [d,t=""] = raw.split(" ");
+
+  // Convert YYYY-MM-DD → DD-MMM-YYYY
+  if(d){
+    const [Y,M,D] = d.split("-");
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const mmm = monthNames[Number(M)-1] || M;
+    dateText = `${D}-${mmm}-${Y}`;
+  }
+
+  // Convert HH:MM(:SS) → hh:mm am/pm (remove seconds)
+  if(t){
+    let [hh,mm] = t.split(":");
+    hh = Number(hh);
+    const ampm = hh>=12 ? "pm" : "am";
+    hh = (hh % 12) || 12;
+    timeText = `${hh}:${mm} ${ampm}`;
+  }
+}
+
+// final 2-line output
+timeBox.innerHTML =
+  `<span class="event-date" style="display:block">${esc(dateText)}</span>
+   <span class="event-clock" style="display:block">${esc(timeText)}</span>`;
 
 
     const body = document.createElement("div");
