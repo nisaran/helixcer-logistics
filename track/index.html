@@ -71,7 +71,7 @@ description: Track Shipment - Helixcer Logistics.
   .events{display:flex;flex-direction:column;gap:var(--event-gap);margin-top:6px}
   .events.scrollable { -webkit-overflow-scrolling: touch; touch-action: auto; }
 
-  .event-card{display:flex;gap:14px;padding:12px;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(13,31,64,0.04);align-items:flex-start;border-left:6px solid transparent}
+  .event-card{display:flex;gap:14px;padding:10px 12px;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(13,31,64,0.04);align-items:flex-start;}
   .event-card.latest{box-shadow:0 12px 30px rgba(13,31,64,0.06)}
   .event-time{min-width:120px;font-size:13px;color:var(--muted);line-height:1.05}
   .event-date{display:block;font-weight:700;color:var(--text);margin-bottom:6px;font-size:13px}
@@ -582,10 +582,10 @@ if(ev.when){
 }
 
 // final 2-line output
+// final output — 2 lines, tighter spacing, darker time
 timeBox.innerHTML =
-  `<span class="event-date" style="display:block">${esc(dateText)}</span>
-   <span class="event-clock" style="display:block">${esc(timeText)}</span>`;
-
+  `<span class="event-date" style="display:block;font-weight:700;margin-bottom:2px">${esc(dateText)}</span>
+   <span class="event-clock" style="display:block;color:#111">${esc(timeText)}</span>`;
 
     const body = document.createElement("div");
     body.className = "event-body";
