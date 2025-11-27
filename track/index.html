@@ -10,755 +10,756 @@ description: Track Shipment - Helixcer Logistics.
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Shipment Tracker</title>
 <style>
-  :root{
-    --bg:#f6f9fe;
-    --card:#ffffff;
-    --muted:#64748b;
-    --text:#0f172a;
-    --accent:#1f56ff;
-    --radius:12px;
-    --shadow:0 10px 30px rgba(13,31,64,0.06);
-    --event-gap:12px;
-  }
-  
-  body {
-    margin:0;
-    font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    -webkit-font-smoothing:antialiased;
-  }
+  :root{
+    --bg:#f6f9fe;
+    --card:#ffffff;
+    --muted:#64748b;
+    --text:#0f172a;
+    --accent:#1f56ff;
+    --radius:12px;
+    --shadow:0 10px 30px rgba(13,31,64,0.06);
+    --event-gap:12px;
+  }
+  
+  body {
+    margin:0;
+    font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+  }
 
-  .wrap{max-width:1100px;margin:22px auto;padding:14px}
-  .page-title{ margin:0 0 12px; font-size:22px; font-weight:800; color:#0c2748 }
+  .wrap{max-width:1100px;margin:22px auto;padding:14px}
+  .page-title{ margin:0 0 12px; font-size:22px; font-weight:800; color:#0c2748 }
 
-  .grid{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
-  @media (max-width:900px){ .grid{grid-template-columns:1fr} }
+  .grid{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+  @media (max-width:900px){ .grid{grid-template-columns:1fr} }
 
-  .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
-  .title{font-size:18px;font-weight:700;margin-bottom:10px}
-  .label{font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
-  .control{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #e6ecf5;background:#fbfdff;font-size:14px}
-  .control:focus{outline:none;box-shadow:0 0 0 4px rgba(31,86,255,0.08);border-color:var(--accent)}
-  .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer;display:inline-flex;gap:10px;align-items:center}
-  .btn[disabled]{opacity:0.6;cursor:not-allowed}
+  .card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+  .title{font-size:18px;font-weight:700;margin-bottom:10px}
+  .label{font-size:13px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .control{width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #e6ecf5;background:#fbfdff;font-size:14px}
+  .control:focus{outline:none;box-shadow:0 0 0 4px rgba(31,86,255,0.08);border-color:var(--accent)}
+  .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;font-weight:700;cursor:pointer;display:inline-flex;gap:10px;align-items:center}
+  .btn[disabled]{opacity:0.6;cursor:not-allowed}
 
-  .dropdown{position:relative}
-  .dropdown-list{
-    position:absolute;left:0;right:0;top:calc(100% + 8px);
-    background:#fff;border-radius:10px;box-shadow:0 8px 20px rgba(15,23,42,0.06);
-    max-height:260px;overflow:auto;border:1px solid #eef2ff;display:none;z-index:80;
-    -webkit-overflow-scrolling: touch;
-    touch-action: auto;
-  }
-  .dropdown-item{padding:10px 12px;cursor:pointer;border-bottom:1px solid #f6f8fb}
-  .dropdown-item:hover{background:#f1f6ff}
+  .dropdown{position:relative}
+  .dropdown-list{
+    position:absolute;left:0;right:0;top:calc(100% + 8px);
+    background:#fff;border-radius:10px;box-shadow:0 8px 20px rgba(15,23,42,0.06);
+    max-height:260px;overflow:auto;border:1px solid #eef2ff;display:none;z-index:80;
+    -webkit-overflow-scrolling: touch;
+    touch-action: auto;
+  }
+  .dropdown-item{padding:10px 12px;cursor:pointer;border-bottom:1px solid #f6f8fb}
+  .dropdown-item:hover{background:#f1f6ff}
 
-  .banner{background:#f7fbff;border-radius:14px;padding:16px 18px;margin-bottom:14px;position:relative;box-shadow:0 8px 24px rgba(13,31,64,0.04)}
-  .banner-line{display:flex;gap:8px;align-items:center;margin-bottom:8px;justify-content:flex-start}
-  .banner-label{font-weight:700;color:var(--muted);min-width:110px;flex-shrink:0}
-  .banner-value{font-weight:600;color:var(--text);word-break:break-word}
+  .banner{background:#f7fbff;border-radius:14px;padding:16px 18px;margin-bottom:14px;position:relative;box-shadow:0 8px 24px rgba(13,31,64,0.04)}
+  .banner-line{display:flex;gap:8px;align-items:center;margin-bottom:8px;justify-content:flex-start}
+  .banner-label{font-weight:700;color:var(--muted);min-width:110px;flex-shrink:0}
+  .banner-value{font-weight:600;color:var(--text);word-break:break-word}
 
-  .badge{position:absolute;right:18px;top:18px;padding:8px 12px;border-radius:10px;color:#fff;font-weight:800;display:inline-flex;gap:8px;align-items:center;white-space:nowrap}
-  .badge-green{background:#16a34a}
-  .badge-blue{background:#0ea5e9}
-  .badge-primary{background:#2563eb}
-  .badge-indigo{background:#6366f1}
-  .badge-gray{background:#6b7280}
-  .badge-red{background:#dc2626}
-  .badge-orange{background:#ea580c}
+  .badge{position:absolute;right:18px;top:18px;padding:8px 12px;border-radius:10px;color:#fff;font-weight:800;display:inline-flex;gap:8px;align-items:center;white-space:nowrap}
+  .badge-green{background:#16a34a}
+  .badge-blue{background:#0ea5e9}
+  .badge-primary{background:#2563eb}
+  .badge-indigo{background:#6366f1}
+  .badge-gray{background:#6b7280}
+  .badge-red{background:#dc2626}
+  .badge-orange{background:#ea580c}
 
-  .events{display:flex;flex-direction:column;gap:var(--event-gap);margin-top:6px}
-  .events.scrollable{-webkit-overflow-scrolling:touch;touch-action:auto}
+  .events{display:flex;flex-direction:column;gap:var(--event-gap);margin-top:6px}
+  .events.scrollable{-webkit-overflow-scrolling:touch;touch-action:auto}
 
-  /* UPDATED: Changed alignment to flex-start for better vertical alignment */
-  .event-card{display:flex;gap:14px;padding:12px;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(13,31,64,0.04);align-items:flex-start;border-left:6px solid transparent}
-  .event-card.latest{box-shadow:0 12px 30px rgba(13,31,64,0.06)}
+  .event-card{display:flex;gap:14px;padding:12px;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(13,31,64,0.04);align-items:flex-start;border-left:6px solid transparent}
+  .event-card.latest{box-shadow:0 12px 30px rgba(13,31,64,0.06)}
 
-  .event-time{min-width:120px;font-size:13px;color:var(--muted);line-height:1.05}
-  .event-date{display:block;font-weight:400;color:var(--text);margin-bottom:6px;font-size:13px}
-  .event-clock{display:block;color:#111;font-size:12px}
+  .event-time{min-width:120px;font-size:13px;color:var(--muted);line-height:1.05}
+  .event-date{display:block;font-weight:400;color:var(--text);margin-bottom:6px;font-size:13px}
+  .event-clock{display:block;color:#111;font-size:12px}
 
-  .event-body{flex:1}
-  .event-title{font-weight:600;font-size:15px;margin-bottom:6px;color:#111}
-  .event-location{color:var(--muted);font-size:13px;margin-bottom:6px}
-  .event-details{font-size:14px;color:#222;white-space:pre-wrap}
+  .event-body{flex:1}
+  .event-title{font-weight:600;font-size:15px;margin-bottom:6px;color:#111}
+  .event-location{color:var(--muted);font-size:13px;margin-bottom:6px}
+  .event-details{font-size:14px;color:#222;white-space:pre-wrap}
 
-  .empty{padding:24px;text-align:center;color:var(--muted);border-radius:12px}
+  .empty{padding:24px;text-align:center;color:var(--muted);border-radius:12px}
 
-  .overlay{
-    position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(255,255,255,0.6);z-index:9999;
-    display:flex;align-items:center;justify-content:center;
-    visibility:hidden;opacity:0;transition:opacity .15s;
-    pointer-events:none;
-  }
-  .overlay.show{
-    visibility:visible;opacity:1;
-    pointer-events:auto;
-  }
-  .overlay .spinner{width:84px;height:84px;border-radius:50%;border:8px solid rgba(31,86,255,0.12);border-top-color:var(--accent);animation:spin .9s linear infinite;box-shadow:0 10px 30px rgba(17,24,39,0.08)}
-  @keyframes spin{to{transform:rotate(360deg)}}
+  .overlay{
+    position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(255,255,255,0.6);z-index:9999;
+    display:flex;align-items:center;justify-content:center;
+    visibility:hidden;opacity:0;transition:opacity .15s;
+    pointer-events:none;
+  }
+  .overlay.show{
+    visibility:visible;opacity:1;
+    pointer-events:auto;
+  }
+  .overlay .spinner{width:84px;height:84px;border-radius:50%;border:8px solid rgba(31,86,255,0.12);border-top-color:var(--accent);animation:spin .9s linear infinite;box-shadow:0 10px 30px rgba(17,24,39,0.08)}
+  @keyframes spin{to{transform:rotate(360deg)}}
 
-  .muted{color:var(--muted);font-size:13px}
-  .small{font-size:13px;color:var(--muted)}
-  .map-link{margin-left:8px;font-size:12px;color:var(--accent);text-decoration:none}
+  .muted{color:var(--muted);font-size:13px}
+  .small{font-size:13px;color:var(--muted)}
+  .map-link{margin-left:8px;font-size:12px;color:var(--accent);text-decoration:none}
 
-  @media (max-width:560px){
-    .banner{
-      padding:12px 12px 18px 12px;
-      text-align:left;
-      display:flex;
-      flex-direction:column;
-      align-items:flex-start;
-    }
-    .banner-line{
-      justify-content:flex-start;
-      flex-wrap:wrap;
-      width:100%;
-    }
-    .banner-label{
-      min-width:0;
-      margin-right:6px;
-    }
-    .banner-value{
-      font-weight:700;
-    }
-    .event-time{min-width:75px;font-size:12px} /* UPDATED: Adjusted for mobile spacing */
-    .badge{
-      position:static;
-      margin:10px 0 0 0;
-      display:inline-flex;
-      float:none;
-      align-self:flex-start;
-    }
-    .card{padding:14px}
-  }
+  @media (max-width:560px){
+    .banner{
+      padding:12px 12px 18px 12px;
+      text-align:left;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+    }
+    .banner-line{
+      justify-content:flex-start;
+      flex-wrap:wrap;
+      width:100%;
+    }
+    .banner-label{
+      min-width:0;
+      margin-right:6px;
+    }
+    .banner-value{
+      font-weight:700;
+    }
+    .event-time{min-width:84px;font-size:12px}
+    .badge{
+      position:static;
+      margin:10px 0 0 0;
+      display:inline-flex;
+      float:none;
+      align-self:flex-start;
+    }
+    .card{padding:14px}
+  }
 
-  @media (max-width:360px){
-    .event-time{min-width:72px}
-  }
+  @media (max-width:360px){
+    .event-time{min-width:72px}
+  }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="grid">
-            <div class="card">
-        <div class="title">Track Shipment</div>
+  <div class="wrap">
+    <div class="grid">
+      <!-- form card -->
+      <div class="card">
+        <div class="title">Track Shipment</div>
 
-        <div style="margin-top:8px">
-          <div class="label">Tracking ID</div>
-          <input id="trackingInput" class="control" type="text" placeholder="Enter Tracking ID" />
-        </div>
+        <div style="margin-top:8px">
+          <div class="label">Tracking ID</div>
+          <input id="trackingInput" class="control" type="text" placeholder="Enter Tracking ID" />
+        </div>
 
-        <div style="margin-top:12px">
-          <div class="label">Carrier</div>
-          <div class="dropdown">
-            <input id="carrierSearch" class="control" type="text" placeholder="Search carriers…" autocomplete="off" />
-            <div id="dropdownList" class="dropdown-list" role="listbox" tabindex="-1"></div>
-          </div>
-        </div>
+        <div style="margin-top:12px">
+          <div class="label">Carrier</div>
+          <div class="dropdown">
+            <input id="carrierSearch" class="control" type="text" placeholder="Search carriers…" autocomplete="off" />
+            <div id="dropdownList" class="dropdown-list" role="listbox" tabindex="-1"></div>
+          </div>
+        </div>
 
-        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
-          <button id="submitBtn" class="btn"><span id="btnSpinner" style="display:none;width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.45);border-top-color:#fff;animation:spin .9s linear infinite"></span><span>Track</span></button>
-          <div id="formMessage" class="small" style="margin-left:8px"></div>
-        </div>
-      </div>
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+          <button id="submitBtn" class="btn"><span id="btnSpinner" style="display:none;width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,0.45);border-top-color:#fff;animation:spin .9s linear infinite"></span><span>Track</span></button>
+          <div id="formMessage" class="small" style="margin-left:8px"></div>
+        </div>
+      </div>
 
-            <div class="card" id="resultCard" style="display:none">
-        <div id="trackingResult"></div>
-      </div>
-    </div>
-  </div>
+      <!-- result card (hidden initially) -->
+      <div class="card" id="resultCard" style="display:none">
+        <div id="trackingResult"></div>
+      </div>
+    </div>
+  </div>
 
-  <div id="overlay" class="overlay" aria-hidden="true"><div class="spinner" aria-hidden="true"></div></div>
+  <div id="overlay" class="overlay" aria-hidden="true"><div class="spinner" aria-hidden="true"></div></div>
 
 <script>
 /* -------------------------
-   CONFIG
-   ------------------------- */
+   CONFIG
+   ------------------------- */
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby9450wF37JPBWzJjbZoolDVVjmgEGB86E4C9TkJPyHGaTIHkfBpLmU-xthMcmeR4Rn/exec";
 const CARRIERS_CACHE_KEY = "carriers_v1";
 const CARRIERS_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 /* -------------------------
-   STATE
-   ------------------------- */
+   STATE
+   ------------------------- */
 let carriers = [];
 let selectedCarrierId = null;
 let autoLookupStarted = false;
 
 /* -------------------------
-   DOM helpers
-   ------------------------- */
-function esc(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,"&").replace(/</g,"<").replace(/>/g,">"); }
+   DOM helpers
+   ------------------------- */
+function esc(s){ if(s===null||s===undefined) return ""; return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function q(id){ return document.getElementById(id); }
 function setLoading(on){
-  const overlay = q("overlay");
-  const btnSpinner = q("btnSpinner");
-  const btn = q("submitBtn");
-  if(on){ overlay.classList.add("show"); btn.setAttribute("disabled","disabled"); btnSpinner.style.display="inline-block"; }
-  else { overlay.classList.remove("show"); btn.removeAttribute("disabled"); btnSpinner.style.display="none"; }
+  const overlay = q("overlay");
+  const btnSpinner = q("btnSpinner");
+  const btn = q("submitBtn");
+  if(on){ overlay.classList.add("show"); btn.setAttribute("disabled","disabled"); btnSpinner.style.display="inline-block"; }
+  else { overlay.classList.remove("show"); btn.removeAttribute("disabled"); btnSpinner.style.display="none"; }
 }
 function fmtAddrCombined(obj){
-  if(!obj || typeof obj !== "object") return "";
-  const street = obj.street || obj.street1 || obj.address || "";
-  const city = obj.city || obj.town || "";
-  const state = obj.state || obj.region || "";
-  const country = obj.country || obj.country_code || "";
-  const parts = [street, city, state, country].filter(Boolean);
-  return parts.join(", ");
+  if(!obj || typeof obj !== "object") return "";
+  const street = obj.street || obj.street1 || obj.address || "";
+  const city = obj.city || obj.town || "";
+  const state = obj.state || obj.region || "";
+  const country = obj.country || obj.country_code || "";
+  const parts = [street, city, state, country].filter(Boolean);
+  return parts.join(", ");
 }
 
 /* -------------------------
-   UTILS: status mapping
-   ------------------------- */
+   UTILS: status mapping
+   ------------------------- */
 function statusClass(status){
-  const s = (status||"").toString().toLowerCase().replace(/\s+/g,"");
-  if(s.includes("deliv")) return "badge-green";
-  if(s.includes("out")) return "badge-blue";
-  if(s.includes("pickup")) return "badge-blue";
-  if(s.includes("transit")) return "badge-primary";
-  if(s.includes("info")) return "badge-indigo";
-  if(s.includes("fail") || s.includes("exception")) return "badge-red";
-  if(s.includes("expire")) return "badge-orange";
-  return "badge-gray";
+  const s = (status||"").toString().toLowerCase().replace(/\s+/g,"");
+  if(s.includes("deliv")) return "badge-green";
+  if(s.includes("out")) return "badge-blue";
+  if(s.includes("pickup")) return "badge-blue";
+  if(s.includes("transit")) return "badge-primary";
+  if(s.includes("info")) return "badge-indigo";
+  if(s.includes("fail") || s.includes("exception")) return "badge-red";
+  if(s.includes("expire")) return "badge-orange";
+  return "badge-gray";
 }
 function statusIcon(status){
-  const s = (status||"").toString().toLowerCase();
-  if(s.includes("deliv")) return "✓";
-  if(s.includes("out")) return "🚚";
-  if(s.includes("transit")) return "⤴";
-  if(s.includes("exception")||s.includes("fail")) return "!";
-  return "•";
+  const s = (status||"").toString().toLowerCase();
+  if(s.includes("deliv")) return "✓";
+  if(s.includes("out")) return "🚚";
+  if(s.includes("transit")) return "⤴";
+  if(s.includes("exception")||s.includes("fail")) return "!";
+  return "•";
 }
 
 /* -------------------------
-   RENDER: carrier dropdown
-   ------------------------- */
+   RENDER: carrier dropdown
+   ------------------------- */
 function renderDropdown(list){
-  const box = q("dropdownList");
-  box.innerHTML = "";
-  if(!list || !list.length){
-    box.innerHTML = '<div class="dropdown-item" style="color:var(--muted)">No carriers</div>';
-    box.style.display = "block";
-    return;
-  }
-  list.forEach(c=>{
-    const it = document.createElement("div");
-    it.className = "dropdown-item";
-    it.textContent = c.courierName || "(unnamed)";
-    it.dataset.cid = c.carrierId || c.wixId || "";
-    it.onclick = ()=>{
-      q("carrierSearch").value = c.courierName || "";
-      selectedCarrierId = c.carrierId || c.wixId || "";
-      box.style.display = "none";
-    };
-    box.appendChild(it);
-  });
+  const box = q("dropdownList");
+  box.innerHTML = "";
+  if(!list || !list.length){
+    box.innerHTML = '<div class="dropdown-item" style="color:var(--muted)">No carriers</div>';
+    box.style.display = "block";
+    return;
+  }
+  list.forEach(c=>{
+    const it = document.createElement("div");
+    it.className = "dropdown-item";
+    it.textContent = c.courierName || "(unnamed)";
+    it.dataset.cid = c.carrierId || c.wixId || "";
+    it.onclick = ()=>{
+      q("carrierSearch").value = c.courierName || "";
+      selectedCarrierId = c.carrierId || c.wixId || "";
+      box.style.display = "none";
+    };
+    box.appendChild(it);
+  });
 }
 
 /* -------------------------
-   CARRIER LOADING (with small cache)
-   ------------------------- */
+   CARRIER LOADING (with small cache)
+   ------------------------- */
 async function fetchCarriersFromNetwork(){
-  const res = await fetch(WEBAPP_URL + "?routeType=fetch-carriers");
-  const json = await res.json();
-  return json;
+  const res = await fetch(WEBAPP_URL + "?routeType=fetch-carriers");
+  const json = await res.json();
+  return json;
 }
 
 function readCarriersCache(){
-  try{
-    const raw = localStorage.getItem(CARRIERS_CACHE_KEY);
-    if(!raw) return null;
-    const obj = JSON.parse(raw);
-    if(!obj || !obj.ts || !obj.items) return null;
-    if(Date.now() - obj.ts > CARRIERS_CACHE_TTL_MS) {
-      localStorage.removeItem(CARRIERS_CACHE_KEY);
-      return null;
-    }
-    return obj.items;
-  }catch(e){ return null; }
+  try{
+    const raw = localStorage.getItem(CARRIERS_CACHE_KEY);
+    if(!raw) return null;
+    const obj = JSON.parse(raw);
+    if(!obj || !obj.ts || !obj.items) return null;
+    if(Date.now() - obj.ts > CARRIERS_CACHE_TTL_MS) {
+      localStorage.removeItem(CARRIERS_CACHE_KEY);
+      return null;
+    }
+    return obj.items;
+  }catch(e){ return null; }
 }
 function writeCarriersCache(items){
-  try{
-    localStorage.setItem(CARRIERS_CACHE_KEY, JSON.stringify({ ts: Date.now(), items }));
-  }catch(e){ /* ignore */ }
+  try{
+    localStorage.setItem(CARRIERS_CACHE_KEY, JSON.stringify({ ts: Date.now(), items }));
+  }catch(e){ /* ignore */ }
 }
 
 async function loadCarriersAndMaybeAutoRun(){
-  try{
-    console.log("Loading carriers...");
-    // Try cache first
-    const cached = readCarriersCache();
-    if(cached && Array.isArray(cached) && cached.length){
-      carriers = cached;
-      renderDropdown(carriers);
-    }
+  try{
+    console.log("Loading carriers...");
+    // Try cache first
+    const cached = readCarriersCache();
+    if(cached && Array.isArray(cached) && cached.length){
+      carriers = cached;
+      renderDropdown(carriers);
+    }
 
-    // Always try network to refresh
-    let json = null;
-    try {
-      json = await fetchCarriersFromNetwork();
-    } catch (e) {
-      console.warn("Failed fetching carriers from network:", e);
-      if(!carriers.length){
-        q("formMessage").textContent = "Failed to load carriers";
-      }
-    }
+    // Always try network to refresh
+    let json = null;
+    try {
+      json = await fetchCarriersFromNetwork();
+    } catch (e) {
+      console.warn("Failed fetching carriers from network:", e);
+      if(!carriers.length){
+        q("formMessage").textContent = "Failed to load carriers";
+      }
+    }
 
-    if(json && json.success && Array.isArray(json.carriers)){
-      carriers = json.carriers.sort((a,b)=>(a.courierName||"").localeCompare(b.courierName||""));
-      renderDropdown(carriers);
-      writeCarriersCache(carriers);
-    } else if(json && json.raw && Array.isArray(json.raw.dataItems || json.raw.items || json.raw.data)){
-      const arr = json.raw.dataItems || json.raw.items || json.raw.data;
-      carriers = arr.map(it=>{
-        const d = it.data || it;
-        return {
-          wixId: it.id||d._id||null,
-          courierName: d.courierName||it.courierName||"",
-          carrierId: d.seventeenTrackNetId||d.shipwayInId||d.trackingmoreComId||null,
-          raw:d
-        };
-      }).sort((a,b)=>(a.courierName||"").localeCompare(b.courierName||""));
-      renderDropdown(carriers);
-      writeCarriersCache(carriers);
-    } else {
-      if(!carriers.length){
-        q("formMessage").textContent = "Failed to load carriers";
-      }
-    }
+    if(json && json.success && Array.isArray(json.carriers)){
+      carriers = json.carriers.sort((a,b)=>(a.courierName||"").localeCompare(b.courierName||""));
+      renderDropdown(carriers);
+      writeCarriersCache(carriers);
+    } else if(json && json.raw && Array.isArray(json.raw.dataItems || json.raw.items || json.raw.data)){
+      const arr = json.raw.dataItems || json.raw.items || json.raw.data;
+      carriers = arr.map(it=>{
+        const d = it.data || it;
+        return {
+          wixId: it.id||d._id||null,
+          courierName: d.courierName||it.courierName||"",
+          carrierId: d.seventeenTrackNetId||d.shipwayInId||d.trackingmoreComId||null,
+          raw:d
+        };
+      }).sort((a,b)=>(a.courierName||"").localeCompare(b.courierName||""));
+      renderDropdown(carriers);
+      writeCarriersCache(carriers);
+    } else {
+      if(!carriers.length){
+        q("formMessage").textContent = "Failed to load carriers";
+      }
+    }
 
-    // URL params
-    const params = new URLSearchParams(window.location.search);
-    const preTid = params.get("tid");
-    const preCid = params.get("cid");
+    // URL params
+    const params = new URLSearchParams(window.location.search);
+    const preTid = params.get("tid");
+    const preCid = params.get("cid");
 
-    if(preCid && carriers.length){
-      const found = carriers.find(c=>String(c.carrierId)===String(preCid) || String(c.wixId)===String(preCid));
-      if(found){
-        q("carrierSearch").value = found.courierName || "";
-        selectedCarrierId = found.carrierId || found.wixId || preCid;
-      }
-    }
+    if(preCid && carriers.length){
+      const found = carriers.find(c=>String(c.carrierId)===String(preCid) || String(c.wixId)===String(preCid));
+      if(found){
+        q("carrierSearch").value = found.courierName || "";
+        selectedCarrierId = found.carrierId || found.wixId || preCid;
+      }
+    }
 
-    if(preTid) q("trackingInput").value = preTid;
+    if(preTid) q("trackingInput").value = preTid;
 
-    if(preTid && selectedCarrierId && !autoLookupStarted){
-      autoLookupStarted = true;
-      try {
-        q("formMessage").textContent = "Auto-tracking…";
-        await doLookupAndRender(preTid, selectedCarrierId);
-      } catch(e){
-        console.error("Auto-run after carriers load failed:", e);
-      }
-    }
+    if(preTid && selectedCarrierId && !autoLookupStarted){
+      autoLookupStarted = true;
+      try {
+        q("formMessage").textContent = "Auto-tracking…";
+        await doLookupAndRender(preTid, selectedCarrierId);
+      } catch(e){
+        console.error("Auto-run after carriers load failed:", e);
+      }
+    }
 
-  }catch(err){
-    console.error("Error load carriers", err);
-    q("formMessage").textContent = "Error loading carriers";
-  }
+  }catch(err){
+    console.error("Error load carriers", err);
+    q("formMessage").textContent = "Error loading carriers";
+  }
 }
 
 /* -------------------------
-   NORMALIZATION
-   ------------------------- */
+   NORMALIZATION
+   ------------------------- */
 function extractFromRaw(raw){
-  let item = null;
-  try{
-    if(!raw) return null;
-    if(raw.data && Array.isArray(raw.data.accepted) && raw.data.accepted[0]) {
-      item = raw.data.accepted[0];
-    } else if(Array.isArray(raw) && raw[0]) {
-      item = raw[0];
-    } else if(raw.dataItems && Array.isArray(raw.dataItems) && raw.dataItems[0]) {
-      const maybe = raw.dataItems[0];
-      item = maybe.data || maybe;
-    } else if(raw.track_info || raw.tracking || raw.number) {
-      item = raw;
-    } else if(raw.raw && raw.raw.data && Array.isArray(raw.raw.data.accepted) && raw.raw.data.accepted[0]) {
-      item = raw.raw.data.accepted[0];
-    } else if(raw.raw && raw.raw[0]) {
-      item = raw.raw[0];
-    } else {
-      item = raw;
-    }
-  }catch(e){
-    console.warn("extractFromRaw exception", e);
-    item = raw;
-  }
+  let item = null;
+  try{
+    if(!raw) return null;
+    if(raw.data && Array.isArray(raw.data.accepted) && raw.data.accepted[0]) {
+      item = raw.data.accepted[0];
+    } else if(Array.isArray(raw) && raw[0]) {
+      item = raw[0];
+    } else if(raw.dataItems && Array.isArray(raw.dataItems) && raw.dataItems[0]) {
+      const maybe = raw.dataItems[0];
+      item = maybe.data || maybe;
+    } else if(raw.track_info || raw.tracking || raw.number) {
+      item = raw;
+    } else if(raw.raw && raw.raw.data && Array.isArray(raw.raw.data.accepted) && raw.raw.data.accepted[0]) {
+      item = raw.raw.data.accepted[0];
+    } else if(raw.raw && raw.raw[0]) {
+      item = raw.raw[0];
+    } else {
+      item = raw;
+    }
+  }catch(e){
+    console.warn("extractFromRaw exception", e);
+    item = raw;
+  }
 
-  const track_info = item.track_info || item.tracking_info || (item.data && item.data.track_info) || item;
+  const track_info = item.track_info || item.tracking_info || (item.data && item.data.track_info) || item;
 
-  let shipper = null, recipient = null;
-  try{
-    if(track_info && track_info.shipping_info && track_info.shipping_info.shipper_address) {
-      shipper = track_info.shipping_info.shipper_address;
-      recipient = track_info.shipping_info.recipient_address || null;
-    } else if(track_info && track_info.shipper_address) {
-      shipper = track_info.shipper_address;
-      recipient = track_info.recipient_address || null;
-    } else if(item.shipper_address || item.recipient_address) {
-      shipper = item.shipper_address || null;
-      recipient = item.recipient_address || null;
-    } else if(item.shipper || item.recipient) {
-      shipper = item.shipper || null;
-      recipient = item.recipient || null;
-    }
-  }catch(e){ console.warn("shipper parse err", e); }
+  let shipper = null, recipient = null;
+  try{
+    if(track_info && track_info.shipping_info && track_info.shipping_info.shipper_address) {
+      shipper = track_info.shipping_info.shipper_address;
+      recipient = track_info.shipping_info.recipient_address || null;
+    } else if(track_info && track_info.shipper_address) {
+      shipper = track_info.shipper_address;
+      recipient = track_info.recipient_address || null;
+    } else if(item.shipper_address || item.recipient_address) {
+      shipper = item.shipper_address || null;
+      recipient = item.recipient_address || null;
+    } else if(item.shipper || item.recipient) {
+      shipper = item.shipper || null;
+      recipient = item.recipient || null;
+    }
+  }catch(e){ console.warn("shipper parse err", e); }
 
-  let events = [];
-  try{
-    const providers = (track_info && track_info.tracking && track_info.tracking.providers)
-      || (track_info && track_info.providers)
-      || (item.tracking && item.tracking.providers)
-      || (item.track_info && item.track_info.tracking && item.track_info.tracking.providers);
-    if(Array.isArray(providers) && providers.length && providers[0].events && Array.isArray(providers[0].events)){
-      events = providers[0].events.slice();
-    } else if(track_info && Array.isArray(track_info.milestone) && track_info.milestone.length){
-      events = track_info.milestone.slice();
-    } else if(item.events && Array.isArray(item.events)){
-      events = item.events.slice();
-    } else if(item.tracking && item.tracking.providers && item.tracking.providers[0] && item.tracking.providers[0].events){
-      events = item.tracking.providers[0].events.slice();
-    }
-  }catch(e){ console.warn("events parse err", e); }
+  let events = [];
+  try{
+    const providers = (track_info && track_info.tracking && track_info.tracking.providers)
+      || (track_info && track_info.providers)
+      || (item.tracking && item.tracking.providers)
+      || (item.track_info && item.track_info.tracking && item.track_info.tracking.providers);
+    if(Array.isArray(providers) && providers.length && providers[0].events && Array.isArray(providers[0].events)){
+      events = providers[0].events.slice();
+    } else if(track_info && Array.isArray(track_info.milestone) && track_info.milestone.length){
+      events = track_info.milestone.slice();
+    } else if(item.events && Array.isArray(item.events)){
+      events = item.events.slice();
+    } else if(item.tracking && item.tracking.providers && item.tracking.providers[0] && item.tracking.providers[0].events){
+      events = item.tracking.providers[0].events.slice();
+    }
+  }catch(e){ console.warn("events parse err", e); }
 
-  const norm = events.map(ev=>{
-    // Use time_raw as primary source
-    let when = "";
-    if(ev.time_raw){
-      if(ev.time_raw.date && ev.time_raw.time){
-        when = ev.time_raw.date + " " + ev.time_raw.time;  // "yyyy-mm-dd HH:MM:ss"
-      } else if(typeof ev.time_raw === "string"){
-        when = ev.time_raw;
-      } else {
-        when = JSON.stringify(ev.time_raw);
-      }
-    } else if(ev.time_utc || ev.time_iso){
-      when = ev.time_utc || ev.time_iso;
-    } else if(ev.time){
-      when = ev.time;
-    } else if(ev.created_at){
-      when = ev.created_at;
-    }
+  const norm = events.map(ev=>{
+    // Use time_raw as primary source
+    let when = "";
+    if(ev.time_raw){
+      if(ev.time_raw.date && ev.time_raw.time){
+        when = ev.time_raw.date + " " + ev.time_raw.time;  // "yyyy-mm-dd HH:MM:ss"
+      } else if(typeof ev.time_raw === "string"){
+        when = ev.time_raw;
+      } else {
+        when = JSON.stringify(ev.time_raw);
+      }
+    } else if(ev.time_utc || ev.time_iso){
+      when = ev.time_utc || ev.time_iso;
+    } else if(ev.time){
+      when = ev.time;
+    } else if(ev.created_at){
+      when = ev.created_at;
+    }
 
-    const status = ev.description || ev.desc || ev.title || ev.stage || ev.sub_status || "";
-    let location = ev.location || "";
-    if(ev.address){
-      const a = ev.address;
-      const parts = [
-        (a.street||""),
-        (a.city||a.town||""),
-        (a.state||a.region||""),
-        (a.country||a.country_code||"")
-      ].filter(Boolean);
-      if(parts.length) location = parts.join(", ");
-    }
-    const details = ev.note || ev.sub_status_descr || ev.stage || "";
-    const coords = ev.address && ev.address.coordinates ? ev.address.coordinates : null;
-    return { when, status, location, details, raw: ev, coords };
-  });
+    const status = ev.description || ev.desc || ev.title || ev.stage || ev.sub_status || "";
+    let location = ev.location || "";
+    if(ev.address){
+      const a = ev.address;
+      const parts = [
+        (a.street||""),
+        (a.city||a.town||""),
+        (a.state||a.region||""),
+        (a.country||a.country_code||"")
+      ].filter(Boolean);
+      if(parts.length) location = parts.join(", ");
+    }
+    const details = ev.note || ev.sub_status_descr || ev.stage || "";
+    const coords = ev.address && ev.address.coordinates ? ev.address.coordinates : null;
+    return { when, status, location, details, raw: ev, coords };
+  });
 
-  // Sort newest first – only for ordering
-  norm.sort((a,b)=>{
-    const ta = a.when ? Date.parse(a.when) : 0;
-    const tb = b.when ? Date.parse(b.when) : 0;
-    return tb - ta;
-  });
+  // Sort newest first – only for ordering
+  norm.sort((a,b)=>{
+    const ta = a.when ? Date.parse(a.when) : 0;
+    const tb = b.when ? Date.parse(b.when) : 0;
+    return tb - ta;
+  });
 
-  let providerName = "";
-  try{
-    const p0 = (track_info && track_info.tracking && track_info.tracking.providers && track_info.tracking.providers[0])
-      || (item.tracking && item.tracking.providers && item.tracking.providers[0]);
-    if(p0 && p0.provider && p0.provider.name) providerName = p0.provider.name;
-    else if(item.provider && item.provider.name) providerName = item.provider.name;
-    else if(item.providerName) providerName = item.providerName;
-  }catch(e){ console.warn("provider name parse err", e); }
+  let providerName = "";
+  try{
+    const p0 = (track_info && track_info.tracking && track_info.tracking.providers && track_info.tracking.providers[0])
+      || (item.tracking && item.tracking.providers && item.tracking.providers[0]);
+    if(p0 && p0.provider && p0.provider.name) providerName = p0.provider.name;
+    else if(item.provider && item.provider.name) providerName = item.provider.name;
+    else if(item.providerName) providerName = item.providerName;
+  }catch(e){ console.warn("provider name parse err", e); }
 
-  let latest_status = (track_info && track_info.latest_status && track_info.latest_status.status)
-    || (item.latest_status && item.latest_status.status)
-    || (norm.length?norm[0].status:"");
+  let latest_status = (track_info && track_info.latest_status && track_info.latest_status.status)
+    || (item.latest_status && item.latest_status.status)
+    || (norm.length?norm[0].status:"");
 
-  return {
-    providerName,
-    latest_status,
-    origin: shipper ? fmtAddr(shipper) : "",
-    destination: recipient ? fmtAddr(recipient) : "",
-    events: norm
-  };
+  return {
+    providerName,
+    latest_status,
+    origin: shipper ? fmtAddr(shipper) : "",
+    destination: recipient ? fmtAddr(recipient) : "",
+    events: norm
+  };
 }
 
 function fmtAddr(a){
-  if(!a || typeof a !== "object") return "";
-  const street = a.street || a.street1 || a.address || "";
-  const city = a.city || a.town || "";
-  const state = a.state || a.region || "";
-  const country = a.country || a.country_code || "";
-  const parts = [street, city, state, country].filter(Boolean);
-  return parts.join(", ");
+  if(!a || typeof a !== "object") return "";
+  const street = a.street || a.street1 || a.address || "";
+  const city = a.city || a.town || "";
+  const state = a.state || a.region || "";
+  const country = a.country || a.country_code || "";
+  const parts = [street, city, state, country].filter(Boolean);
+  return parts.join(", ");
 }
 
 /* -------------------------
-   RENDER timeline
-   ------------------------- */
+   RENDER timeline
+   ------------------------- */
 function renderTimeline(normalized, tid, cid){
-  const out = q("trackingResult");
-  out.innerHTML = "";
+  const out = q("trackingResult");
+  out.innerHTML = "";
 
-  q("resultCard").style.display = "block";
+  q("resultCard").style.display = "block";
 
-  const banner = document.createElement("div");
-  banner.className = "banner";
+  const banner = document.createElement("div");
+  banner.className = "banner";
 
-  const l1 = document.createElement("div"); l1.className = "banner-line";
-  l1.innerHTML = `<div class="banner-label">Tracking ID</div><div class="banner-value">${esc(tid)}</div>`;
-  banner.appendChild(l1);
+  const l1 = document.createElement("div"); l1.className = "banner-line";
+  l1.innerHTML = `<div class="banner-label">Tracking ID</div><div class="banner-value">${esc(tid)}</div>`;
+  banner.appendChild(l1);
 
-  let carrierName = normalized.providerName || "";
-  const found = carriers.find(c => String(c.carrierId) === String(cid) || String(c.wixId) === String(cid));
-  if(found && found.courierName) carrierName = found.courierName;
-  const l2 = document.createElement("div"); l2.className = "banner-line";
-  l2.innerHTML = `<div class="banner-label">Carrier</div><div class="banner-value">${esc(carrierName || "")}</div>`;
-  banner.appendChild(l2);
+  let carrierName = normalized.providerName || "";
+  const found = carriers.find(c => String(c.carrierId) === String(cid) || String(c.wixId) === String(cid));
+  if(found && found.courierName) carrierName = found.courierName;
+  const l2 = document.createElement("div"); l2.className = "banner-line";
+  l2.innerHTML = `<div class="banner-label">Carrier</div><div class="banner-value">${esc(carrierName || "")}</div>`;
+  banner.appendChild(l2);
 
-  if(normalized.origin){
-    const l3 = document.createElement("div"); l3.className = "banner-line";
-    l3.innerHTML = `<div class="banner-label">Origin</div><div class="banner-value">${esc(normalized.origin)}</div>`;
-    banner.appendChild(l3);
-  }
+  if(normalized.origin){
+    const l3 = document.createElement("div"); l3.className = "banner-line";
+    l3.innerHTML = `<div class="banner-label">Origin</div><div class="banner-value">${esc(normalized.origin)}</div>`;
+    banner.appendChild(l3);
+  }
 
-  if(normalized.destination){
-    const l4 = document.createElement("div"); l4.className = "banner-line";
-    l4.innerHTML = `<div class="banner-label">Destination</div><div class="banner-value">${esc(normalized.destination)}</div>`;
-    banner.appendChild(l4);
-  }
+  if(normalized.destination){
+    const l4 = document.createElement("div"); l4.className = "banner-line";
+    l4.innerHTML = `<div class="banner-label">Destination</div><div class="banner-value">${esc(normalized.destination)}</div>`;
+    banner.appendChild(l4);
+  }
 
-  const statusText = normalized.latest_status || (normalized.events && normalized.events[0] && normalized.events[0].status) || "";
-  const badge = document.createElement("div");
-  const cls = statusClass(statusText);
-  badge.className = "badge " + cls;
-  badge.innerHTML = `<span style="font-size:13px">${esc(statusIcon(statusText))}</span><span>${esc(statusText)}</span>`;
-  banner.appendChild(badge);
+  const statusText = normalized.latest_status || (normalized.events && normalized.events[0] && normalized.events[0].status) || "";
+  const badge = document.createElement("div");
+  const cls = statusClass(statusText);
+  badge.className = "badge " + cls;
+  badge.innerHTML = `<span style="font-size:13px">${esc(statusIcon(statusText))}</span><span>${esc(statusText)}</span>`;
+  banner.appendChild(badge);
 
-  out.appendChild(banner);
+  out.appendChild(banner);
 
-  const events = normalized.events || [];
-  if(!events.length){
-    const empty = document.createElement("div");
-    empty.className = "empty";
-    empty.textContent = "No events found for this tracking id.";
-    out.appendChild(empty);
-    return;
-  }
+  const events = normalized.events || [];
+  if(!events.length){
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "No events found for this tracking id.";
+    out.appendChild(empty);
+    return;
+  }
 
-  const evWrap = document.createElement("div");
-  evWrap.className = "events scrollable";
+  const evWrap = document.createElement("div");
+  evWrap.className = "events scrollable";
 
-  events.forEach((ev, idx) => {
-    const card = document.createElement("div");
-    card.className = "event-card" + (idx===0 ? " latest" : "");
-    const colorMap = {
-      "badge-green":"#16a34a","badge-blue":"#0ea5e9","badge-primary":"#2563eb",
-      "badge-indigo":"#6366f1","badge-gray":"#6b7280","badge-red":"#dc2626","badge-orange":"#ea580c"
-    };
-    const leftColorClass = statusClass(ev.status || "");
-    const borderColor = colorMap[leftColorClass] || "#1f56ff";
-    card.style.borderLeftColor = borderColor;
+  events.forEach((ev, idx) => {
+    const card = document.createElement("div");
+    card.className = "event-card" + (idx===0 ? " latest" : "");
+    const colorMap = {
+      "badge-green":"#16a34a","badge-blue":"#0ea5e9","badge-primary":"#2563eb",
+      "badge-indigo":"#6366f1","badge-gray":"#6b7280","badge-red":"#dc2626","badge-orange":"#ea580c"
+    };
+    const leftColorClass = statusClass(ev.status || "");
+    const borderColor = colorMap[leftColorClass] || "#1f56ff";
+    card.style.borderLeftColor = borderColor;
 
-    const timeBox = document.createElement("div");
-    timeBox.className = "event-time";
+    const timeBox = document.createElement("div");
+    timeBox.className = "event-time";
 
-    // RAW DATE & TIME FORMATTER
-    let dateText = "", timeText = "";
-    if(ev.when){
-      let raw = ev.when.toString().trim();
+    // RAW DATE & TIME FORMATTER
+    let dateText = "", timeText = "";
+    if(ev.when){
+      let raw = ev.when.toString().trim();
 
-      let d = "", t = "";
-      if(raw.includes(" ")){
-        [d, t] = raw.split(" ");
-      } else if(raw.includes("T")){
-        [d, t] = raw.split("T");
-      } else {
-        d = raw;
-      }
+      let d = "", t = "";
+      if(raw.includes(" ")){
+        [d, t] = raw.split(" ");
+      } else if(raw.includes("T")){
+        [d, t] = raw.split("T");
+      } else {
+        d = raw;
+      }
 
-      // Convert YYYY-MM-DD → DD-MMM-YYYY
-      if(d){
-        const parts = d.split("-");
-        if(parts.length === 3){
-          const [Y,M,D] = parts;
-          const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-          const mIndex = parseInt(M,10)-1;
-          const mmm = monthNames[mIndex] || M;
-          dateText = `${D}-${mmm}-${Y}`;
-        } else {
-          dateText = d;
-        }
-      }
+      // Convert YYYY-MM-DD → DD-MMM-YYYY
+      if(d){
+        const parts = d.split("-");
+        if(parts.length === 3){
+          const [Y,M,D] = parts;
+          const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+          const mIndex = parseInt(M,10)-1;
+          const mmm = monthNames[mIndex] || M;
+          dateText = `${D}-${mmm}-${Y}`;
+        } else {
+          dateText = d;
+        }
+      }
 
-      // Convert HH:MM(:SS) → hh:mm am/pm
-      if(t){
-        t = t.replace("Z","");
-        const tParts = t.split(":");
-        if(tParts.length >= 2){
-          let hh = parseInt(tParts[0],10);
-          const mm = tParts[1];
-          if(!isNaN(hh)){
-            const ampm = hh>=12 ? "pm" : "am";
-            hh = (hh % 12) || 12;
-            timeText = `${hh}:${mm} ${ampm}`;
-          } else {
-            timeText = t;
-          }
-        } else {
-          timeText = t;
-        }
-      }
-    }
+      // Convert HH:MM(:SS) → hh:mm am/pm
+      if(t){
+        t = t.replace("Z","");
+        const tParts = t.split(":");
+        if(tParts.length >= 2){
+          let hh = parseInt(tParts[0],10);
+          const mm = tParts[1];
+          if(!isNaN(hh)){
+            const ampm = hh>=12 ? "pm" : "am";
+            hh = (hh % 12) || 12;
+            timeText = `${hh}:${mm} ${ampm}`;
+          } else {
+            timeText = t;
+          }
+        } else {
+          timeText = t;
+        }
+      }
+    }
 
-    // 2-line output, layout via CSS
-    timeBox.innerHTML =
-      `<span class="event-date">${esc(dateText)}</span>
-       <span class="event-clock">${esc(timeText)}</span>`;
+    // 2-line output, layout via CSS
+    timeBox.innerHTML =
+      `<span class="event-date">${esc(dateText)}</span>
+       <span class="event-clock">${esc(timeText)}</span>`;
 
-    const body = document.createElement("div");
-    body.className = "event-body";
-    const title = document.createElement("div");
-    title.className = "event-title";
-    title.textContent = ev.status || "Status";
+    const body = document.createElement("div");
+    body.className = "event-body";
+    const title = document.createElement("div");
+    title.className = "event-title";
+    title.textContent = ev.status || "Status";
 
-    const loc = document.createElement("div");
-    loc.className = "event-location";
-    loc.textContent = ev.location || "";
+    const loc = document.createElement("div");
+    loc.className = "event-location";
+    loc.textContent = ev.location || "";
 
-    const details = document.createElement("div");
-    details.className = "event-details";
-    details.textContent = ev.details || "";
+    const details = document.createElement("div");
+    details.className = "event-details";
+    details.textContent = ev.details || "";
 
-    if(ev.coords && (ev.coords.latitude || ev.coords.lat) && (ev.coords.longitude || ev.coords.lng)){
-      const lat = ev.coords.latitude || ev.coords.lat;
-      const lng = ev.coords.longitude || ev.coords.lng;
-      const a = document.createElement("a");
-      a.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lat + "," + lng)}`;
-      a.target = "_blank"; a.rel="noopener";
-      a.className = "map-link";
-      a.textContent = "Map";
-      loc.appendChild(a);
-    }
+    if(ev.coords && (ev.coords.latitude || ev.coords.lat) && (ev.coords.longitude || ev.coords.lng)){
+      const lat = ev.coords.latitude || ev.coords.lat;
+      const lng = ev.coords.longitude || ev.coords.lng;
+      const a = document.createElement("a");
+      a.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lat + "," + lng)}`;
+      a.target = "_blank"; a.rel="noopener";
+      a.className = "map-link";
+      a.textContent = "Map";
+      loc.appendChild(a);
+    }
 
-    body.appendChild(title);
-    if(loc.textContent) body.appendChild(loc);
-    if(details.textContent) body.appendChild(details);
+    body.appendChild(title);
+    if(loc.textContent) body.appendChild(loc);
+    if(details.textContent) body.appendChild(details);
 
-    card.appendChild(timeBox);
-    card.appendChild(body);
+    card.appendChild(timeBox);
+    card.appendChild(body);
 
-    evWrap.appendChild(card);
-  });
+    evWrap.appendChild(card);
+  });
 
-  out.appendChild(evWrap);
+  out.appendChild(evWrap);
 }
 
 /* -------------------------
-   LOOKUP
-   ------------------------- */
+   LOOKUP
+   ------------------------- */
 async function doLookupAndRender(tid, cid){
-  q("trackingResult").innerHTML = "";
-  q("formMessage").textContent = "";
-  q("resultCard").style.display = "none";
-  setLoading(true);
+  q("trackingResult").innerHTML = "";
+  q("formMessage").textContent = "";
+  q("resultCard").style.display = "none";
+  setLoading(true);
 
-  try{
-    const url = `${WEBAPP_URL}?routeType=track-shipment&tid=${encodeURIComponent(tid)}&cid=${encodeURIComponent(cid)}`;
-    console.log("Calling backend:", url);
-    const resp = await fetch(url);
-    const text = await resp.text();
-    let json = null;
-    try { json = JSON.parse(text); } catch(e) { json = null; }
-    console.log("Backend raw response text:", text);
-    console.log("Parsed json:", json);
+  try{
+    const url = `${WEBAPP_URL}?routeType=track-shipment&tid=${encodeURIComponent(tid)}&cid=${encodeURIComponent(cid)}`;
+    console.log("Calling backend:", url);
+    const resp = await fetch(url);
+    const text = await resp.text();
+    let json = null;
+    try { json = JSON.parse(text); } catch(e) { json = null; }
+    console.log("Backend raw response text:", text);
+    console.log("Parsed json:", json);
 
-    if(!json){
-      q("resultCard").style.display = "block";
-      q("trackingResult").innerHTML = `<div class="empty">Invalid response from server. Check console for raw text.</div>`;
-      return;
-    }
+    if(!json){
+      q("resultCard").style.display = "block";
+      q("trackingResult").innerHTML = `<div class="empty">Invalid response from server. Check console for raw text.</div>`;
+      return;
+    }
 
-    q("resultCard").style.display = "block";
+    q("resultCard").style.display = "block";
 
-    if(!json.success){
-      q("trackingResult").innerHTML = `<div class="empty">${esc(json.message || json.error || "Tracking failed")}</div>`;
-      return;
-    }
+    if(!json.success){
+      q("trackingResult").innerHTML = `<div class="empty">${esc(json.message || json.error || "Tracking failed")}</div>`;
+      return;
+    }
 
-    const raw = json.raw || json.rawText || (json.data?json.data: null);
-    if(!raw){
-      q("trackingResult").innerHTML = `<div class="empty">No provider response returned (raw missing)</div>`;
-      return;
-    }
+    const raw = json.raw || json.rawText || (json.data?json.data: null);
+    if(!raw){
+      q("trackingResult").innerHTML = `<div class="empty">No provider response returned (raw missing)</div>`;
+      return;
+    }
 
-    const normalized = extractFromRaw(raw);
-    renderTimeline(normalized, json.tid || tid, json.cid || cid);
+    const normalized = extractFromRaw(raw);
+    renderTimeline(normalized, json.tid || tid, json.cid || cid);
 
-    const trackingUrl = `${location.pathname}?cid=${encodeURIComponent(cid)}&tid=${encodeURIComponent(tid)}`;
-    history.replaceState(null, "", trackingUrl);
+    const trackingUrl = `${location.pathname}?cid=${encodeURIComponent(cid)}&tid=${encodeURIComponent(tid)}`;
+    history.replaceState(null, "", trackingUrl);
 
-  }catch(err){
-    console.error("Tracking error:", err);
-    q("resultCard").style.display = "block";
-    q("trackingResult").innerHTML = `<div class="empty">Tracking request failed. ${esc(err && err.message || err)}</div>`;
-  } finally {
-    setLoading(false);
-  }
+  }catch(err){
+    console.error("Tracking error:", err);
+    q("resultCard").style.display = "block";
+    q("trackingResult").innerHTML = `<div class="empty">Tracking request failed. ${esc(err && err.message || err)}</div>`;
+  } finally {
+    setLoading(false);
+  }
 }
 
 /* -------------------------
-   UI wiring
-   ------------------------- */
+   UI wiring
+   ------------------------- */
 q("carrierSearch").addEventListener("input", function(){
-  const term = this.value.toLowerCase();
-  const filtered = carriers.filter(c => (c.courierName||"").toLowerCase().includes(term));
-  renderDropdown(filtered);
+  const term = this.value.toLowerCase();
+  const filtered = carriers.filter(c => (c.courierName||"").toLowerCase().includes(term));
+  renderDropdown(filtered);
 });
 q("carrierSearch").addEventListener("focus", ()=>{ q("dropdownList").style.display = "block"; });
 document.addEventListener("click", (e)=>{ const box=q("dropdownList"); const s=q("carrierSearch"); if(!s.contains(e.target) && !box.contains(e.target)) box.style.display="none"; });
 
 q("submitBtn").addEventListener("click", async ()=>{
-  const tid = q("trackingInput").value.trim();
-  const cid = selectedCarrierId;
-  if(!tid){ alert("Enter tracking ID"); return; }
-  if(!cid){ alert("Select a carrier"); return; }
-  q("formMessage").textContent = "Calling tracking API…";
-  await doLookupAndRender(tid, cid);
+  const tid = q("trackingInput").value.trim();
+  const cid = selectedCarrierId;
+  if(!tid){ alert("Enter tracking ID"); return; }
+  if(!cid){ alert("Select a carrier"); return; }
+  q("formMessage").textContent = "Calling tracking API…";
+  await doLookupAndRender(tid, cid);
 });
 
 /* -------------------------
-   INIT
-   ------------------------- */
+   INIT
+   ------------------------- */
 (async function init(){
-  q("resultCard").style.display = "none";
+  q("resultCard").style.display = "none";
 
-  const params = new URLSearchParams(window.location.search);
-  const preTid = params.get("tid");
-  const preCid = params.get("cid");
+  const params = new URLSearchParams(window.location.search);
+  const preTid = params.get("tid");
+  const preCid = params.get("cid");
 
-  if(preCid){
-    selectedCarrierId = preCid;
-  }
-  if(preTid){
-    q("trackingInput").value = preTid;
-  }
+  if(preCid){
+    selectedCarrierId = preCid;
+  }
+  if(preTid){
+    q("trackingInput").value = preTid;
+  }
 
-  loadCarriersAndMaybeAutoRun();
+  loadCarriersAndMaybeAutoRun();
 
-  if(preTid && preCid){
-    autoLookupStarted = true;
-    q("formMessage").textContent = "Auto-tracking…";
-    doLookupAndRender(preTid, preCid).catch(err => {
-      console.error("Auto lookup error:", err);
-    });
-  }
+  if(preTid && preCid){
+    autoLookupStarted = true;
+    q("formMessage").textContent = "Auto-tracking…";
+    doLookupAndRender(preTid, preCid).catch(err => {
+      console.error("Auto lookup error:", err);
+    });
+  }
 })();
 </script>
 </body>
