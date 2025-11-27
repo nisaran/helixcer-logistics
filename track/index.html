@@ -421,12 +421,21 @@ function extractFromRaw(raw){
   }catch(e){ console.warn("events parse err", e); }
 
   const norm = events.map(ev=>{
-    let when = ev.time_utc || ev.time_iso || null;
-    if(!when && ev.time_raw && ev.time_raw.date && ev.time_raw.time){
-      when = ev.time_raw.date + "T" + ev.time_raw.time + "Z";
-    }
-    if(!when && ev.time) when = ev.time;
-    if(!when && ev.created_at) when = ev.created_at;
+    // *** USE RAW TIME — NO FORMAT / NO CONVERT ***
+let when = "";
+if(ev.time_raw){
+  // if raw object contains date + time → keep exactly same
+  if(ev.time_raw.date && ev.time_raw.time){
+    when = ev.time_raw.date + " " + ev.time_raw.time;
+  } else if(typeof ev.time_raw === "string"){
+    when = ev.time_raw; // if API gives a single raw timestamp
+  } else {
+    when = JSON.stringify(ev.time_raw); // fallback display raw object
+  }
+} else {
+  // Fallback only when no raw time exists
+  when = ev.time || ev.created_at || "";
+}
 
     const status = ev.description || ev.desc || ev.title || ev.stage || ev.sub_status || "";
     let location = ev.location || "";
@@ -544,22 +553,9 @@ function renderTimeline(normalized, tid, cid){
     const timeBox = document.createElement("div");
     timeBox.className = "event-time";
 
-    let dateText = "", timeText = "";
-    if(ev.when){
-      const p = Date.parse(ev.when);
-      if(!isNaN(p)){
-        const d = new Date(p);
-        dateText = d.toLocaleDateString();
-        timeText = d.toLocaleTimeString();
-      } else {
-        const s = String(ev.when);
-        const parts = s.split("T");
-        dateText = parts[0] || s;
-        timeText = parts[1] ? parts[1].replace("Z","") : "";
-      }
-    }
+    // 📌 Show exact raw time — no conversion, no formatting
+timeBox.innerHTML = `<span class="event-date">${esc(ev.when || "")}</span>`;
 
-    timeBox.innerHTML = `<span class="event-date">${esc(dateText)}</span><span class="event-clock">${esc(timeText)}</span>`;
 
     const body = document.createElement("div");
     body.className = "event-body";
