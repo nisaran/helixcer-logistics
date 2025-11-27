@@ -69,20 +69,19 @@ description: Track Shipment - Helixcer Logistics.
   .badge-orange{background:#ea580c}
 
   .events{display:flex;flex-direction:column;gap:var(--event-gap);margin-top:6px}
-.events.scrollable{-webkit-overflow-scrolling:touch;touch-action:auto}
+  .events.scrollable{-webkit-overflow-scrolling:touch;touch-action:auto}
 
-.event-card{display:flex;gap:14px;padding:10px 12px;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(13,31,64,0.04);align-items:flex-start;}
-.event-card.latest{box-shadow:0 12px 30px rgba(13,31,64,0.06)}
+  .event-card{display:flex;gap:14px;padding:12px;border-radius:12px;background:#fff;box-shadow:0 8px 24px rgba(13,31,64,0.04);align-items:flex-start;border-left:6px solid transparent}
+  .event-card.latest{box-shadow:0 12px 30px rgba(13,31,64,0.06)}
 
-.event-time{min-width:120px;font-size:13px;color:#111;line-height:1.05;font-weight:600;margin-top:2px}
-.event-date{display:block;font-weight:700;color:var(--text);margin-bottom:0;font-size:13px}
-.event-clock{display:block;color:#111;font-size:12px}
+  .event-time{min-width:120px;font-size:13px;color:var(--muted);line-height:1.05}
+  .event-date{display:block;font-weight:700;color:var(--text);margin-bottom:6px;font-size:13px}
+  .event-clock{display:block;color:#111;font-size:12px}
 
-.event-body{flex:1}
-.event-title{font-weight:600;font-size:15px;margin-bottom:6px;color:#111}
-.event-location{color:var(--muted);font-size:13px;margin-bottom:6px}
-.event-details{font-size:14px;color:#222;white-space:pre-wrap}
-
+  .event-body{flex:1}
+  .event-title{font-weight:600;font-size:15px;margin-bottom:6px;color:#111}
+  .event-location{color:var(--muted);font-size:13px;margin-bottom:6px}
+  .event-details{font-size:14px;color:#222;white-space:pre-wrap}
 
   .empty{padding:24px;text-align:center;color:var(--muted);border-radius:12px}
 
@@ -132,10 +131,6 @@ description: Track Shipment - Helixcer Logistics.
       align-self:flex-start;
     }
     .card{padding:14px}
-
-    .event-card{gap:10px;padding:8px 10px;align-items:flex-start;}
-    .event-time{min-width:90px;font-size:12px;line-height:1.05;margin-top:2px}
-    .event-date{margin-bottom:0}
   }
 
   @media (max-width:360px){
@@ -307,11 +302,9 @@ async function loadCarriersAndMaybeAutoRun(){
       json = await fetchCarriersFromNetwork();
     } catch (e) {
       console.warn("Failed fetching carriers from network:", e);
-      // if we had cached carriers already rendered, continue. if not, show message.
       if(!carriers.length){
         q("formMessage").textContent = "Failed to load carriers";
       }
-      // Even if fetch failed, we should still attempt auto-run if cache had the carrier match
     }
 
     if(json && json.success && Array.isArray(json.carriers)){
@@ -322,18 +315,22 @@ async function loadCarriersAndMaybeAutoRun(){
       const arr = json.raw.dataItems || json.raw.items || json.raw.data;
       carriers = arr.map(it=>{
         const d = it.data || it;
-        return { wixId: it.id||d._id||null, courierName: d.courierName||it.courierName||"", carrierId: d.seventeenTrackNetId||d.shipwayInId||d.trackingmoreComId||null, raw:d };
+        return {
+          wixId: it.id||d._id||null,
+          courierName: d.courierName||it.courierName||"",
+          carrierId: d.seventeenTrackNetId||d.shipwayInId||d.trackingmoreComId||null,
+          raw:d
+        };
       }).sort((a,b)=>(a.courierName||"").localeCompare(b.courierName||""));
       renderDropdown(carriers);
       writeCarriersCache(carriers);
     } else {
-      // if network produced something unexpected and we had no cache, show a message
       if(!carriers.length){
         q("formMessage").textContent = "Failed to load carriers";
       }
     }
 
-    // Now apply URL params to populate inputs & possibly trigger auto-run (but only if not already started)
+    // URL params
     const params = new URLSearchParams(window.location.search);
     const preTid = params.get("tid");
     const preCid = params.get("cid");
@@ -342,14 +339,12 @@ async function loadCarriersAndMaybeAutoRun(){
       const found = carriers.find(c=>String(c.carrierId)===String(preCid) || String(c.wixId)===String(preCid));
       if(found){
         q("carrierSearch").value = found.courierName || "";
-        // ensure selectedCarrierId uses canonical carrier id (prefer carrierId then wixId)
         selectedCarrierId = found.carrierId || found.wixId || preCid;
       }
     }
 
     if(preTid) q("trackingInput").value = preTid;
 
-    // Only auto-run if not already started (init() may have started it)
     if(preTid && selectedCarrierId && !autoLookupStarted){
       autoLookupStarted = true;
       try {
@@ -367,7 +362,7 @@ async function loadCarriersAndMaybeAutoRun(){
 }
 
 /* -------------------------
-   NORMALIZATION (same as your original code)
+   NORMALIZATION
    ------------------------- */
 function extractFromRaw(raw){
   let item = null;
@@ -415,7 +410,10 @@ function extractFromRaw(raw){
 
   let events = [];
   try{
-    const providers = (track_info && track_info.tracking && track_info.tracking.providers) || (track_info && track_info.providers) || (item.tracking && item.tracking.providers) || (item.track_info && item.track_info.tracking && item.track_info.tracking.providers);
+    const providers = (track_info && track_info.tracking && track_info.tracking.providers)
+      || (track_info && track_info.providers)
+      || (item.tracking && item.tracking.providers)
+      || (item.track_info && item.track_info.tracking && item.track_info.tracking.providers);
     if(Array.isArray(providers) && providers.length && providers[0].events && Array.isArray(providers[0].events)){
       events = providers[0].events.slice();
     } else if(track_info && Array.isArray(track_info.milestone) && track_info.milestone.length){
@@ -428,27 +426,34 @@ function extractFromRaw(raw){
   }catch(e){ console.warn("events parse err", e); }
 
   const norm = events.map(ev=>{
-    // *** USE RAW TIME — NO FORMAT / NO CONVERT ***
-let when = "";
-if(ev.time_raw){
-  // if raw object contains date + time → keep exactly same
-  if(ev.time_raw.date && ev.time_raw.time){
-    when = ev.time_raw.date + " " + ev.time_raw.time;
-  } else if(typeof ev.time_raw === "string"){
-    when = ev.time_raw; // if API gives a single raw timestamp
-  } else {
-    when = JSON.stringify(ev.time_raw); // fallback display raw object
-  }
-} else {
-  // Fallback only when no raw time exists
-  when = ev.time || ev.created_at || "";
-}
+    // Use time_raw as primary source
+    let when = "";
+    if(ev.time_raw){
+      if(ev.time_raw.date && ev.time_raw.time){
+        when = ev.time_raw.date + " " + ev.time_raw.time;  // "yyyy-mm-dd HH:MM:ss"
+      } else if(typeof ev.time_raw === "string"){
+        when = ev.time_raw;
+      } else {
+        when = JSON.stringify(ev.time_raw);
+      }
+    } else if(ev.time_utc || ev.time_iso){
+      when = ev.time_utc || ev.time_iso;
+    } else if(ev.time){
+      when = ev.time;
+    } else if(ev.created_at){
+      when = ev.created_at;
+    }
 
     const status = ev.description || ev.desc || ev.title || ev.stage || ev.sub_status || "";
     let location = ev.location || "";
     if(ev.address){
       const a = ev.address;
-      const parts = [(a.street||""),(a.city||a.town||""),(a.state||a.region||""),(a.country||a.country_code||"")].filter(Boolean);
+      const parts = [
+        (a.street||""),
+        (a.city||a.town||""),
+        (a.state||a.region||""),
+        (a.country||a.country_code||"")
+      ].filter(Boolean);
       if(parts.length) location = parts.join(", ");
     }
     const details = ev.note || ev.sub_status_descr || ev.stage || "";
@@ -456,6 +461,7 @@ if(ev.time_raw){
     return { when, status, location, details, raw: ev, coords };
   });
 
+  // Sort newest first – only for ordering
   norm.sort((a,b)=>{
     const ta = a.when ? Date.parse(a.when) : 0;
     const tb = b.when ? Date.parse(b.when) : 0;
@@ -464,13 +470,16 @@ if(ev.time_raw){
 
   let providerName = "";
   try{
-    const p0 = (track_info && track_info.tracking && track_info.tracking.providers && track_info.tracking.providers[0]) || (item.tracking && item.tracking.providers && item.tracking.providers[0]);
+    const p0 = (track_info && track_info.tracking && track_info.tracking.providers && track_info.tracking.providers[0])
+      || (item.tracking && item.tracking.providers && item.tracking.providers[0]);
     if(p0 && p0.provider && p0.provider.name) providerName = p0.provider.name;
     else if(item.provider && item.provider.name) providerName = item.provider.name;
     else if(item.providerName) providerName = item.providerName;
   }catch(e){ console.warn("provider name parse err", e); }
 
-  let latest_status = (track_info && track_info.latest_status && track_info.latest_status.status) || (item.latest_status && item.latest_status.status) || (norm.length?norm[0].status:"");
+  let latest_status = (track_info && track_info.latest_status && track_info.latest_status.status)
+    || (item.latest_status && item.latest_status.status)
+    || (norm.length?norm[0].status:"");
 
   return {
     providerName,
@@ -551,7 +560,8 @@ function renderTimeline(normalized, tid, cid){
     const card = document.createElement("div");
     card.className = "event-card" + (idx===0 ? " latest" : "");
     const colorMap = {
-      "badge-green":"#16a34a","badge-blue":"#0ea5e9","badge-primary":"#2563eb","badge-indigo":"#6366f1","badge-gray":"#6b7280","badge-red":"#dc2626","badge-orange":"#ea580c"
+      "badge-green":"#16a34a","badge-blue":"#0ea5e9","badge-primary":"#2563eb",
+      "badge-indigo":"#6366f1","badge-gray":"#6b7280","badge-red":"#dc2626","badge-orange":"#ea580c"
     };
     const leftColorClass = statusClass(ev.status || "");
     const borderColor = colorMap[leftColorClass] || "#1f56ff";
@@ -560,39 +570,58 @@ function renderTimeline(normalized, tid, cid){
     const timeBox = document.createElement("div");
     timeBox.className = "event-time";
 
-  // ---------- RAW DATE & TIME FORMATTER ----------
-// expected ev.when = "yyyy-mm-dd HH:MM:ss" or similar
-let dateText = "", timeText = "";
+    // RAW DATE & TIME FORMATTER
+    let dateText = "", timeText = "";
+    if(ev.when){
+      let raw = ev.when.toString().trim();
 
-if(ev.when){
-  let raw = ev.when.toString().trim();
+      let d = "", t = "";
+      if(raw.includes(" ")){
+        [d, t] = raw.split(" ");
+      } else if(raw.includes("T")){
+        [d, t] = raw.split("T");
+      } else {
+        d = raw;
+      }
 
-  // split date & time
-  let [d,t=""] = raw.split(" ");
+      // Convert YYYY-MM-DD → DD-MMM-YYYY
+      if(d){
+        const parts = d.split("-");
+        if(parts.length === 3){
+          const [Y,M,D] = parts;
+          const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+          const mIndex = parseInt(M,10)-1;
+          const mmm = monthNames[mIndex] || M;
+          dateText = `${D}-${mmm}-${Y}`;
+        } else {
+          dateText = d;
+        }
+      }
 
-  // Convert YYYY-MM-DD → DD-MMM-YYYY
-  if(d){
-    const [Y,M,D] = d.split("-");
-    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const mmm = monthNames[Number(M)-1] || M;
-    dateText = `${D}-${mmm}-${Y}`;
-  }
+      // Convert HH:MM(:SS) → hh:mm am/pm
+      if(t){
+        t = t.replace("Z","");
+        const tParts = t.split(":");
+        if(tParts.length >= 2){
+          let hh = parseInt(tParts[0],10);
+          const mm = tParts[1];
+          if(!isNaN(hh)){
+            const ampm = hh>=12 ? "pm" : "am";
+            hh = (hh % 12) || 12;
+            timeText = `${hh}:${mm} ${ampm}`;
+          } else {
+            timeText = t;
+          }
+        } else {
+          timeText = t;
+        }
+      }
+    }
 
-  // Convert HH:MM(:SS) → hh:mm am/pm (remove seconds)
-  if(t){
-    let [hh,mm] = t.split(":");
-    hh = Number(hh);
-    const ampm = hh>=12 ? "pm" : "am";
-    hh = (hh % 12) || 12;
-    timeText = `${hh}:${mm} ${ampm}`;
-  }
-}
-
-// final 2-line output
-// final output — 2 lines, tighter spacing, darker time
-timeBox.innerHTML =
-  `<span class="event-date" style="display:block;font-weight:700;margin-bottom:2px">${esc(dateText)}</span>
-   <span class="event-clock" style="display:block;color:#111">${esc(timeText)}</span>`;
+    // 2-line output, layout via CSS
+    timeBox.innerHTML =
+      `<span class="event-date">${esc(dateText)}</span>
+       <span class="event-clock">${esc(timeText)}</span>`;
 
     const body = document.createElement("div");
     body.className = "event-body";
@@ -673,11 +702,8 @@ async function doLookupAndRender(tid, cid){
     const normalized = extractFromRaw(raw);
     renderTimeline(normalized, json.tid || tid, json.cid || cid);
 
-    const u = new URL(window.location.href);
-    // Force ordering of query params: cid first, tid next
     const trackingUrl = `${location.pathname}?cid=${encodeURIComponent(cid)}&tid=${encodeURIComponent(tid)}`;
     history.replaceState(null, "", trackingUrl);
-
 
   }catch(err){
     console.error("Tracking error:", err);
@@ -709,17 +735,15 @@ q("submitBtn").addEventListener("click", async ()=>{
 });
 
 /* -------------------------
-   INIT (Option A: immediate-start)
+   INIT
    ------------------------- */
 (async function init(){
   q("resultCard").style.display = "none";
 
-  // read URL params early
   const params = new URLSearchParams(window.location.search);
   const preTid = params.get("tid");
   const preCid = params.get("cid");
 
-  // prefill inputs immediately (so user sees them)
   if(preCid){
     selectedCarrierId = preCid;
   }
@@ -727,14 +751,11 @@ q("submitBtn").addEventListener("click", async ()=>{
     q("trackingInput").value = preTid;
   }
 
-  // start loading carriers (don't await — let it run in background)
   loadCarriersAndMaybeAutoRun();
 
-  // if both tid+cid are present, kick off lookup right away so spinner starts immediately
   if(preTid && preCid){
     autoLookupStarted = true;
     q("formMessage").textContent = "Auto-tracking…";
-    // start lookup (doLookupAndRender already calls setLoading(true))
     doLookupAndRender(preTid, preCid).catch(err => {
       console.error("Auto lookup error:", err);
     });
